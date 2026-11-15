@@ -1,0 +1,11 @@
+# Fichiers de travail jetables
+tmp/
+
+# Données de séance : elles ne se publient pas
+donnees/
+
+# Mémoire locale de l'atelier, propre à chaque poste
+CLAUDE.local.md
+
+# Captures d'écran du serveur MCP Playwright
+.playwright-mcp/
