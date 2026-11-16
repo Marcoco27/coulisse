@@ -52,6 +52,9 @@ donnée personnelle : ni nom, ni machine, ni adresse, ni séance.
 - `CLAUDE.md` : cette carte.
 - `docs/depots-de-reference.md` : les dépôts GitHub proches, leur licence et ce
   qu'on en tire.
+- `docs/bases-scientifiques.md` : les quinze règles d'entraînement et de
+  motivation de la page, R1 à R15, chacune avec sa source et la force de sa
+  preuve, puis la liste de ce que la page n'écrit pas.
 - `.claude/settings.json` : retire la ligne d'attribution des commits.
 
 Aucun code n'existe encore. Chaque dossier créé s'ajoute ici le jour même.
@@ -80,8 +83,10 @@ est un décodeur testé sur des trames réelles du rameur, dont les totaux colle
   comprendre et ne se recopie pas. Un code sous MIT, comme `ftms-js`, se reprend
   avec la mention de sa licence.
 - **Toute règle d'entraînement ou de motivation appliquée par la page s'appuie
-  sur une source publiée**, citée dans `docs/`. La page ne donne pas d'avis
-  médical.
+  sur une source publiée**, citée dans `docs/bases-scientifiques.md`. Le code
+  porte le numéro de la règle en commentaire. Une valeur notée « convention »
+  dans ce relevé devient un réglage. La page ne donne pas d'avis médical et ne
+  promet aucun résultat.
 - **Le nom de l'application ne contient ni « Domyos » ni « Decathlon »**, selon
   les règles de marque du dépôt officiel.
 - **Les données de séance restent hors de git.** Les dossiers `donnees/` et
