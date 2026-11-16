@@ -65,6 +65,10 @@ donnée personnelle : ni nom, ni machine, ni adresse, ni séance.
 - `outils/capture-ble.py` : capture depuis un ordinateur Linux par `bleak`, pas
   encore essayée sur le rameur.
 - `outils/extraire-fixture.mjs` : tire un extrait publiable d'une capture.
+- `outils/serveur.mjs` : serveur local sans dépendance (`node outils/serveur.mjs`,
+  port 8790). Sert la page et écrit dans `donnees/` les trames qu'elle lui envoie.
+- `web/` : la page (`index.html`, `style.css`, `app.js`). Écran en direct par Web
+  Bluetooth, ou rejeu d'une capture par `?rejeu=1&vitesse=20&depuis=175`.
 - `donnees/` : captures complètes, ignorées par git.
 - `.claude/settings.json` : retire la ligne d'attribution des commits.
 
@@ -82,6 +86,12 @@ Le 2026-11-16, elle affiche `tests 13`, `pass 13`. Un rapport à zéro test n'es
 pas un succès. La console du rameur ne sert pas de référence : les tests
 contrôlent la cohérence des chiffres entre eux, et le décodeur de `ftms-js`
 0.1.2 a servi de contre-épreuve (zéro écart sur 2 545 trames).
+
+L'écran se contrôle sur le rejeu de la capture, servi en HTTP local (le serveur
+MCP Playwright n'ouvre pas `file://`). Le 2026-11-16, une séance réelle de
+3 min 45 s a été suivie en direct depuis un portable sous Windows, la page étant
+ouverte par `localhost` à travers la redirection de port de VS Code : 1 514
+trames reçues, aucune erreur de décodage.
 
 ## Règles propres à ce dépôt
 

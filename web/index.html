@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rameur</title>
+<link rel="stylesheet" href="/web/style.css">
+</head>
+<body>
+<main>
+  <header>
+    <p id="etat" role="status">Non connecté</p>
+    <p id="secondaire"></p>
+  </header>
+
+  <section class="principaux" aria-label="Mesures principales">
+    <div><span class="valeur" id="allure">–:––</span><span class="unite">/500 m</span></div>
+    <div><span class="valeur" id="cadence">–</span><span class="unite">coups/min</span></div>
+    <div><span class="valeur" id="temps">0:00</span><span class="unite">temps</span></div>
+    <div><span class="valeur" id="distance">0</span><span class="unite">mètres</span></div>
+  </section>
+
+  <section class="secondaires" aria-label="Autres mesures">
+    <div><span id="puissance">–</span> W</div>
+    <div><span id="calories">0</span> kcal</div>
+    <div><span id="coups">0</span> coups</div>
+    <div>niveau <span id="resistance">–</span></div>
+    <div hidden id="bloc-fc"><span id="fc">–</span> bpm</div>
+  </section>
+
+  <button id="action" type="button">Se connecter au rameur</button>
+  <p id="aide"></p>
+</main>
+<script type="module" src="/web/app.js"></script>
+</body>
+</html>

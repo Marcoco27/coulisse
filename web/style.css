@@ -1,0 +1,77 @@
+:root {
+  color-scheme: dark;
+  --fond: #0e1116;
+  --texte: #f2f4f7;
+  --discret: #8b95a5;
+  --accent: #3ddc97;
+  --alerte: #ffb454;
+  font-family: system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--fond);
+  color: var(--texte);
+}
+
+main {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto auto;
+  gap: 2vmin;
+  padding: 3vmin 4vmin;
+}
+
+header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.3rem 1rem; }
+header p { min-width: 0; overflow-wrap: anywhere; }
+#etat { margin: 0; font-size: clamp(1rem, 3vmin, 2rem); color: var(--discret); }
+#etat.actif { color: var(--accent); }
+#etat.pause { color: var(--alerte); }
+#secondaire { margin: 0; text-align: end; color: var(--discret); font-size: clamp(0.9rem, 2.2vmin, 1.4rem); }
+
+/* Lisible à un mètre, en plein effort : quatre grands chiffres. */
+.principaux {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2vmin;
+  align-content: center;
+}
+@media (orientation: landscape) and (min-width: 700px) {
+  .principaux { grid-template-columns: repeat(4, 1fr); }
+}
+.principaux div { display: flex; flex-direction: column; align-items: center; }
+.valeur {
+  font-size: clamp(3rem, 13vmin, 10rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.unite { color: var(--discret); font-size: clamp(0.9rem, 2.5vmin, 1.6rem); }
+
+.secondaires {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 4vmin;
+  font-size: clamp(1.1rem, 3.5vmin, 2.2rem);
+  font-variant-numeric: tabular-nums;
+}
+
+#action {
+  justify-self: center;
+  min-width: min(100%, 22rem);
+  min-height: 3.5rem;
+  padding: 0.8rem 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #06261a;
+  font-size: clamp(1.1rem, 3vmin, 1.8rem);
+  font-weight: 700;
+  cursor: pointer;
+}
+#action:disabled { opacity: 0.5; cursor: default; }
+#aide { margin: 0; text-align: center; color: var(--discret); min-height: 1.2em; }
