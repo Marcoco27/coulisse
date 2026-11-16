@@ -25,8 +25,9 @@ donnée personnelle : ni nom, ni machine, ni adresse, ni séance.
   l'arrêt et la résistance. Ses tests citent le nom Bluetooth `Domyos-ROW-0000`.
   Le dépôt date du 2026-11-14 : c'est la déclaration d'un auteur, pas encore un
   constat fait ici.
-- **Aucune trame réelle n'a encore été lue.** Ce que le rameur publie vraiment
-  reste à constater sur l'appareil.
+- **Des trames réelles ont été lues le 2026-11-16.** Le détail est dans
+  `docs/inventaire-bluetooth.md`. La console affiche une mesure à la fois puis
+  s'éteint : elle ne sert pas de référence pour vérifier les totaux.
 - **Le Woodrower est auto-alimenté**, d'après sa fiche commerciale, non
   vérifiée. Déduction : son Bluetooth dort tant que personne ne rame. Tout essai
   réel demande donc quelqu'un sur le rameur.
@@ -55,23 +56,32 @@ donnée personnelle : ni nom, ni machine, ni adresse, ni séance.
 - `docs/bases-scientifiques.md` : les quinze règles d'entraînement et de
   motivation de la page, R1 à R15, chacune avec sa source et la force de sa
   preuve, puis la liste de ce que la page n'écrit pas.
+- `docs/inventaire-bluetooth.md` : ce que le rameur publie réellement, constaté
+  sur une capture le 2026-11-16 (résistance sur 16 bits, remise à zéro après
+  121 s de pause).
+- `src/ftms.js` : le décodeur, en fonctions pures (mesures, statuts, capacités).
+- `tests/ftms.test.js` : ses tests, sur `tests/fixtures/rameur-protocole.json`,
+  extrait d'une capture réelle sans date ni numéro de série.
+- `outils/capture-ble.py` : capture depuis un ordinateur Linux par `bleak`, pas
+  encore essayée sur le rameur.
+- `outils/extraire-fixture.mjs` : tire un extrait publiable d'une capture.
+- `donnees/` : captures complètes, ignorées par git.
 - `.claude/settings.json` : retire la ligne d'attribution des commits.
 
-Aucun code n'existe encore. Chaque dossier créé s'ajoute ici le jour même.
+Chaque dossier créé s'ajoute ici le jour même.
 
 ## Vérification
 
-**L'oracle n'existe pas encore, et c'est la première chose à construire.** La
-commande prévue est celle du lanceur de tests intégré à node :
+La commande est celle du lanceur de tests intégré à node :
 
 ```bash
 node --test
 ```
 
-Exécutée le 2026-11-15 dans le dépôt sans code, elle affiche `tests 0` et sort
-sans erreur. Un rapport à zéro test n'est donc pas un succès. La preuve attendue
-est un décodeur testé sur des trames réelles du rameur, dont les totaux collent
-à ceux de la console.
+Le 2026-11-16, elle affiche `tests 13`, `pass 13`. Un rapport à zéro test n'est
+pas un succès. La console du rameur ne sert pas de référence : les tests
+contrôlent la cohérence des chiffres entre eux, et le décodeur de `ftms-js`
+0.1.2 a servi de contre-épreuve (zéro écart sur 2 545 trames).
 
 ## Règles propres à ce dépôt
 

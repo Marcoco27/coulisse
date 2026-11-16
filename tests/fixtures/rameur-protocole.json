@@ -1,0 +1,3050 @@
+{
+ "origine": "Capture réelle, exportée par la démo de ftms-js puis resserrée par outils/extraire-fixture.mjs",
+ "appareil": {
+  "nom": "Domyos-ROW-0000",
+  "manufacturer": "DECATHLON",
+  "model": "8604435",
+  "hardware": "1.0.0",
+  "firmware": "Console: 2.5.0\r\nBluetooth: 2.6.0\r\nB805:2.5.0",
+  "software": "Console Bootloader: 1.3.0\r\nBluetooth Bootloader: 1.0.0\r\nB805 Bootloader:1.1.0"
+ },
+ "type": "rower",
+ "entrees": [
+  {
+   "t": 3751,
+   "car": "feature",
+   "sens": "read",
+   "hex": "a6 56 00 00 04 00 00 00"
+  },
+  {
+   "t": 3824,
+   "car": "resistanceRange",
+   "sens": "read",
+   "hex": "0a 00 96 00 0a 00"
+  },
+  {
+   "t": 4484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 01 00 22 22 00 00 00 00 00 00 01 00 00 00 00 00 00 00 10 00"
+  },
+  {
+   "t": 8968,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "04"
+  },
+  {
+   "t": 8987,
+   "car": "trainingStatus",
+   "sens": "in",
+   "hex": "01 0d"
+  },
+  {
+   "t": 8998,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 01 00 2e 22 00 00 9a 00 5f 00 01 00 00 00 be 01 07 00 10 00"
+  },
+  {
+   "t": 9478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 01 00 2e 26 00 00 9a 00 5f 00 01 00 00 00 be 01 07 00 11 00"
+  },
+  {
+   "t": 10483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 01 00 2e 29 00 00 9a 00 5f 00 01 00 00 00 be 01 07 00 12 00"
+  },
+  {
+   "t": 11473,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 01 00 30 2b 00 00 e6 00 1c 00 01 00 00 00 83 00 02 00 13 00"
+  },
+  {
+   "t": 11983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 02 00 30 2b 00 00 e6 00 1c 00 01 00 00 00 83 00 02 00 13 00"
+  },
+  {
+   "t": 12478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 02 00 30 2d 00 00 e6 00 1c 00 01 00 00 00 83 00 02 00 14 00"
+  },
+  {
+   "t": 13483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 02 00 32 30 00 00 e1 00 1e 00 01 00 00 00 8c 00 02 00 15 00"
+  },
+  {
+   "t": 13978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 03 00 32 30 00 00 e1 00 1e 00 01 00 00 00 8c 00 02 00 15 00"
+  },
+  {
+   "t": 14488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 03 00 32 32 00 00 e1 00 1e 00 01 00 00 00 8c 00 02 00 16 00"
+  },
+  {
+   "t": 15478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 03 00 32 34 00 00 ea 00 1b 00 01 00 01 00 7e 00 02 00 17 00"
+  },
+  {
+   "t": 15973,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 04 00 32 34 00 00 ea 00 1b 00 01 00 01 00 7e 00 02 00 17 00"
+  },
+  {
+   "t": 16483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 04 00 32 36 00 00 ea 00 1b 00 01 00 01 00 7e 00 02 00 18 00"
+  },
+  {
+   "t": 17473,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 04 00 32 38 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 19 00"
+  },
+  {
+   "t": 17983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 38 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 19 00"
+  },
+  {
+   "t": 18478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 3a 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 1a 00"
+  },
+  {
+   "t": 19483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 3c 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 1b 00"
+  },
+  {
+   "t": 20474,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 3f 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 1c 00"
+  },
+  {
+   "t": 21494,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 41 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 1d 00"
+  },
+  {
+   "t": 22483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 43 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 1e 00"
+  },
+  {
+   "t": 23473,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 45 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 1f 00"
+  },
+  {
+   "t": 24493,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 47 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 20 00"
+  },
+  {
+   "t": 25484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 49 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 21 00"
+  },
+  {
+   "t": 26473,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 4b 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 22 00"
+  },
+  {
+   "t": 27478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 4d 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 23 00"
+  },
+  {
+   "t": 28483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 4f 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 24 00"
+  },
+  {
+   "t": 29474,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 52 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 25 00"
+  },
+  {
+   "t": 30479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 05 00 32 54 00 00 ed 00 1a 00 01 00 01 00 7a 00 02 00 26 00"
+  },
+  {
+   "t": 31468,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "02 02"
+  },
+  {
+   "t": 31488,
+   "car": "trainingStatus",
+   "sens": "in",
+   "hex": "01 01"
+  },
+  {
+   "t": 31505,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 05 00 32 56 00 00 00 00 00 00 01 00 01 00 00 00 00 00 27 00"
+  },
+  {
+   "t": 152461,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "02 01"
+  },
+  {
+   "t": 152541,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 05 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 152987,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 157488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 00 00 00 00 00 00 8a 00 83 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 159977,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 00 00 00 00 00 00 d0 00 26 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 168482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 0c 00 00 00 00 00 00 02 01 14 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 170477,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 00 00 00 00 00 00 ce 00 27 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 172487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 00 00 00 00 00 00 d3 00 24 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 174482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 00 00 00 00 00 00 d5 00 24 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 176477,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 00 00 00 00 00 00 c5 00 2d 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 177977,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "04"
+  },
+  {
+   "t": 178139,
+   "car": "trainingStatus",
+   "sens": "in",
+   "hex": "01 0d"
+  },
+  {
+   "t": 178213,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 00 00 00 00 00 00 c5 00 2d 00 01 00 00 00 d3 00 03 00 00 00"
+  },
+  {
+   "t": 178487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 00 00 3c 00 00 00 b4 00 3b 00 01 00 00 00 15 01 04 00 00 00"
+  },
+  {
+   "t": 178982,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 01 00 3c 02 00 00 b4 00 3b 00 01 00 00 00 15 01 04 00 01 00"
+  },
+  {
+   "t": 179477,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 01 00 3c 05 00 00 b4 00 3b 00 01 00 00 00 15 01 04 00 02 00"
+  },
+  {
+   "t": 180482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 01 00 3c 07 00 00 cc 00 29 00 01 00 00 00 c0 00 03 00 03 00"
+  },
+  {
+   "t": 180977,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 02 00 3c 07 00 00 cc 00 29 00 01 00 00 00 c0 00 03 00 03 00"
+  },
+  {
+   "t": 181487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 02 00 3c 0a 00 00 cc 00 29 00 01 00 00 00 c0 00 03 00 04 00"
+  },
+  {
+   "t": 182477,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 02 00 3c 0c 00 00 c8 00 2b 00 01 00 00 00 ca 00 03 00 05 00"
+  },
+  {
+   "t": 182987,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 03 00 3c 0c 00 00 c8 00 2b 00 01 00 00 00 ca 00 03 00 05 00"
+  },
+  {
+   "t": 183482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 03 00 3c 0f 00 00 c8 00 2b 00 01 00 00 00 ca 00 03 00 06 00"
+  },
+  {
+   "t": 184488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 03 00 3c 11 00 00 c9 00 2a 00 01 00 00 00 c5 00 03 00 07 00"
+  },
+  {
+   "t": 184982,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 04 00 3c 11 00 00 c9 00 2a 00 01 00 00 00 c5 00 03 00 07 00"
+  },
+  {
+   "t": 185478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 04 00 3c 14 00 00 c9 00 2a 00 01 00 00 00 c5 00 03 00 08 00"
+  },
+  {
+   "t": 186482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 04 00 3a 16 00 00 d1 00 25 00 01 00 00 00 ad 00 02 00 09 00"
+  },
+  {
+   "t": 186978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 05 00 3a 16 00 00 d1 00 25 00 01 00 00 00 ad 00 02 00 09 00"
+  },
+  {
+   "t": 187488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 05 00 3a 19 00 00 d1 00 25 00 01 00 00 00 ad 00 02 00 0a 00"
+  },
+  {
+   "t": 188478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 05 00 3a 1b 00 00 c7 00 2c 00 01 00 00 00 ce 00 03 00 0b 00"
+  },
+  {
+   "t": 188988,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 06 00 3a 1b 00 00 c7 00 2c 00 01 00 00 00 ce 00 03 00 0b 00"
+  },
+  {
+   "t": 189483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 06 00 3a 1e 00 00 c7 00 2c 00 01 00 00 00 ce 00 03 00 0c 00"
+  },
+  {
+   "t": 190488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 06 00 3c 20 00 00 c8 00 2b 00 01 00 00 00 ca 00 03 00 0d 00"
+  },
+  {
+   "t": 190983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 07 00 3c 20 00 00 c8 00 2b 00 01 00 00 00 ca 00 03 00 0d 00"
+  },
+  {
+   "t": 191478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 07 00 3c 23 00 00 c8 00 2b 00 01 00 00 00 ca 00 03 00 0e 00"
+  },
+  {
+   "t": 192483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 07 00 3a 25 00 00 d0 00 26 00 01 00 00 00 b2 00 02 00 0f 00"
+  },
+  {
+   "t": 192978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 08 00 3a 25 00 00 d0 00 26 00 01 00 00 00 b2 00 02 00 0f 00"
+  },
+  {
+   "t": 193488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 08 00 3a 27 00 00 d0 00 26 00 01 00 00 00 b2 00 02 00 10 00"
+  },
+  {
+   "t": 194478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 08 00 3a 2a 00 00 cc 00 29 00 01 00 00 00 c0 00 03 00 11 00"
+  },
+  {
+   "t": 194988,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 09 00 3a 2a 00 00 cc 00 29 00 01 00 00 00 c0 00 03 00 11 00"
+  },
+  {
+   "t": 195483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 09 00 3a 2c 00 00 cc 00 29 00 01 00 01 00 c0 00 03 00 12 00"
+  },
+  {
+   "t": 196489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 09 00 3a 2f 00 00 ca 00 2a 00 01 00 01 00 c5 00 03 00 13 00"
+  },
+  {
+   "t": 196983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 0a 00 3a 2f 00 00 ca 00 2a 00 01 00 01 00 c5 00 03 00 13 00"
+  },
+  {
+   "t": 197478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 0a 00 3a 31 00 00 ca 00 2a 00 01 00 01 00 c5 00 03 00 14 00"
+  },
+  {
+   "t": 197988,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 0a 00 3a 31 00 00 c7 00 2c 00 01 00 01 00 ce 00 03 00 14 00"
+  },
+  {
+   "t": 198483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 0b 00 3a 34 00 00 c7 00 2c 00 01 00 01 00 ce 00 03 00 15 00"
+  },
+  {
+   "t": 199488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 0b 00 3a 36 00 00 c7 00 2c 00 01 00 01 00 ce 00 03 00 16 00"
+  },
+  {
+   "t": 199983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 0b 00 3c 36 00 00 c1 00 30 00 01 00 01 00 e1 00 03 00 16 00"
+  },
+  {
+   "t": 200478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 0c 00 3c 39 00 00 c1 00 30 00 01 00 01 00 e1 00 03 00 17 00"
+  },
+  {
+   "t": 201483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 0c 00 3c 3b 00 00 c1 00 30 00 01 00 01 00 e1 00 03 00 18 00"
+  },
+  {
+   "t": 201978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 0c 00 3c 3b 00 00 c1 00 30 00 01 00 01 00 e1 00 03 00 18 00"
+  },
+  {
+   "t": 202488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 0d 00 3c 3e 00 00 c1 00 30 00 01 00 01 00 e1 00 03 00 19 00"
+  },
+  {
+   "t": 203478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 0d 00 3c 41 00 00 c1 00 30 00 01 00 01 00 e1 00 03 00 1a 00"
+  },
+  {
+   "t": 203973,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 0d 00 3c 41 00 00 ca 00 2a 00 01 00 01 00 c5 00 03 00 1a 00"
+  },
+  {
+   "t": 204483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 0e 00 3c 43 00 00 ca 00 2a 00 01 00 01 00 c5 00 03 00 1b 00"
+  },
+  {
+   "t": 205488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 0e 00 3c 46 00 00 ca 00 2a 00 01 00 01 00 c5 00 03 00 1c 00"
+  },
+  {
+   "t": 205983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 0e 00 3c 46 00 00 c7 00 2b 00 01 00 01 00 ca 00 03 00 1c 00"
+  },
+  {
+   "t": 206478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 0f 00 3c 48 00 00 c7 00 2b 00 01 00 01 00 ca 00 03 00 1d 00"
+  },
+  {
+   "t": 207482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 0f 00 3c 4b 00 00 c7 00 2b 00 01 00 01 00 ca 00 03 00 1e 00"
+  },
+  {
+   "t": 207978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 0f 00 3c 4b 00 00 cc 00 28 00 01 00 01 00 bb 00 03 00 1e 00"
+  },
+  {
+   "t": 208488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 10 00 3c 4d 00 00 cc 00 28 00 01 00 01 00 bb 00 03 00 1f 00"
+  },
+  {
+   "t": 209477,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 10 00 3c 4f 00 00 cc 00 28 00 01 00 01 00 bb 00 03 00 20 00"
+  },
+  {
+   "t": 209973,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 10 00 3c 4f 00 00 ce 00 27 00 01 00 01 00 b7 00 03 00 20 00"
+  },
+  {
+   "t": 210482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 11 00 3c 52 00 00 ce 00 27 00 01 00 01 00 b7 00 03 00 21 00"
+  },
+  {
+   "t": 211488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 11 00 3c 54 00 00 ce 00 27 00 01 00 01 00 b7 00 03 00 22 00"
+  },
+  {
+   "t": 211983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 11 00 3c 54 00 00 cf 00 27 00 01 00 01 00 b7 00 03 00 22 00"
+  },
+  {
+   "t": 212478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 12 00 3c 57 00 00 cf 00 27 00 01 00 01 00 b7 00 03 00 23 00"
+  },
+  {
+   "t": 213483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 12 00 3c 59 00 00 cf 00 27 00 01 00 02 00 b7 00 03 00 24 00"
+  },
+  {
+   "t": 213978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 12 00 3c 59 00 00 ce 00 27 00 01 00 02 00 b7 00 03 00 24 00"
+  },
+  {
+   "t": 214488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 13 00 3c 5c 00 00 ce 00 27 00 01 00 02 00 b7 00 03 00 25 00"
+  },
+  {
+   "t": 215478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 13 00 3c 5e 00 00 ce 00 27 00 01 00 02 00 b7 00 03 00 26 00"
+  },
+  {
+   "t": 215988,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 13 00 3c 5e 00 00 c9 00 2a 00 01 00 02 00 c5 00 03 00 26 00"
+  },
+  {
+   "t": 216483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 14 00 3c 60 00 00 c9 00 2a 00 01 00 02 00 c5 00 03 00 27 00"
+  },
+  {
+   "t": 217488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 14 00 3c 63 00 00 c9 00 2a 00 01 00 02 00 c5 00 03 00 28 00"
+  },
+  {
+   "t": 217983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 14 00 3c 63 00 00 cd 00 28 00 01 00 02 00 bb 00 03 00 28 00"
+  },
+  {
+   "t": 218478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 15 00 3c 65 00 00 cd 00 28 00 01 00 02 00 bb 00 03 00 29 00"
+  },
+  {
+   "t": 219483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 15 00 3c 68 00 00 c9 00 2b 00 01 00 02 00 ca 00 03 00 2a 00"
+  },
+  {
+   "t": 219978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 16 00 3c 68 00 00 c9 00 2b 00 01 00 02 00 ca 00 03 00 2a 00"
+  },
+  {
+   "t": 220488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 16 00 3c 6a 00 00 c9 00 2b 00 01 00 02 00 ca 00 03 00 2b 00"
+  },
+  {
+   "t": 221478,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 16 00 3c 6d 00 00 c8 00 2b 00 01 00 02 00 ca 00 03 00 2c 00"
+  },
+  {
+   "t": 221988,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 17 00 3c 6d 00 00 c8 00 2b 00 01 00 02 00 ca 00 03 00 2c 00"
+  },
+  {
+   "t": 222487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 17 00 3c 6f 00 00 c8 00 2b 00 01 00 02 00 ca 00 03 00 2d 00"
+  },
+  {
+   "t": 223488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 17 00 3c 72 00 00 c2 00 2f 00 01 00 02 00 dc 00 03 00 2e 00"
+  },
+  {
+   "t": 223984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 18 00 3c 72 00 00 c2 00 2f 00 01 00 02 00 dc 00 03 00 2e 00"
+  },
+  {
+   "t": 224479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 18 00 3c 74 00 00 c2 00 2f 00 01 00 02 00 dc 00 03 00 2f 00"
+  },
+  {
+   "t": 225484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 18 00 3c 77 00 00 c7 00 2c 00 01 00 02 00 ce 00 03 00 30 00"
+  },
+  {
+   "t": 225979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 19 00 3c 77 00 00 c7 00 2c 00 01 00 02 00 ce 00 03 00 30 00"
+  },
+  {
+   "t": 226489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 19 00 3c 79 00 00 c7 00 2c 00 01 00 02 00 ce 00 03 00 31 00"
+  },
+  {
+   "t": 227479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 19 00 3c 7c 00 00 c9 00 2b 00 01 00 02 00 ca 00 03 00 32 00"
+  },
+  {
+   "t": 227989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 1a 00 3c 7c 00 00 c9 00 2b 00 01 00 02 00 ca 00 03 00 32 00"
+  },
+  {
+   "t": 228484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 1a 00 3c 7e 00 00 c9 00 2b 00 01 00 02 00 ca 00 03 00 33 00"
+  },
+  {
+   "t": 229489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 1a 00 3c 81 00 00 c4 00 2e 00 01 00 02 00 d8 00 03 00 34 00"
+  },
+  {
+   "t": 229984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 1b 00 3c 81 00 00 c4 00 2e 00 01 00 02 00 d8 00 03 00 34 00"
+  },
+  {
+   "t": 230479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 1b 00 3c 83 00 00 c4 00 2e 00 01 00 02 00 d8 00 03 00 35 00"
+  },
+  {
+   "t": 230974,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 1b 00 3c 83 00 00 c1 00 30 00 01 00 02 00 e1 00 03 00 35 00"
+  },
+  {
+   "t": 231483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 1c 00 3c 86 00 00 c1 00 30 00 01 00 03 00 e1 00 03 00 36 00"
+  },
+  {
+   "t": 232489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 1c 00 3c 89 00 00 c1 00 30 00 01 00 03 00 e1 00 03 00 37 00"
+  },
+  {
+   "t": 232984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 1c 00 3c 89 00 00 c7 00 2c 00 01 00 03 00 ce 00 03 00 37 00"
+  },
+  {
+   "t": 233479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 1d 00 3c 8b 00 00 c7 00 2c 00 01 00 03 00 ce 00 03 00 38 00"
+  },
+  {
+   "t": 234484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 1d 00 3c 8e 00 00 c7 00 2c 00 01 00 03 00 ce 00 03 00 39 00"
+  },
+  {
+   "t": 234979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 1d 00 3c 8e 00 00 ce 00 28 00 01 00 03 00 bb 00 03 00 39 00"
+  },
+  {
+   "t": 235489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 1e 00 3c 90 00 00 ce 00 28 00 01 00 03 00 bb 00 03 00 3a 00"
+  },
+  {
+   "t": 236479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 1e 00 3c 93 00 00 ce 00 28 00 01 00 03 00 bb 00 03 00 3b 00"
+  },
+  {
+   "t": 236974,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 1e 00 3c 93 00 00 cd 00 28 00 01 00 03 00 bb 00 03 00 3b 00"
+  },
+  {
+   "t": 237483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 1f 00 3c 95 00 00 cd 00 28 00 01 00 03 00 bb 00 03 00 3c 00"
+  },
+  {
+   "t": 238488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 1f 00 3c 97 00 00 cd 00 28 00 01 00 03 00 bb 00 03 00 3d 00"
+  },
+  {
+   "t": 238984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 1f 00 3c 97 00 00 ce 00 28 00 01 00 03 00 bb 00 03 00 3d 00"
+  },
+  {
+   "t": 239479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c 9a 00 00 ce 00 28 00 01 00 03 00 bb 00 03 00 3e 00"
+  },
+  {
+   "t": 240484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c 9c 00 00 ce 00 28 00 01 00 03 00 bb 00 03 00 3f 00"
+  },
+  {
+   "t": 241474,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 1e"
+  },
+  {
+   "t": 241579,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c 9f 00 00 ce 00 28 00 03 00 03 00 bb 00 03 00 40 00"
+  },
+  {
+   "t": 241969,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 28"
+  },
+  {
+   "t": 242073,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c 9f 00 00 ce 00 28 00 04 00 03 00 bb 00 03 00 40 00"
+  },
+  {
+   "t": 242463,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 32"
+  },
+  {
+   "t": 242563,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c a1 00 00 ce 00 28 00 05 00 03 00 bb 00 03 00 41 00"
+  },
+  {
+   "t": 242974,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 64"
+  },
+  {
+   "t": 243088,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c a1 00 00 ce 00 28 00 0a 00 03 00 bb 00 03 00 41 00"
+  },
+  {
+   "t": 243469,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 5a"
+  },
+  {
+   "t": 243618,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c a4 00 00 ce 00 28 00 09 00 03 00 bb 00 03 00 42 00"
+  },
+  {
+   "t": 243979,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 50"
+  },
+  {
+   "t": 244097,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c a4 00 00 ce 00 28 00 08 00 03 00 bb 00 03 00 42 00"
+  },
+  {
+   "t": 244489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c a6 00 00 ce 00 28 00 08 00 03 00 bb 00 03 00 43 00"
+  },
+  {
+   "t": 245479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 20 00 3c a8 00 00 ce 00 28 00 08 00 03 00 bb 00 03 00 44 00"
+  },
+  {
+   "t": 246484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 10 20 00 3a ab 00 00 eb 00 1a 00 08 00 03 00 7a 00 02 00 45 00"
+  },
+  {
+   "t": 246979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 10 21 00 3a ab 00 00 eb 00 1a 00 08 00 03 00 7a 00 02 00 45 00"
+  },
+  {
+   "t": 247489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 10 21 00 3a ad 00 00 eb 00 1a 00 08 00 03 00 7a 00 02 00 46 00"
+  },
+  {
+   "t": 248479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 21 00 3a af 00 00 b5 00 3a 00 08 00 03 00 10 01 04 00 47 00"
+  },
+  {
+   "t": 248989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 22 00 3a af 00 00 b5 00 3a 00 08 00 03 00 10 01 04 00 47 00"
+  },
+  {
+   "t": 249484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 22 00 3a b2 00 00 b5 00 3a 00 08 00 03 00 10 01 04 00 48 00"
+  },
+  {
+   "t": 250489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 22 00 3a b5 00 00 ae 00 42 00 08 00 04 00 36 01 05 00 49 00"
+  },
+  {
+   "t": 250984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 23 00 3a b5 00 00 ae 00 42 00 08 00 04 00 36 01 05 00 49 00"
+  },
+  {
+   "t": 251479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 23 00 3a b7 00 00 ae 00 42 00 08 00 04 00 36 01 05 00 4a 00"
+  },
+  {
+   "t": 252484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 23 00 3a ba 00 00 ab 00 45 00 08 00 04 00 44 01 05 00 4b 00"
+  },
+  {
+   "t": 252978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 24 00 3a ba 00 00 ab 00 45 00 08 00 04 00 44 01 05 00 4b 00"
+  },
+  {
+   "t": 253489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 24 00 3a bd 00 00 ab 00 45 00 08 00 04 00 44 01 05 00 4c 00"
+  },
+  {
+   "t": 254479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 24 00 3a c0 00 00 ae 00 41 00 08 00 04 00 31 01 05 00 4d 00"
+  },
+  {
+   "t": 254990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 25 00 3a c0 00 00 ae 00 41 00 08 00 04 00 31 01 05 00 4d 00"
+  },
+  {
+   "t": 255484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 25 00 3a c3 00 00 ae 00 41 00 08 00 04 00 31 01 05 00 4e 00"
+  },
+  {
+   "t": 256489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 25 00 3a c6 00 00 ab 00 45 00 08 00 04 00 44 01 05 00 4f 00"
+  },
+  {
+   "t": 256984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 26 00 3a c6 00 00 ab 00 45 00 08 00 04 00 44 01 05 00 4f 00"
+  },
+  {
+   "t": 257479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 26 00 3a c9 00 00 ab 00 45 00 08 00 04 00 44 01 05 00 50 00"
+  },
+  {
+   "t": 257974,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 26 00 3a c9 00 00 a4 00 4e 00 08 00 04 00 6e 01 06 00 50 00"
+  },
+  {
+   "t": 258484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 27 00 3a cc 00 00 a4 00 4e 00 08 00 04 00 6e 01 06 00 51 00"
+  },
+  {
+   "t": 259489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 27 00 3a cf 00 00 a4 00 4e 00 08 00 04 00 6e 01 06 00 52 00"
+  },
+  {
+   "t": 259985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 27 00 3a cf 00 00 ae 00 41 00 08 00 04 00 31 01 05 00 52 00"
+  },
+  {
+   "t": 260479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 28 00 3a d2 00 00 ae 00 41 00 08 00 04 00 31 01 05 00 53 00"
+  },
+  {
+   "t": 261500,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 28 00 3a d5 00 00 ae 00 41 00 08 00 05 00 31 01 05 00 54 00"
+  },
+  {
+   "t": 261979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 28 00 3a d5 00 00 a9 00 47 00 08 00 05 00 4d 01 05 00 54 00"
+  },
+  {
+   "t": 262489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 29 00 3a d8 00 00 a9 00 47 00 08 00 05 00 4d 01 05 00 55 00"
+  },
+  {
+   "t": 263479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 29 00 3a db 00 00 a9 00 47 00 08 00 05 00 4d 01 05 00 56 00"
+  },
+  {
+   "t": 263989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 29 00 3a db 00 00 af 00 41 00 08 00 05 00 31 01 05 00 56 00"
+  },
+  {
+   "t": 264485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 2a 00 3a dd 00 00 af 00 41 00 08 00 05 00 31 01 05 00 57 00"
+  },
+  {
+   "t": 265489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 2a 00 3a e0 00 00 af 00 41 00 08 00 05 00 31 01 05 00 58 00"
+  },
+  {
+   "t": 265985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 2a 00 3a e3 00 00 a8 00 49 00 08 00 05 00 57 01 05 00 59 00"
+  },
+  {
+   "t": 266480,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 2b 00 3a e3 00 00 a8 00 49 00 08 00 05 00 57 01 05 00 59 00"
+  },
+  {
+   "t": 266989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 2b 00 3a e6 00 00 a8 00 49 00 08 00 05 00 57 01 05 00 5a 00"
+  },
+  {
+   "t": 267980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 2b 00 3a e9 00 00 a8 00 49 00 08 00 05 00 57 01 05 00 5b 00"
+  },
+  {
+   "t": 268490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 2c 00 3a e9 00 00 a8 00 49 00 08 00 05 00 57 01 05 00 5b 00"
+  },
+  {
+   "t": 268985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 2c 00 3a ec 00 00 a8 00 49 00 08 00 05 00 57 01 05 00 5c 00"
+  },
+  {
+   "t": 269974,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 2c 00 3a ef 00 00 ae 00 42 00 08 00 05 00 36 01 05 00 5d 00"
+  },
+  {
+   "t": 270485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 2d 00 3a ef 00 00 ae 00 42 00 08 00 05 00 36 01 05 00 5d 00"
+  },
+  {
+   "t": 270979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 2d 00 3a f2 00 00 ae 00 42 00 08 00 05 00 36 01 05 00 5e 00"
+  },
+  {
+   "t": 271984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 2d 00 3a f5 00 00 b1 00 3e 00 08 00 05 00 23 01 04 00 5f 00"
+  },
+  {
+   "t": 272479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 2e 00 3a f5 00 00 b1 00 3e 00 08 00 05 00 23 01 04 00 5f 00"
+  },
+  {
+   "t": 272975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 2e 00 3a f7 00 00 b1 00 3e 00 08 00 06 00 23 01 04 00 60 00"
+  },
+  {
+   "t": 273980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 2e 00 3a fa 00 00 a8 00 48 00 08 00 06 00 52 01 05 00 61 00"
+  },
+  {
+   "t": 274490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 2f 00 3a fa 00 00 a8 00 48 00 08 00 06 00 52 01 05 00 61 00"
+  },
+  {
+   "t": 274985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 2f 00 3a fd 00 00 a8 00 48 00 08 00 06 00 52 01 05 00 62 00"
+  },
+  {
+   "t": 275975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 2f 00 3a 00 01 00 ad 00 42 00 08 00 06 00 36 01 05 00 63 00"
+  },
+  {
+   "t": 276485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 30 00 3a 00 01 00 ad 00 42 00 08 00 06 00 36 01 05 00 63 00"
+  },
+  {
+   "t": 276980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 30 00 3a 03 01 00 ad 00 42 00 08 00 06 00 36 01 05 00 64 00"
+  },
+  {
+   "t": 277490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 30 00 3a 03 01 00 ad 00 43 00 08 00 06 00 3a 01 05 00 64 00"
+  },
+  {
+   "t": 277985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 31 00 3a 06 01 00 ad 00 43 00 08 00 06 00 3a 01 05 00 65 00"
+  },
+  {
+   "t": 278990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 31 00 3a 09 01 00 ad 00 43 00 08 00 06 00 3a 01 05 00 66 00"
+  },
+  {
+   "t": 279485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 31 00 3a 09 01 00 b0 00 3f 00 08 00 06 00 28 01 04 00 66 00"
+  },
+  {
+   "t": 279980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 32 00 3a 0c 01 00 b0 00 3f 00 08 00 06 00 28 01 04 00 67 00"
+  },
+  {
+   "t": 280985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 32 00 3a 0f 01 00 b0 00 3f 00 08 00 06 00 28 01 04 00 68 00"
+  },
+  {
+   "t": 281480,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 32 00 3a 0f 01 00 b3 00 3c 00 08 00 06 00 19 01 04 00 68 00"
+  },
+  {
+   "t": 281975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 33 00 3a 11 01 00 b3 00 3c 00 08 00 06 00 19 01 04 00 69 00"
+  },
+  {
+   "t": 282980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 33 00 3a 14 01 00 b3 00 3c 00 08 00 06 00 19 01 04 00 6a 00"
+  },
+  {
+   "t": 283490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 33 00 3a 14 01 00 ac 00 43 00 08 00 06 00 3a 01 05 00 6a 00"
+  },
+  {
+   "t": 283985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 34 00 3a 17 01 00 ac 00 43 00 08 00 07 00 3a 01 05 00 6b 00"
+  },
+  {
+   "t": 284975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 34 00 3a 1a 01 00 ac 00 43 00 08 00 07 00 3a 01 05 00 6c 00"
+  },
+  {
+   "t": 285485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 34 00 3a 1a 01 00 ad 00 42 00 08 00 07 00 36 01 05 00 6c 00"
+  },
+  {
+   "t": 285980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 35 00 3a 1d 01 00 ad 00 42 00 08 00 07 00 36 01 05 00 6d 00"
+  },
+  {
+   "t": 286985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 35 00 3a 20 01 00 ad 00 42 00 08 00 07 00 36 01 05 00 6e 00"
+  },
+  {
+   "t": 287479,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 35 00 3a 20 01 00 b1 00 3e 00 08 00 07 00 23 01 04 00 6e 00"
+  },
+  {
+   "t": 287990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 36 00 3a 23 01 00 b1 00 3e 00 08 00 07 00 23 01 04 00 6f 00"
+  },
+  {
+   "t": 288980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 36 00 3a 25 01 00 b1 00 3e 00 08 00 07 00 23 01 04 00 70 00"
+  },
+  {
+   "t": 289490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 36 00 3a 25 01 00 ac 00 44 00 08 00 07 00 3f 01 05 00 70 00"
+  },
+  {
+   "t": 289985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 37 00 3a 28 01 00 ac 00 44 00 08 00 07 00 3f 01 05 00 71 00"
+  },
+  {
+   "t": 290975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 37 00 3a 2b 01 00 ac 00 44 00 08 00 07 00 3f 01 05 00 72 00"
+  },
+  {
+   "t": 291485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 37 00 3a 2b 01 00 b3 00 3c 00 08 00 07 00 19 01 04 00 72 00"
+  },
+  {
+   "t": 291980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 38 00 3a 2e 01 00 b3 00 3c 00 08 00 07 00 19 01 04 00 73 00"
+  },
+  {
+   "t": 292985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 38 00 3a 31 01 00 b3 00 3c 00 08 00 07 00 19 01 04 00 74 00"
+  },
+  {
+   "t": 293480,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 38 00 3a 31 01 00 a2 00 51 00 08 00 07 00 7c 01 06 00 74 00"
+  },
+  {
+   "t": 293975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 39 00 3a 34 01 00 a2 00 51 00 08 00 07 00 7c 01 06 00 75 00"
+  },
+  {
+   "t": 294980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 39 00 3a 37 01 00 a2 00 51 00 08 00 07 00 7c 01 06 00 76 00"
+  },
+  {
+   "t": 295490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 39 00 3a 37 01 00 ac 00 44 00 08 00 07 00 3f 01 05 00 76 00"
+  },
+  {
+   "t": 295985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 3a 00 3a 3a 01 00 ac 00 44 00 08 00 08 00 3f 01 05 00 77 00"
+  },
+  {
+   "t": 296974,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 3a 00 3a 3d 01 00 ac 00 44 00 08 00 08 00 3f 01 05 00 78 00"
+  },
+  {
+   "t": 297485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3a 00 3a 3d 01 00 ad 00 42 00 08 00 08 00 36 01 05 00 78 00"
+  },
+  {
+   "t": 297980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3b 00 3a 40 01 00 ad 00 42 00 08 00 08 00 36 01 05 00 79 00"
+  },
+  {
+   "t": 298985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3b 00 3a 42 01 00 ad 00 42 00 08 00 08 00 36 01 05 00 7a 00"
+  },
+  {
+   "t": 299480,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3b 00 3a 42 01 00 ab 00 44 00 08 00 08 00 3f 01 05 00 7a 00"
+  },
+  {
+   "t": 299975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3c 00 3a 45 01 00 ab 00 44 00 08 00 08 00 3f 01 05 00 7b 00"
+  },
+  {
+   "t": 300980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3c 00 3a 48 01 00 ab 00 44 00 08 00 08 00 3f 01 05 00 7c 00"
+  },
+  {
+   "t": 301491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3c 00 3a 48 01 00 ae 00 41 00 08 00 08 00 31 01 05 00 7c 00"
+  },
+  {
+   "t": 301985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3d 00 3a 4b 01 00 ae 00 41 00 08 00 08 00 31 01 05 00 7d 00"
+  },
+  {
+   "t": 302975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3d 00 3a 4e 01 00 b0 00 3f 00 08 00 08 00 28 01 04 00 7e 00"
+  },
+  {
+   "t": 303485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3e 00 3a 4e 01 00 b0 00 3f 00 08 00 08 00 28 01 04 00 7e 00"
+  },
+  {
+   "t": 303981,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 3e 00 3a 51 01 00 b0 00 3f 00 08 00 08 00 28 01 04 00 7f 00"
+  },
+  {
+   "t": 304985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 3e 00 3a 54 01 00 ab 00 45 00 08 00 08 00 44 01 05 00 80 00"
+  },
+  {
+   "t": 305480,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 3f 00 3a 54 01 00 ab 00 45 00 08 00 08 00 44 01 05 00 80 00"
+  },
+  {
+   "t": 305975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 3f 00 3a 57 01 00 ab 00 45 00 08 00 08 00 44 01 05 00 81 00"
+  },
+  {
+   "t": 306980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 3f 00 3a 5a 01 00 aa 00 46 00 08 00 09 00 48 01 05 00 82 00"
+  },
+  {
+   "t": 307490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 40 00 3a 5a 01 00 aa 00 46 00 08 00 09 00 48 01 05 00 82 00"
+  },
+  {
+   "t": 307986,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 40 00 3a 5c 01 00 aa 00 46 00 08 00 09 00 48 01 05 00 83 00"
+  },
+  {
+   "t": 308990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 40 00 3a 60 01 00 a2 00 51 00 08 00 09 00 7c 01 06 00 84 00"
+  },
+  {
+   "t": 309486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 60 01 00 a2 00 51 00 08 00 09 00 7c 01 06 00 84 00"
+  },
+  {
+   "t": 309981,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 63 01 00 a2 00 51 00 08 00 09 00 7c 01 06 00 85 00"
+  },
+  {
+   "t": 310985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 66 01 00 a2 00 51 00 08 00 09 00 7c 01 06 00 86 00"
+  },
+  {
+   "t": 311991,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 69 01 00 a2 00 51 00 08 00 09 00 7c 01 06 00 87 00"
+  },
+  {
+   "t": 312987,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 6c 01 00 a2 00 51 00 08 00 09 00 7c 01 06 00 88 00"
+  },
+  {
+   "t": 313986,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 6f 01 00 a2 00 51 00 08 00 09 00 7c 01 06 00 89 00"
+  },
+  {
+   "t": 314991,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 72 01 00 a2 00 51 00 08 00 09 00 7c 01 06 00 8a 00"
+  },
+  {
+   "t": 315965,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 6e"
+  },
+  {
+   "t": 316103,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 75 01 00 a2 00 51 00 0b 00 09 00 7c 01 06 00 8b 00"
+  },
+  {
+   "t": 316475,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 82"
+  },
+  {
+   "t": 316584,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 75 01 00 a2 00 51 00 0d 00 09 00 7c 01 06 00 8b 00"
+  },
+  {
+   "t": 316971,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 8c"
+  },
+  {
+   "t": 317136,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 78 01 00 a2 00 51 00 0e 00 0a 00 7c 01 06 00 8c 00"
+  },
+  {
+   "t": 317466,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 96"
+  },
+  {
+   "t": 317604,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 78 01 00 a2 00 51 00 0f 00 0a 00 7c 01 06 00 8c 00"
+  },
+  {
+   "t": 317975,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 41 00 3a 7b 01 00 a2 00 51 00 0f 00 0a 00 7c 01 06 00 8d 00"
+  },
+  {
+   "t": 318996,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "02 02"
+  },
+  {
+   "t": 319128,
+   "car": "trainingStatus",
+   "sens": "in",
+   "hex": "01 01"
+  },
+  {
+   "t": 319255,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 41 00 3a 7e 01 00 00 00 00 00 0f 00 0a 00 00 00 00 00 8e 00"
+  },
+  {
+   "t": 328977,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "04"
+  },
+  {
+   "t": 329115,
+   "car": "trainingStatus",
+   "sens": "in",
+   "hex": "01 0d"
+  },
+  {
+   "t": 329234,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 41 00 3a 7e 01 00 7b 00 b8 00 0f 00 0a 00 60 03 0e 00 8e 00"
+  },
+  {
+   "t": 329482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 41 00 3a 82 01 00 7b 00 b8 00 0f 00 0a 00 60 03 0e 00 8f 00"
+  },
+  {
+   "t": 330486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 41 00 3a 86 01 00 7b 00 b8 00 0f 00 0a 00 60 03 0e 00 90 00"
+  },
+  {
+   "t": 330981,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 41 00 3a 86 01 00 a0 00 55 00 0f 00 0a 00 8f 01 06 00 90 00"
+  },
+  {
+   "t": 331491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 42 00 3a 89 01 00 a0 00 55 00 0f 00 0a 00 8f 01 06 00 91 00"
+  },
+  {
+   "t": 332481,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 42 00 3a 8d 01 00 a0 00 55 00 0f 00 0a 00 8f 01 06 00 92 00"
+  },
+  {
+   "t": 333486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 42 00 3a 90 01 00 9c 00 5a 00 0f 00 0b 00 a6 01 07 00 93 00"
+  },
+  {
+   "t": 333981,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 43 00 3a 90 01 00 9c 00 5a 00 0f 00 0b 00 a6 01 07 00 93 00"
+  },
+  {
+   "t": 334491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 43 00 3a 93 01 00 9c 00 5a 00 0f 00 0b 00 a6 01 07 00 94 00"
+  },
+  {
+   "t": 335480,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 43 00 3a 96 01 00 a2 00 52 00 0f 00 0b 00 81 01 06 00 95 00"
+  },
+  {
+   "t": 335976,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 44 00 3a 96 01 00 a2 00 52 00 0f 00 0b 00 81 01 06 00 95 00"
+  },
+  {
+   "t": 336486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 44 00 3a 99 01 00 a2 00 52 00 0f 00 0b 00 81 01 06 00 96 00"
+  },
+  {
+   "t": 337491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 44 00 3a 9c 01 00 a2 00 52 00 0f 00 0b 00 81 01 06 00 97 00"
+  },
+  {
+   "t": 337987,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 44 00 3a 9c 01 00 a6 00 4b 00 0f 00 0b 00 60 01 05 00 97 00"
+  },
+  {
+   "t": 338481,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 45 00 3a 9f 01 00 a6 00 4b 00 0f 00 0b 00 60 01 05 00 98 00"
+  },
+  {
+   "t": 339486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 45 00 3a a2 01 00 a6 00 4b 00 0f 00 0b 00 60 01 05 00 99 00"
+  },
+  {
+   "t": 339981,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 45 00 3a a2 01 00 a3 00 4f 00 0f 00 0b 00 73 01 06 00 99 00"
+  },
+  {
+   "t": 340491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 46 00 3a a5 01 00 a3 00 4f 00 0f 00 0b 00 73 01 06 00 9a 00"
+  },
+  {
+   "t": 341482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 46 00 3a a8 01 00 a3 00 4f 00 0f 00 0b 00 73 01 06 00 9b 00"
+  },
+  {
+   "t": 342487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 46 00 3a ab 01 00 a7 00 4a 00 0f 00 0c 00 5b 01 05 00 9c 00"
+  },
+  {
+   "t": 342982,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 47 00 3a ab 01 00 a7 00 4a 00 0f 00 0c 00 5b 01 05 00 9c 00"
+  },
+  {
+   "t": 343491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 47 00 3a ae 01 00 a7 00 4a 00 0f 00 0c 00 5b 01 05 00 9d 00"
+  },
+  {
+   "t": 344481,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 47 00 3a b1 01 00 a5 00 4c 00 0f 00 0c 00 65 01 05 00 9e 00"
+  },
+  {
+   "t": 344976,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 48 00 3a b1 01 00 a5 00 4c 00 0f 00 0c 00 65 01 05 00 9e 00"
+  },
+  {
+   "t": 345486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 48 00 3a b4 01 00 a5 00 4c 00 0f 00 0c 00 65 01 05 00 9f 00"
+  },
+  {
+   "t": 346491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 48 00 3a b7 01 00 a5 00 4c 00 0f 00 0c 00 65 01 05 00 a0 00"
+  },
+  {
+   "t": 346986,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 48 00 3a b7 01 00 a7 00 49 00 0f 00 0c 00 57 01 05 00 a0 00"
+  },
+  {
+   "t": 347482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 49 00 3a ba 01 00 a7 00 49 00 0f 00 0c 00 57 01 05 00 a1 00"
+  },
+  {
+   "t": 348487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 49 00 3a bd 01 00 a7 00 49 00 0f 00 0c 00 57 01 05 00 a2 00"
+  },
+  {
+   "t": 348981,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 49 00 3a bd 01 00 a7 00 4a 00 0f 00 0c 00 5b 01 05 00 a2 00"
+  },
+  {
+   "t": 349492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 4a 00 3a c0 01 00 a7 00 4a 00 0f 00 0c 00 5b 01 05 00 a3 00"
+  },
+  {
+   "t": 350482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 4a 00 3a c3 01 00 a7 00 4a 00 0f 00 0c 00 5b 01 05 00 a4 00"
+  },
+  {
+   "t": 350977,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 4a 00 3a c3 01 00 a0 00 55 00 0f 00 0c 00 8f 01 06 00 a4 00"
+  },
+  {
+   "t": 351487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 4b 00 3a c6 01 00 a0 00 55 00 0f 00 0c 00 8f 01 06 00 a5 00"
+  },
+  {
+   "t": 352492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 4b 00 3a c9 01 00 a0 00 55 00 0f 00 0c 00 8f 01 06 00 a6 00"
+  },
+  {
+   "t": 353482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 4b 00 3a cd 01 00 a4 00 4e 00 0f 00 0d 00 6e 01 06 00 a7 00"
+  },
+  {
+   "t": 353977,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 4c 00 3a cd 01 00 a4 00 4e 00 0f 00 0d 00 6e 01 06 00 a7 00"
+  },
+  {
+   "t": 354486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 4c 00 3a d0 01 00 a4 00 4e 00 0f 00 0d 00 6e 01 06 00 a8 00"
+  },
+  {
+   "t": 355507,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 4c 00 3a d3 01 00 a5 00 4d 00 0f 00 0d 00 69 01 06 00 a9 00"
+  },
+  {
+   "t": 355987,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 4d 00 3a d3 01 00 a5 00 4d 00 0f 00 0d 00 69 01 06 00 a9 00"
+  },
+  {
+   "t": 356482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 4d 00 3a d6 01 00 a5 00 4d 00 0f 00 0d 00 69 01 06 00 aa 00"
+  },
+  {
+   "t": 357487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 4d 00 3a d9 01 00 ae 00 41 00 0f 00 0d 00 31 01 05 00 ab 00"
+  },
+  {
+   "t": 357982,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 4e 00 3a d9 01 00 ae 00 41 00 0f 00 0d 00 31 01 05 00 ab 00"
+  },
+  {
+   "t": 358491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 4e 00 3a dc 01 00 ae 00 41 00 0f 00 0d 00 31 01 05 00 ac 00"
+  },
+  {
+   "t": 359482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 4e 00 3a de 01 00 ae 00 41 00 0f 00 0d 00 31 01 05 00 ad 00"
+  },
+  {
+   "t": 359977,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 4e 00 3a de 01 00 a3 00 4f 00 0f 00 0d 00 73 01 06 00 ad 00"
+  },
+  {
+   "t": 360487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 4f 00 3a e1 01 00 a3 00 4f 00 0f 00 0d 00 73 01 06 00 ae 00"
+  },
+  {
+   "t": 361492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 4f 00 3a e4 01 00 a3 00 4f 00 0f 00 0d 00 73 01 06 00 af 00"
+  },
+  {
+   "t": 361987,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 4f 00 3a e4 01 00 ab 00 44 00 0f 00 0d 00 3f 01 05 00 af 00"
+  },
+  {
+   "t": 362482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 50 00 3a e7 01 00 ab 00 44 00 0f 00 0d 00 3f 01 05 00 b0 00"
+  },
+  {
+   "t": 363487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 50 00 3a ea 01 00 ab 00 44 00 0f 00 0e 00 3f 01 05 00 b1 00"
+  },
+  {
+   "t": 363982,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 50 00 3a ea 01 00 a0 00 54 00 0f 00 0e 00 8a 01 06 00 b1 00"
+  },
+  {
+   "t": 364492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 51 00 3a ed 01 00 a0 00 54 00 0f 00 0e 00 8a 01 06 00 b2 00"
+  },
+  {
+   "t": 365482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 51 00 3a f1 01 00 a0 00 54 00 0f 00 0e 00 8a 01 06 00 b3 00"
+  },
+  {
+   "t": 366487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 51 00 3a f4 01 00 a2 00 51 00 0f 00 0e 00 7c 01 06 00 b4 00"
+  },
+  {
+   "t": 366982,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 52 00 3a f4 01 00 a2 00 51 00 0f 00 0e 00 7c 01 06 00 b4 00"
+  },
+  {
+   "t": 367492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 52 00 3a f7 01 00 a2 00 51 00 0f 00 0e 00 7c 01 06 00 b5 00"
+  },
+  {
+   "t": 368481,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 52 00 3a fa 01 00 a3 00 50 00 0f 00 0e 00 77 01 06 00 b6 00"
+  },
+  {
+   "t": 368977,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 53 00 3a fa 01 00 a3 00 50 00 0f 00 0e 00 77 01 06 00 b6 00"
+  },
+  {
+   "t": 369487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 53 00 3a fd 01 00 a3 00 50 00 0f 00 0e 00 77 01 06 00 b7 00"
+  },
+  {
+   "t": 370491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 53 00 3a 00 02 00 a4 00 4e 00 0f 00 0e 00 6e 01 06 00 b8 00"
+  },
+  {
+   "t": 370987,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 54 00 3a 00 02 00 a4 00 4e 00 0f 00 0e 00 6e 01 06 00 b8 00"
+  },
+  {
+   "t": 371482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 54 00 3a 03 02 00 a4 00 4e 00 0f 00 0e 00 6e 01 06 00 b9 00"
+  },
+  {
+   "t": 372487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 54 00 3a 06 02 00 a5 00 4d 00 0f 00 0e 00 69 01 06 00 ba 00"
+  },
+  {
+   "t": 372982,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 55 00 3a 06 02 00 a5 00 4d 00 0f 00 0e 00 69 01 06 00 ba 00"
+  },
+  {
+   "t": 373492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 55 00 3a 09 02 00 a5 00 4d 00 0f 00 0f 00 69 01 06 00 bb 00"
+  },
+  {
+   "t": 374482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 55 00 3a 0c 02 00 a5 00 4d 00 0f 00 0f 00 69 01 06 00 bc 00"
+  },
+  {
+   "t": 374977,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 55 00 38 0c 02 00 a7 00 4b 00 0f 00 0f 00 60 01 05 00 bc 00"
+  },
+  {
+   "t": 375487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 56 00 38 0f 02 00 a7 00 4b 00 0f 00 0f 00 60 01 05 00 bd 00"
+  },
+  {
+   "t": 376492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 56 00 38 12 02 00 a7 00 4b 00 0f 00 0f 00 60 01 05 00 be 00"
+  },
+  {
+   "t": 376987,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 56 00 38 12 02 00 a2 00 51 00 0f 00 0f 00 7c 01 06 00 be 00"
+  },
+  {
+   "t": 377482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 57 00 38 15 02 00 a2 00 51 00 0f 00 0f 00 7c 01 06 00 bf 00"
+  },
+  {
+   "t": 378487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 57 00 38 18 02 00 a2 00 51 00 0f 00 0f 00 7c 01 06 00 c0 00"
+  },
+  {
+   "t": 378982,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 57 00 38 18 02 00 a4 00 4e 00 0f 00 0f 00 6e 01 06 00 c0 00"
+  },
+  {
+   "t": 379492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 58 00 38 1b 02 00 a4 00 4e 00 0f 00 0f 00 6e 01 06 00 c1 00"
+  },
+  {
+   "t": 380482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 58 00 38 1e 02 00 a4 00 4e 00 0f 00 0f 00 6e 01 06 00 c2 00"
+  },
+  {
+   "t": 380977,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 58 00 38 1e 02 00 9b 00 5d 00 0f 00 0f 00 b5 01 07 00 c2 00"
+  },
+  {
+   "t": 381487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 59 00 38 21 02 00 9b 00 5d 00 0f 00 0f 00 b5 01 07 00 c3 00"
+  },
+  {
+   "t": 382492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 59 00 38 25 02 00 9b 00 5d 00 0f 00 10 00 b5 01 07 00 c4 00"
+  },
+  {
+   "t": 382987,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 59 00 38 25 02 00 a0 00 54 00 0f 00 10 00 8a 01 06 00 c4 00"
+  },
+  {
+   "t": 383482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 5a 00 38 28 02 00 a0 00 54 00 0f 00 10 00 8a 01 06 00 c5 00"
+  },
+  {
+   "t": 384488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 5a 00 38 2b 02 00 a0 00 54 00 0f 00 10 00 8a 01 06 00 c6 00"
+  },
+  {
+   "t": 384982,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 5a 00 38 2b 02 00 a5 00 4d 00 0f 00 10 00 69 01 06 00 c6 00"
+  },
+  {
+   "t": 385492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 5b 00 38 2b 02 00 a5 00 4d 00 0f 00 10 00 69 01 06 00 c6 00"
+  },
+  {
+   "t": 386482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 5b 00 38 2e 02 00 a5 00 4d 00 0f 00 10 00 69 01 06 00 c7 00"
+  },
+  {
+   "t": 386978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 5b 00 38 2e 02 00 a0 00 54 00 0f 00 10 00 8a 01 06 00 c7 00"
+  },
+  {
+   "t": 387487,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 5c 00 38 31 02 00 a0 00 54 00 0f 00 10 00 8a 01 06 00 c8 00"
+  },
+  {
+   "t": 388493,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 5c 00 38 34 02 00 a0 00 54 00 0f 00 10 00 8a 01 06 00 c9 00"
+  },
+  {
+   "t": 389483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 5c 00 38 37 02 00 a7 00 4b 00 0f 00 10 00 60 01 05 00 ca 00"
+  },
+  {
+   "t": 389992,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 5d 00 38 37 02 00 a7 00 4b 00 0f 00 10 00 60 01 05 00 ca 00"
+  },
+  {
+   "t": 390488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 5d 00 38 3a 02 00 a7 00 4b 00 0f 00 10 00 60 01 05 00 cb 00"
+  },
+  {
+   "t": 390983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 5d 00 38 3a 02 00 9f 00 56 00 0f 00 10 00 94 01 06 00 cb 00"
+  },
+  {
+   "t": 391492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 5e 00 38 3d 02 00 9f 00 56 00 0f 00 10 00 94 01 06 00 cc 00"
+  },
+  {
+   "t": 392483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 5e 00 38 40 02 00 9f 00 56 00 0f 00 10 00 94 01 06 00 cd 00"
+  },
+  {
+   "t": 393488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 5e 00 38 44 02 00 9d 00 59 00 0f 00 11 00 a2 01 06 00 ce 00"
+  },
+  {
+   "t": 393983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 5f 00 38 44 02 00 9d 00 59 00 0f 00 11 00 a2 01 06 00 ce 00"
+  },
+  {
+   "t": 394493,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 38 5f 00 38 47 02 00 9d 00 59 00 0f 00 11 00 a2 01 06 00 cf 00"
+  },
+  {
+   "t": 395483,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 5f 00 38 4a 02 00 9b 00 5c 00 0f 00 11 00 b0 01 07 00 d0 00"
+  },
+  {
+   "t": 395978,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 60 00 38 4a 02 00 9b 00 5c 00 0f 00 11 00 b0 01 07 00 d0 00"
+  },
+  {
+   "t": 396488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 60 00 38 4d 02 00 9b 00 5c 00 0f 00 11 00 b0 01 07 00 d1 00"
+  },
+  {
+   "t": 397492,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 60 00 38 50 02 00 9b 00 5c 00 0f 00 11 00 b0 01 07 00 d2 00"
+  },
+  {
+   "t": 398482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 60 00 38 54 02 00 9b 00 5c 00 0f 00 11 00 b0 01 07 00 d3 00"
+  },
+  {
+   "t": 399488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 60 00 38 57 02 00 9b 00 5c 00 0f 00 11 00 b0 01 07 00 d4 00"
+  },
+  {
+   "t": 400493,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 60 00 38 5a 02 00 9b 00 5c 00 0f 00 11 00 b0 01 07 00 d5 00"
+  },
+  {
+   "t": 401482,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 60 00 38 5d 02 00 9b 00 5c 00 0f 00 12 00 b0 01 07 00 d6 00"
+  },
+  {
+   "t": 402502,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "02 02"
+  },
+  {
+   "t": 402688,
+   "car": "trainingStatus",
+   "sens": "in",
+   "hex": "01 01"
+  },
+  {
+   "t": 402870,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 60 00 38 60 02 00 00 00 00 00 0f 00 12 00 00 00 00 00 d7 00"
+  },
+  {
+   "t": 416963,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 5a"
+  },
+  {
+   "t": 417144,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 60 00 38 60 02 00 00 00 00 00 09 00 12 00 00 00 00 00 d7 00"
+  },
+  {
+   "t": 417473,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 3c"
+  },
+  {
+   "t": 417635,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 60 00 38 60 02 00 00 00 00 00 06 00 12 00 00 00 00 00 d7 00"
+  },
+  {
+   "t": 417967,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 1e"
+  },
+  {
+   "t": 418158,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 60 00 38 60 02 00 00 00 00 00 03 00 12 00 00 00 00 00 d7 00"
+  },
+  {
+   "t": 419469,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "07 3c"
+  },
+  {
+   "t": 419631,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 60 00 38 60 02 00 00 00 00 00 06 00 12 00 00 00 00 00 d7 00"
+  },
+  {
+   "t": 442973,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "04"
+  },
+  {
+   "t": 443139,
+   "car": "trainingStatus",
+   "sens": "in",
+   "hex": "01 0d"
+  },
+  {
+   "t": 443341,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 60 00 38 60 02 00 87 00 8c 00 06 00 12 00 91 02 0a 00 d7 00"
+  },
+  {
+   "t": 443979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 60 00 38 64 02 00 87 00 8c 00 06 00 12 00 91 02 0a 00 d8 00"
+  },
+  {
+   "t": 444983,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 60 00 38 68 02 00 bb 00 34 00 06 00 12 00 f4 00 04 00 d9 00"
+  },
+  {
+   "t": 445493,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 61 00 38 68 02 00 bb 00 34 00 06 00 12 00 f4 00 04 00 d9 00"
+  },
+  {
+   "t": 445989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 61 00 38 6a 02 00 bb 00 34 00 06 00 12 00 f4 00 04 00 da 00"
+  },
+  {
+   "t": 446980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 61 00 38 6d 02 00 b2 00 3d 00 06 00 12 00 1e 01 04 00 db 00"
+  },
+  {
+   "t": 447488,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 62 00 38 6d 02 00 b2 00 3d 00 06 00 12 00 1e 01 04 00 db 00"
+  },
+  {
+   "t": 447984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 62 00 38 70 02 00 b2 00 3d 00 06 00 12 00 1e 01 04 00 dc 00"
+  },
+  {
+   "t": 448990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 62 00 38 73 02 00 bc 00 34 00 06 00 12 00 f4 00 04 00 dd 00"
+  },
+  {
+   "t": 449486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 63 00 38 73 02 00 bc 00 34 00 06 00 12 00 f4 00 04 00 dd 00"
+  },
+  {
+   "t": 449994,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3c 63 00 38 75 02 00 bc 00 34 00 06 00 12 00 f4 00 04 00 de 00"
+  },
+  {
+   "t": 450984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 63 00 38 78 02 00 bc 00 34 00 06 00 12 00 f4 00 04 00 df 00"
+  },
+  {
+   "t": 451494,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 64 00 38 78 02 00 bc 00 34 00 06 00 12 00 f4 00 04 00 df 00"
+  },
+  {
+   "t": 451989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 64 00 38 7b 02 00 bc 00 34 00 06 00 13 00 f4 00 04 00 e0 00"
+  },
+  {
+   "t": 452979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3a 64 00 38 7d 02 00 bc 00 34 00 06 00 13 00 f4 00 04 00 e1 00"
+  },
+  {
+   "t": 453489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 64 00 38 7d 02 00 dd 00 20 00 06 00 13 00 96 00 02 00 e1 00"
+  },
+  {
+   "t": 453984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 65 00 38 7f 02 00 dd 00 20 00 06 00 13 00 96 00 02 00 e2 00"
+  },
+  {
+   "t": 454989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 65 00 38 82 02 00 dd 00 20 00 06 00 13 00 96 00 02 00 e3 00"
+  },
+  {
+   "t": 455994,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 2e 65 00 38 84 02 00 e5 00 1d 00 06 00 13 00 88 00 02 00 e4 00"
+  },
+  {
+   "t": 456490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 2e 66 00 38 84 02 00 e5 00 1d 00 06 00 13 00 88 00 02 00 e4 00"
+  },
+  {
+   "t": 456984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 2e 66 00 38 86 02 00 e5 00 1d 00 06 00 13 00 88 00 02 00 e5 00"
+  },
+  {
+   "t": 457989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 2e 66 00 38 88 02 00 e5 00 1d 00 06 00 13 00 88 00 02 00 e6 00"
+  },
+  {
+   "t": 458484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 2c 66 00 38 88 02 00 e1 00 1e 00 06 00 13 00 8c 00 02 00 e6 00"
+  },
+  {
+   "t": 458979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 2c 67 00 38 8b 02 00 e1 00 1e 00 06 00 13 00 8c 00 02 00 e7 00"
+  },
+  {
+   "t": 459984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 2c 67 00 38 8d 02 00 e1 00 1e 00 06 00 13 00 8c 00 02 00 e8 00"
+  },
+  {
+   "t": 460989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 67 00 38 8f 02 00 cf 00 27 00 06 00 13 00 b7 00 03 00 e9 00"
+  },
+  {
+   "t": 461484,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 68 00 38 8f 02 00 cf 00 27 00 06 00 13 00 b7 00 03 00 e9 00"
+  },
+  {
+   "t": 461979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 68 00 38 92 02 00 cf 00 27 00 06 00 13 00 b7 00 03 00 ea 00"
+  },
+  {
+   "t": 462984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 68 00 38 94 02 00 cf 00 27 00 06 00 13 00 b7 00 03 00 eb 00"
+  },
+  {
+   "t": 463494,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 30 68 00 38 94 02 00 d9 00 21 00 06 00 13 00 9b 00 02 00 eb 00"
+  },
+  {
+   "t": 463989,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 30 69 00 38 96 02 00 d9 00 21 00 06 00 13 00 9b 00 02 00 ec 00"
+  },
+  {
+   "t": 464979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 30 69 00 38 99 02 00 d9 00 21 00 06 00 13 00 9b 00 02 00 ed 00"
+  },
+  {
+   "t": 465984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 30 69 00 38 9b 02 00 d9 00 21 00 06 00 13 00 9b 00 02 00 ee 00"
+  },
+  {
+   "t": 466494,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 24 69 00 38 9b 02 00 cc 00 29 00 06 00 13 00 c0 00 03 00 ee 00"
+  },
+  {
+   "t": 466990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 24 6a 00 38 9d 02 00 cc 00 29 00 06 00 13 00 c0 00 03 00 ef 00"
+  },
+  {
+   "t": 467979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 4e 6a 00 38 a0 02 00 99 00 61 00 06 00 13 00 c7 01 07 00 f0 00"
+  },
+  {
+   "t": 468489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 4e 6b 00 38 a0 02 00 99 00 61 00 06 00 13 00 c7 01 07 00 f0 00"
+  },
+  {
+   "t": 468984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 4e 6b 00 38 a3 02 00 99 00 61 00 06 00 13 00 c7 01 07 00 f1 00"
+  },
+  {
+   "t": 469990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 4e 6b 00 38 a6 02 00 99 00 61 00 06 00 14 00 c7 01 07 00 f2 00"
+  },
+  {
+   "t": 470485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 6b 00 38 a6 02 00 bb 00 34 00 06 00 14 00 f4 00 04 00 f2 00"
+  },
+  {
+   "t": 470979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 6c 00 38 a9 02 00 bb 00 34 00 06 00 14 00 f4 00 04 00 f3 00"
+  },
+  {
+   "t": 471984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 32 6c 00 38 ac 02 00 bb 00 34 00 06 00 14 00 f4 00 04 00 f4 00"
+  },
+  {
+   "t": 472494,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 6c 00 38 ac 02 00 be 00 33 00 06 00 14 00 ef 00 03 00 f4 00"
+  },
+  {
+   "t": 472990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 6d 00 38 ae 02 00 be 00 33 00 06 00 14 00 ef 00 03 00 f5 00"
+  },
+  {
+   "t": 473979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 36 6d 00 38 b1 02 00 be 00 33 00 06 00 14 00 ef 00 03 00 f6 00"
+  },
+  {
+   "t": 474985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 6d 00 38 b4 02 00 be 00 32 00 06 00 14 00 ea 00 03 00 f7 00"
+  },
+  {
+   "t": 475494,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 6e 00 38 b4 02 00 be 00 32 00 06 00 14 00 ea 00 03 00 f7 00"
+  },
+  {
+   "t": 475990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 34 6e 00 38 b6 02 00 be 00 32 00 06 00 14 00 ea 00 03 00 f8 00"
+  },
+  {
+   "t": 476485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 6e 00 38 b6 02 00 96 00 66 00 06 00 14 00 df 01 07 00 f8 00"
+  },
+  {
+   "t": 476980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 6f 00 38 b9 02 00 96 00 66 00 06 00 14 00 df 01 07 00 f9 00"
+  },
+  {
+   "t": 477490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 6f 00 38 bd 02 00 96 00 66 00 06 00 14 00 df 01 07 00 fa 00"
+  },
+  {
+   "t": 478495,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 42 6f 00 38 c0 02 00 9d 00 59 00 06 00 14 00 a2 01 06 00 fb 00"
+  },
+  {
+   "t": 478990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 42 70 00 38 c0 02 00 9d 00 59 00 06 00 14 00 a2 01 06 00 fb 00"
+  },
+  {
+   "t": 479485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 42 70 00 38 c3 02 00 9d 00 59 00 06 00 14 00 a2 01 06 00 fc 00"
+  },
+  {
+   "t": 479980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 70 00 38 c3 02 00 96 00 66 00 06 00 14 00 df 01 07 00 fc 00"
+  },
+  {
+   "t": 480490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 71 00 38 c6 02 00 96 00 66 00 06 00 15 00 df 01 07 00 fd 00"
+  },
+  {
+   "t": 481495,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 71 00 38 ca 02 00 96 00 66 00 06 00 15 00 df 01 07 00 fe 00"
+  },
+  {
+   "t": 481990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 4c 71 00 38 ca 02 00 94 00 6b 00 06 00 15 00 f6 01 08 00 fe 00"
+  },
+  {
+   "t": 482485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 4c 72 00 38 cd 02 00 94 00 6b 00 06 00 15 00 f6 01 08 00 ff 00"
+  },
+  {
+   "t": 483489,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 72 00 38 d0 02 00 a0 00 54 00 06 00 15 00 8a 01 06 00 00 01"
+  },
+  {
+   "t": 483984,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 73 00 38 d0 02 00 a0 00 54 00 06 00 15 00 8a 01 06 00 00 01"
+  },
+  {
+   "t": 484495,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 73 00 38 d3 02 00 a0 00 54 00 06 00 15 00 8a 01 06 00 01 01"
+  },
+  {
+   "t": 485485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 73 00 38 d6 02 00 a4 00 4d 00 06 00 15 00 69 01 06 00 02 01"
+  },
+  {
+   "t": 485979,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 74 00 38 d6 02 00 a4 00 4d 00 06 00 15 00 69 01 06 00 02 01"
+  },
+  {
+   "t": 486490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 74 00 38 d9 02 00 a4 00 4d 00 06 00 15 00 69 01 06 00 03 01"
+  },
+  {
+   "t": 486985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 48 74 00 38 d9 02 00 a2 00 51 00 06 00 15 00 7c 01 06 00 03 01"
+  },
+  {
+   "t": 487495,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 48 75 00 38 dc 02 00 a2 00 51 00 06 00 15 00 7c 01 06 00 04 01"
+  },
+  {
+   "t": 488486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 42 75 00 3a df 02 00 aa 00 46 00 06 00 15 00 48 01 05 00 05 01"
+  },
+  {
+   "t": 488995,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 42 76 00 3a df 02 00 aa 00 46 00 06 00 15 00 48 01 05 00 05 01"
+  },
+  {
+   "t": 489490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 42 76 00 3a e2 02 00 aa 00 46 00 06 00 16 00 48 01 05 00 06 01"
+  },
+  {
+   "t": 490495,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 76 00 3a e5 02 00 ab 00 45 00 06 00 16 00 44 01 05 00 07 01"
+  },
+  {
+   "t": 490990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 77 00 3a e5 02 00 ab 00 45 00 06 00 16 00 44 01 05 00 07 01"
+  },
+  {
+   "t": 491485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 77 00 3a e8 02 00 ab 00 45 00 06 00 16 00 44 01 05 00 08 01"
+  },
+  {
+   "t": 491980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 77 00 3a e8 02 00 a1 00 53 00 06 00 16 00 86 01 06 00 08 01"
+  },
+  {
+   "t": 492490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 78 00 3a eb 02 00 a1 00 53 00 06 00 16 00 86 01 06 00 09 01"
+  },
+  {
+   "t": 493495,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 78 00 3a ee 02 00 a1 00 53 00 06 00 16 00 86 01 06 00 0a 01"
+  },
+  {
+   "t": 493990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 78 00 3a ee 02 00 a6 00 4b 00 06 00 16 00 60 01 05 00 0a 01"
+  },
+  {
+   "t": 494485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 79 00 3a f1 02 00 a6 00 4b 00 06 00 16 00 60 01 05 00 0b 01"
+  },
+  {
+   "t": 495490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 79 00 3a f4 02 00 a8 00 48 00 06 00 16 00 52 01 05 00 0c 01"
+  },
+  {
+   "t": 495985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 7a 00 3a f4 02 00 a8 00 48 00 06 00 16 00 52 01 05 00 0c 01"
+  },
+  {
+   "t": 496494,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 7a 00 3a f7 02 00 a8 00 48 00 06 00 16 00 52 01 05 00 0d 01"
+  },
+  {
+   "t": 497485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 7a 00 3a fa 02 00 a7 00 4a 00 06 00 16 00 5b 01 05 00 0e 01"
+  },
+  {
+   "t": 497980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 7b 00 3a fa 02 00 a7 00 4a 00 06 00 16 00 5b 01 05 00 0e 01"
+  },
+  {
+   "t": 498490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 7b 00 3a fd 02 00 a7 00 4a 00 06 00 16 00 5b 01 05 00 0f 01"
+  },
+  {
+   "t": 499495,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 7b 00 3a 00 03 00 aa 00 46 00 06 00 16 00 48 01 05 00 10 01"
+  },
+  {
+   "t": 499990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 7c 00 3a 00 03 00 aa 00 46 00 06 00 16 00 48 01 05 00 10 01"
+  },
+  {
+   "t": 500485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 40 7c 00 3a 03 03 00 aa 00 46 00 06 00 17 00 48 01 05 00 11 01"
+  },
+  {
+   "t": 500980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 42 7c 00 3a 03 03 00 a4 00 4d 00 06 00 17 00 69 01 06 00 11 01"
+  },
+  {
+   "t": 501490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 42 7d 00 3a 06 03 00 a4 00 4d 00 06 00 17 00 69 01 06 00 12 01"
+  },
+  {
+   "t": 502480,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 42 7d 00 3a 09 03 00 a4 00 4d 00 06 00 17 00 69 01 06 00 13 01"
+  },
+  {
+   "t": 502990,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 7d 00 3a 09 03 00 a0 00 54 00 06 00 17 00 8a 01 06 00 13 01"
+  },
+  {
+   "t": 503485,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 44 7e 00 3a 0c 03 00 a0 00 54 00 06 00 17 00 8a 01 06 00 14 01"
+  },
+  {
+   "t": 504491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 46 7e 00 3a 10 03 00 9f 00 55 00 06 00 17 00 8f 01 06 00 15 01"
+  },
+  {
+   "t": 504985,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 46 7f 00 3a 10 03 00 9f 00 55 00 06 00 17 00 8f 01 06 00 15 01"
+  },
+  {
+   "t": 505495,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 46 7f 00 3a 13 03 00 9f 00 55 00 06 00 17 00 8f 01 06 00 16 01"
+  },
+  {
+   "t": 506486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 7f 00 3a 16 03 00 af 00 40 00 06 00 17 00 2c 01 05 00 17 01"
+  },
+  {
+   "t": 506980,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 16 03 00 af 00 40 00 06 00 17 00 2c 01 05 00 17 01"
+  },
+  {
+   "t": 507490,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 18 03 00 af 00 40 00 06 00 17 00 2c 01 05 00 18 01"
+  },
+  {
+   "t": 508481,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 1b 03 00 af 00 40 00 06 00 17 00 2c 01 05 00 19 01"
+  },
+  {
+   "t": 509486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 1e 03 00 af 00 40 00 06 00 17 00 2c 01 05 00 1a 01"
+  },
+  {
+   "t": 510491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 21 03 00 af 00 40 00 06 00 18 00 2c 01 05 00 1b 01"
+  },
+  {
+   "t": 511496,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 24 03 00 af 00 40 00 06 00 18 00 2c 01 05 00 1c 01"
+  },
+  {
+   "t": 512501,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 27 03 00 af 00 40 00 06 00 18 00 2c 01 05 00 1d 01"
+  },
+  {
+   "t": 513491,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 29 03 00 af 00 40 00 06 00 18 00 2c 01 05 00 1e 01"
+  },
+  {
+   "t": 514496,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 2c 03 00 af 00 40 00 06 00 18 00 2c 01 05 00 1f 01"
+  },
+  {
+   "t": 515486,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 2f 03 00 af 00 40 00 06 00 18 00 2c 01 05 00 20 01"
+  },
+  {
+   "t": 516494,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 32 03 00 af 00 40 00 06 00 18 00 2c 01 05 00 21 01"
+  },
+  {
+   "t": 517496,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 3e 80 00 3a 35 03 00 af 00 40 00 06 00 18 00 2c 01 05 00 22 01"
+  },
+  {
+   "t": 518516,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "02 02"
+  },
+  {
+   "t": 518741,
+   "car": "trainingStatus",
+   "sens": "in",
+   "hex": "01 01"
+  },
+  {
+   "t": 518940,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 80 00 3a 38 03 00 00 00 00 00 06 00 18 00 00 00 00 00 23 01"
+  },
+  {
+   "t": 639509,
+   "car": "machineStatus",
+   "sens": "in",
+   "hex": "02 01"
+  },
+  {
+   "t": 639750,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 80 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00"
+  },
+  {
+   "t": 640045,
+   "car": "machineData",
+   "sens": "in",
+   "hex": "ae 0b 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00"
+  }
+ ]
+}
