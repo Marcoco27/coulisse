@@ -60,7 +60,11 @@ donnée personnelle : ni nom, ni machine, ni adresse, ni séance.
   sur une capture le 2026-11-16 (résistance sur 16 bits, remise à zéro après
   121 s de pause).
 - `src/ftms.js` : le décodeur, en fonctions pures (mesures, statuts, capacités).
-- `tests/ftms.test.js` : ses tests, sur `tests/fixtures/rameur-protocole.json`,
+- `src/seance.js` : découpage du flux en séances, résumé (moyennes, temps de
+  passage aux 500 m), exports CSV, contrôle d'un fichier importé. Fonctions pures.
+- `web/stockage.js` : l'historique dans le navigateur (IndexedDB), un échantillon
+  écrit par seconde ramée, dès son arrivée.
+- `tests/ftms.test.js` et `tests/seance.test.js` : leurs tests, sur `tests/fixtures/rameur-protocole.json`,
   extrait d'une capture réelle sans date ni numéro de série.
 - `outils/capture-ble.py` : capture depuis un ordinateur Linux par `bleak`, pas
   encore essayée sur le rameur.
@@ -68,7 +72,9 @@ donnée personnelle : ni nom, ni machine, ni adresse, ni séance.
 - `outils/serveur.mjs` : serveur local sans dépendance (`node outils/serveur.mjs`,
   port 8790). Sert la page et écrit dans `donnees/` les trames qu'elle lui envoie.
 - `web/` : la page (`index.html`, `style.css`, `app.js`). Écran en direct par Web
-  Bluetooth, ou rejeu d'une capture par `?rejeu=1&vitesse=20&depuis=175`.
+  Bluetooth, résumé de fin, historique avec export et import. Rejeu d'une capture
+  par `?rejeu=1&vitesse=20`, `&depuis=S`, `&jusqua=S` ; il écrit dans une base à
+  part, `rameur-rejeu`, que `?base=rameur-rejeu&vue=historique` relit.
 - `donnees/` : captures complètes, ignorées par git.
 - `.claude/settings.json` : retire la ligne d'attribution des commits.
 
@@ -82,7 +88,7 @@ La commande est celle du lanceur de tests intégré à node :
 node --test
 ```
 
-Le 2026-11-16, elle affiche `tests 13`, `pass 13`. Un rapport à zéro test n'est
+Le 2026-11-16, elle affiche `tests 24`, `pass 24`. Un rapport à zéro test n'est
 pas un succès. La console du rameur ne sert pas de référence : les tests
 contrôlent la cohérence des chiffres entre eux, et le décodeur de `ftms-js`
 0.1.2 a servi de contre-épreuve (zéro écart sur 2 545 trames).

@@ -7,7 +7,12 @@
 <link rel="stylesheet" href="/web/style.css">
 </head>
 <body>
-<main>
+<nav aria-label="Vues">
+  <button type="button" data-vue="direct" aria-current="page">Séance</button>
+  <button type="button" data-vue="historique">Historique</button>
+</nav>
+
+<main id="vue-direct" class="vue">
   <header>
     <p id="etat" role="status">Non connecté</p>
     <p id="secondaire"></p>
@@ -28,9 +33,40 @@
     <div hidden id="bloc-fc"><span id="fc">–</span> bpm</div>
   </section>
 
-  <button id="action" type="button">Se connecter au rameur</button>
+  <button id="action" class="principal" type="button">Se connecter au rameur</button>
   <p id="aide"></p>
 </main>
+
+<main id="vue-resume" class="vue page" hidden>
+  <h1 id="resume-titre">Séance</h1>
+  <p id="resume-date" class="discret"></p>
+  <dl id="resume-chiffres" class="chiffres"></dl>
+  <h2>Temps de passage</h2>
+  <table id="resume-passages">
+    <thead><tr><th scope="col">Distance</th><th scope="col">Temps</th><th scope="col">Tronçon de 500 m</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <p id="resume-sans-passage" class="discret" hidden>Moins de 500 m : pas de temps de passage.</p>
+  <div class="boutons">
+    <button type="button" id="resume-json">Exporter en JSON</button>
+    <button type="button" id="resume-csv">Exporter en CSV</button>
+    <button type="button" id="resume-supprimer" class="danger">Supprimer</button>
+  </div>
+  <button type="button" id="resume-retour" class="principal">Retour</button>
+</main>
+
+<main id="vue-historique" class="vue page" hidden>
+  <h1>Historique</h1>
+  <p id="historique-vide" class="discret" hidden>Aucune séance pour l’instant. Elles s’enregistrent toutes seules dès que vous ramez.</p>
+  <ul id="historique-liste" class="liste"></ul>
+  <div class="boutons">
+    <button type="button" id="historique-json">Tout exporter en JSON</button>
+    <button type="button" id="historique-csv">Tout exporter en CSV</button>
+    <label class="bouton">Importer un JSON<input type="file" id="historique-import" accept="application/json,.json" hidden></label>
+  </div>
+  <p id="historique-message" class="discret" role="status"></p>
+</main>
+
 <script type="module" src="/web/app.js"></script>
 </body>
 </html>
