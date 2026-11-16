@@ -12,6 +12,9 @@
 
 * { box-sizing: border-box; }
 
+/* Un élément masqué le reste, quel que soit son affichage déclaré plus bas. */
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   min-height: 100dvh;
@@ -154,3 +157,48 @@ th { color: var(--discret); font-weight: 400; }
 }
 .liste .date { font-weight: 600; }
 .liste .totaux { color: var(--discret); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------ semaine */
+
+.carte { background: var(--surface); border-radius: 0.8rem; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.carte[hidden] { display: none; }
+.carte h2 { margin: 0; }
+.carte p { margin: 0; }
+summary { cursor: pointer; font-weight: 600; }
+
+.accent { background: var(--accent); color: #06261a; border: 0; font-weight: 700; }
+
+.tableau {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.75rem;
+}
+.tableau[hidden] { display: none; }
+.tuile { background: var(--surface); border-radius: 0.8rem; padding: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.tuile.large { grid-column: 1 / -1; }
+.tuile p { margin: 0; }
+.tuile .titre { color: var(--discret); }
+.tuile .chiffre { font-size: 2.4rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tuile .sur { font-size: 1.3rem; color: var(--discret); font-weight: 400; }
+
+.points { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; max-width: 26rem; }
+.points li { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; color: var(--discret); font-size: 0.85rem; }
+.points li::before { content: ''; width: 1.6rem; height: 1.6rem; border-radius: 50%; border: 2px solid #2a313d; }
+.points li.fait::before { background: var(--accent); border-color: var(--accent); }
+.points li.aujourdhui { color: var(--texte); font-weight: 700; }
+
+progress { width: 100%; height: 0.8rem; accent-color: var(--accent); }
+
+.champs { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 0.75rem; }
+label { display: flex; flex-direction: column; gap: 0.3rem; color: var(--discret); }
+input, select {
+  font: inherit; color: var(--texte); background: var(--fond);
+  border: 1px solid #2a313d; border-radius: 0.5rem; min-height: 2.75rem; padding: 0.4rem 0.6rem;
+}
+.boutons label { flex-direction: row; align-items: center; gap: 0.5rem; }
+.boutons input { width: 5rem; }
+
+.liste.compacte li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.5rem 0; border-bottom: 1px solid #2a313d; }
+.liste.compacte button { width: auto; padding: 0.3rem 0.8rem; min-height: 2.25rem; }
+
+.actions-direct { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.75rem; }

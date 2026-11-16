@@ -8,7 +8,8 @@
 // IndexedDB plutôt que localStorage : une heure de rame fait 3 600 lignes, et
 // localStorage plafonne à quelques mégaoctets pour tout l'historique.
 
-const VERSION = 1;
+// Version 2 : ajout du magasin « carnet », un seul document { id: 'carnet', maj, reglages, activites }.
+const VERSION = 2;
 
 export function ouvrir(nom = 'rameur') {
   return new Promise((resolve, reject) => {
@@ -17,6 +18,7 @@ export function ouvrir(nom = 'rameur') {
       const db = requete.result;
       if (!db.objectStoreNames.contains('seances')) db.createObjectStore('seances', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('echantillons')) db.createObjectStore('echantillons', { keyPath: ['id', 't'] });
+      if (!db.objectStoreNames.contains('carnet')) db.createObjectStore('carnet', { keyPath: 'id' });
     };
     requete.onsuccess = () => resolve(creerAcces(requete.result));
     requete.onerror = () => reject(requete.error);
@@ -48,6 +50,10 @@ function creerAcces(db) {
     async ecrireEchantillon(id, e) { await attendre(magasin('echantillons', 'readwrite').put({ id, ...e })); },
 
     async seance(id) { return attendre(magasin('seances').get(id)); },
+
+    async carnet() { return (await attendre(magasin('carnet').get('carnet'))) ?? null; },
+
+    async ecrireCarnet(carnet) { await attendre(magasin('carnet', 'readwrite').put({ ...carnet, id: 'carnet' })); },
 
     async seances() {
       const toutes = await attendre(magasin('seances').getAll());

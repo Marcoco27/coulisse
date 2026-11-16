@@ -8,11 +8,135 @@
 </head>
 <body>
 <nav aria-label="Vues">
-  <button type="button" data-vue="direct" aria-current="page">Séance</button>
+  <button type="button" data-vue="semaine" aria-current="page">Semaine</button>
+  <button type="button" data-vue="direct">Séance</button>
   <button type="button" data-vue="historique">Historique</button>
 </nav>
 
-<main id="vue-direct" class="vue">
+<main id="vue-semaine" class="vue page">
+  <h1>Cette semaine</h1>
+  <p id="semaine-dates" class="discret"></p>
+
+  <section id="semaine-depart" class="carte" hidden>
+    <h2>Votre objectif</h2>
+    <p>Combien de jours par semaine voulez-vous bouger ? Mieux vaut commencer bas et monter ensuite par paliers.</p>
+    <!-- R1 -->
+    <div class="boutons">
+      <label>Jours par semaine <input id="depart-jours" type="number" min="1" max="7" value="3" inputmode="numeric"></label>
+      <button type="button" id="depart-valider" class="accent">Commencer</button>
+    </div>
+  </section>
+
+  <section id="semaine-message" class="carte" hidden></section>
+
+  <section id="semaine-revision" class="carte" hidden>
+    <!-- R10 -->
+    <p>Quatre semaines avec cet objectif. Le garder, le baisser ou le monter ?</p>
+    <div class="boutons">
+      <button type="button" data-revision="-1">Baisser d’un jour</button>
+      <button type="button" data-revision="0">Garder</button>
+      <button type="button" data-revision="1">Monter d’un jour</button>
+    </div>
+  </section>
+
+  <section id="semaine-tableau" class="tableau" hidden>
+    <div class="tuile large">
+      <p class="titre">Jours actifs</p>
+      <p class="chiffre"><span id="semaine-jours">0</span> <span class="sur">/ <span id="semaine-objectif">–</span></span></p>
+      <ol id="semaine-points" class="points" aria-label="Jours de la semaine"></ol>
+      <p id="semaine-statut" class="discret"></p>
+    </div>
+    <div class="tuile">
+      <p class="titre">Minutes d’activité</p>
+      <p class="chiffre"><span id="semaine-minutes">0</span> <span class="sur">/ 150</span></p>
+      <progress id="semaine-jauge" max="150" value="0"></progress>
+      <p class="discret">Repère de l’OMS pour une semaine.</p>
+    </div>
+    <div class="tuile">
+      <p class="titre">Renforcement</p>
+      <p class="chiffre"><span id="semaine-renfo">0</span> <span class="sur">/ 2 jours</span></p>
+      <p class="discret">Le rameur n’y compte pas.</p>
+    </div>
+    <div class="tuile">
+      <p class="titre">Semaines tenues</p>
+      <p class="chiffre" id="semaine-tenues">0</p>
+      <p class="discret">Série en cours : <span id="semaine-serie">0</span></p>
+    </div>
+    <div class="tuile">
+      <p class="titre">Réserve</p>
+      <p class="chiffre"><span id="semaine-reserve">0</span> <span class="sur">/ <span id="semaine-reserve-max">3</span></span></p>
+      <p class="discret" id="semaine-reserve-detail"></p>
+    </div>
+    <div class="tuile" id="tuile-niveau" hidden>
+      <p class="titre">Prochaine séance de rameur</p>
+      <p class="chiffre">niveau <span id="semaine-niveau">–</span></p>
+      <p class="discret" id="semaine-niveau-raison"></p>
+    </div>
+  </section>
+
+  <section id="semaine-actions" hidden>
+    <div class="boutons">
+      <button type="button" id="ouvrir-activite">Ajouter une activité</button>
+      <button type="button" id="basculer-deplacement">Semaine de déplacement</button>
+    </div>
+
+    <form id="form-activite" class="carte" hidden>
+      <h2>Ajouter une activité</h2>
+      <div class="champs">
+        <label>Activité
+          <select id="activite-type">
+            <option value="course">Course à pied</option>
+            <option value="renforcement">Renforcement</option>
+            <option value="rameur">Rameur, sans la page</option>
+            <option value="autre">Autre</option>
+          </select>
+        </label>
+        <label>Durée (minutes) <input id="activite-minutes" type="number" min="1" max="600" value="30" inputmode="numeric" required></label>
+        <label>Jour <input id="activite-jour" type="date" required></label>
+      </div>
+      <div class="boutons">
+        <button type="submit" class="accent">Ajouter</button>
+        <button type="button" id="annuler-activite">Annuler</button>
+      </div>
+    </form>
+
+    <form id="form-deplacement" class="carte" hidden>
+      <h2>Semaine de déplacement</h2>
+      <p class="discret">Une semaine de déplacement ne compte ni pour ni contre la série.</p>
+      <!-- R8 : avant ou après -->
+      <div class="champs">
+        <label>Semaine
+          <select id="deplacement-semaine"></select>
+        </label>
+      </div>
+      <div class="boutons">
+        <button type="submit" class="accent" id="valider-deplacement">Déclarer</button>
+        <button type="button" id="annuler-deplacement">Annuler</button>
+      </div>
+    </form>
+
+    <h2>Activités ajoutées à la main</h2>
+    <ul id="liste-activites" class="liste compacte"></ul>
+    <p id="aucune-activite" class="discret">Aucune pour l’instant. Les séances de rameur se comptent toutes seules.</p>
+
+    <details class="carte">
+      <summary>Réglages</summary>
+      <div class="champs">
+        <label>Jours actifs visés par semaine <input id="reglage-objectif" type="number" min="1" max="7" inputmode="numeric"></label>
+        <label>Semaines de réserve par période <input id="reglage-jokers" type="number" min="0" max="12" inputmode="numeric"></label>
+        <label>Durée d’une période (semaines) <input id="reglage-bloc" type="number" min="4" max="52" inputmode="numeric"></label>
+        <label>Durée d’une séance complète (minutes) <input id="reglage-cible" type="number" min="5" max="120" inputmode="numeric"></label>
+        <label>Séances complètes avant de monter d’un niveau <input id="reglage-palier" type="number" min="1" max="10" inputmode="numeric"></label>
+        <label>Durée de la séance courte (minutes) <input id="reglage-courte" type="number" min="3" max="30" inputmode="numeric"></label>
+      </div>
+      <button type="button" id="enregistrer-reglages" class="accent">Enregistrer</button>
+    </details>
+  </section>
+
+  <p id="sauvegarde" class="discret"></p>
+</main>
+
+<main id="vue-direct" class="vue" hidden>
   <header>
     <p id="etat" role="status">Non connecté</p>
     <p id="secondaire"></p>
@@ -33,7 +157,10 @@
     <div hidden id="bloc-fc"><span id="fc">–</span> bpm</div>
   </section>
 
-  <button id="action" class="principal" type="button">Se connecter au rameur</button>
+  <div class="actions-direct">
+    <button id="action" class="principal" type="button">Se connecter au rameur</button>
+    <button id="regler-niveau" type="button" hidden>Régler au niveau –</button>
+  </div>
   <p id="aide"></p>
 </main>
 

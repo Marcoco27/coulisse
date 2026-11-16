@@ -127,6 +127,15 @@ export function resumer(echantillons) {
   }
   for (const e of echantillons) maxP = Math.max(maxP, e.p);
 
+  // Niveau principal : celui où l'on a ramé le plus longtemps.
+  const tempsParNiveau = new Map();
+  for (let i = 1; i < echantillons.length; i++) {
+    const dt = echantillons[i].t - echantillons[i - 1].t;
+    if (dt > 0 && echantillons[i].res) tempsParNiveau.set(echantillons[i].res, (tempsParNiveau.get(echantillons[i].res) ?? 0) + dt);
+  }
+  let niveauPrincipal = null; let meilleur = -1;
+  for (const [n, dt] of tempsParNiveau) if (dt > meilleur || (dt === meilleur && n > niveauPrincipal)) { niveauPrincipal = n; meilleur = dt; }
+
   const passages = [];
   let precedent = echantillons[0].d === 0 ? 0 : null;
   for (let cible = 500; cible <= distance; cible += 500) {
@@ -145,6 +154,7 @@ export function resumer(echantillons) {
     puissanceMax: maxP || null,
     calories: fin.kcal,
     coups: fin.coups,
+    niveauPrincipal,
     passages,
   };
 }

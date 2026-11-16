@@ -16,10 +16,12 @@ import {
   FORMAT_EXPORT, VERSION_EXPORT,
 } from '/src/seance.js';
 import { ouvrir } from '/web/stockage.js';
+import { creerSynchro } from '/web/synchro.js';
+import { bilan, suggererNiveau, lundiDe, cleJour, REGLAGES_PAR_DEFAUT } from '/src/objectif.js';
 
 const FTMS = 0x1826;
 const INFOS_APPAREIL = 0x180a;
-const CARS = { capacites: 0x2acc, plageResistance: 0x2ad6, mesures: 0x2ad1, statut: 0x2ada, entrainement: 0x2ad3 };
+const CARS = { capacites: 0x2acc, plageResistance: 0x2ad6, mesures: 0x2ad1, statut: 0x2ada, entrainement: 0x2ad3, pilotage: 0x2ad9 };
 
 /** Sans nouvelle mesure pendant ce délai, une séance ouverte est close. Le rameur, lui, remet à zéro après 121 s. */
 const DELAI_ABANDON_MS = 3 * 60 * 1000;
@@ -45,15 +47,16 @@ const nombre = new Intl.NumberFormat('fr-FR');
 
 // ---------------------------------------------------------------- vues
 
-let vueCourante = 'direct';
+let vueCourante = 'semaine';
 function montrer(vue) {
   vueCourante = vue;
-  for (const v of ['direct', 'resume', 'historique']) $(`vue-${v}`).hidden = v !== vue;
+  for (const v of ['semaine', 'direct', 'resume', 'historique']) $(`vue-${v}`).hidden = v !== vue;
   for (const b of document.querySelectorAll('nav button')) {
     const actif = b.dataset.vue === vue || (vue === 'resume' && b.dataset.vue === 'historique');
     if (actif) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
   }
   if (vue === 'historique') afficherHistorique();
+  if (vue === 'semaine') afficherSemaine();
 }
 for (const b of document.querySelectorAll('nav button')) b.addEventListener('click', () => montrer(b.dataset.vue));
 
@@ -83,6 +86,7 @@ function afficherMesures(d) {
 // ---------------------------------------------------------------- enregistrement
 
 let db;
+let synchro = null;
 let suivi = creerSuivi();
 let derniereMesure = 0;
 
@@ -119,7 +123,306 @@ async function terminer(id) {
   if (!s) return;
   const echantillons = await db.echantillons(id);
   await db.ecrireSeance({ ...s, etat: 'terminee', resume: resumer(echantillons) });
+  try { await synchro?.envoyerSeance(id); } catch (e) { console.warn('sauvegarde serveur', e); afficherSauvegarde(); }
 }
+
+async function supprimerSeance(id) {
+  await db.supprimer(id);
+  try { await synchro?.supprimerSeance(id); } catch (e) { console.warn('sauvegarde serveur', e); }
+}
+
+// ---------------------------------------------------------------- carnet : réglages et activités hors rameur
+
+let carnet = null;
+
+async function chargerCarnet() {
+  carnet = (await db.carnet()) ?? { maj: 0, reglages: {}, activites: [] };
+  carnet.reglages = { ...REGLAGES_PAR_DEFAUT, ...carnet.reglages };
+  carnet.activites ??= [];
+}
+
+async function enregistrerCarnet() {
+  carnet.maj = Date.now();
+  await db.ecrireCarnet(carnet);
+  try { await synchro?.envoyerCarnet({ ...carnet, id: 'carnet' }); } catch (e) { console.warn('sauvegarde serveur', e); }
+}
+
+function afficherSauvegarde() {
+  if (!synchro) $('sauvegarde').textContent = enRejeu || params.has('base') ? 'Base d’essai : rien n’est sauvegardé ailleurs.' : '';
+  else $('sauvegarde').textContent = synchro.active
+    ? 'Historique sauvegardé aussi sur le poste qui sert la page.'
+    : 'Historique gardé dans ce navigateur seulement : pensez à l’exporter de temps en temps.';
+}
+
+// ---------------------------------------------------------------- écran de la semaine
+
+/** « Aujourd'hui ». ?maintenant=AAAA-MM-JJTHH:MM ne sert qu'aux essais, sur une base d'essai. */
+const maintenant = () => (params.has('maintenant') && params.has('base') ? Date.parse(params.get('maintenant')) : Date.now());
+
+const formatJour = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long' });
+const formatCourt = new Intl.DateTimeFormat('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+const LETTRES = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+const NOMS_ACTIVITE = { course: 'Course à pied', renforcement: 'Renforcement', rameur: 'Rameur', autre: 'Autre' };
+
+/** Les séances de rameur enregistrées, avec leur niveau principal (recalculé pour les anciennes). */
+async function seancesRameur() {
+  const liste = [];
+  for (const s of await db.seances()) {
+    if (s.etat !== 'terminee' || !s.resume) continue;
+    if (s.resume.niveauPrincipal === undefined) {
+      s.resume = resumer(await db.echantillons(s.id));
+      await db.ecrireSeance(s);
+    }
+    liste.push(s);
+  }
+  return liste.sort((a, b) => a.debut - b.debut);
+}
+
+let niveauConseille = null;
+
+async function afficherSemaine() {
+  const rameur = await seancesRameur();
+  const activites = [
+    ...rameur.map((s) => ({ debut: s.debut, minutes: s.resume.duree / 60, type: 'rameur' })),
+    ...carnet.activites,
+  ];
+  const b = bilan(activites, carnet.reglages, maintenant());
+  const c = b.courante;
+  const lundi = new Date(`${c.lundi}T12:00`);
+  const dimanche = new Date(lundi); dimanche.setDate(dimanche.getDate() + 6);
+  $('semaine-dates').textContent = `Du lundi ${formatJour.format(lundi)} au dimanche ${formatJour.format(dimanche)}`;
+
+  const sansObjectif = carnet.reglages.objectifs.length === 0;
+  $('semaine-depart').hidden = !sansObjectif;
+  $('semaine-tableau').hidden = sansObjectif;
+  $('semaine-actions').hidden = sansObjectif;
+  $('semaine-revision').hidden = sansObjectif || !b.revisionDue;
+  afficherSauvegarde();
+  if (sansObjectif) { $('semaine-message').hidden = true; return; }
+
+  $('semaine-jours').textContent = c.jours;
+  $('semaine-objectif').textContent = c.objectif;
+  const aujourdhui = cleJour(maintenant());
+  $('semaine-points').replaceChildren(...c.joursActifs.map((fait, i) => {
+    const li = document.createElement('li');
+    li.textContent = LETTRES[i];
+    const jour = new Date(lundi); jour.setDate(jour.getDate() + i);
+    if (fait) li.classList.add('fait');
+    if (cleJour(jour) === aujourdhui) { li.classList.add('aujourdhui'); li.setAttribute('aria-current', 'date'); }
+    li.setAttribute('aria-label', `${formatCourt.format(jour)} : ${fait ? 'actif' : 'pas d’activité'}`);
+    return li;
+  }));
+  const reste = Math.max(0, c.objectif - c.jours);
+  $('semaine-statut').textContent = c.statut === 'deplacement' ? 'Semaine de déplacement : elle ne compte ni pour ni contre la série.'
+    : c.statut === 'tenue' ? 'Objectif de la semaine atteint.'
+    : `Encore ${reste} jour${reste > 1 ? 's' : ''} pour tenir la semaine.`;
+
+  // R2, R3, R13
+  $('semaine-minutes').textContent = c.minutes;
+  $('semaine-jauge').value = Math.min(c.minutes, 150);
+  // R5
+  $('semaine-renfo').textContent = c.renforcement;
+  // R6 : le total d'abord, la série ensuite.
+  $('semaine-tenues').textContent = b.semainesTenues;
+  $('semaine-serie').textContent = `${b.serie} semaine${b.serie > 1 ? 's' : ''}`;
+  // R7
+  $('semaine-reserve').textContent = b.reserve;
+  $('semaine-reserve-max').textContent = b.jokersParBloc;
+  $('semaine-reserve-detail').textContent = `Semaines manquées pardonnées. La réserve se recharge dans ${b.semainesAvantNouveauBloc} semaine${b.semainesAvantNouveauBloc > 1 ? 's' : ''}.`;
+
+  // Progression du niveau (règle choisie par l'utilisateur).
+  const suggestion = suggererNiveau(rameur.map((s) => ({ duree: s.resume.duree, niveau: s.resume.niveauPrincipal })), carnet.reglages);
+  niveauConseille = suggestion?.niveau ?? null;
+  $('tuile-niveau').hidden = !suggestion;
+  if (suggestion) {
+    $('semaine-niveau').textContent = suggestion.niveau;
+    $('semaine-niveau-raison').textContent = suggestion.raison;
+  }
+  majBoutonNiveau();
+
+  // R9 et R4 : sobre, sans reproche, avec la séance courte en proposition.
+  const courte = carnet.reglages.dureeSeanceCourteMin;
+  let message = '';
+  if (!b.aujourdhuiActif && c.statut !== 'deplacement') {
+    message = b.hierSansSeance
+      ? `Pas de séance hier. Aujourd’hui, ${courte} minutes comptent aussi.`
+      : `Pas le temps ou pas l’envie ? Une séance de ${courte} minutes compte aussi.`;
+  }
+  $('semaine-message').hidden = !message;
+  $('semaine-message').textContent = message;
+
+  // Activités ajoutées à la main.
+  const manuelles = [...carnet.activites].sort((x, y) => y.debut - x.debut).slice(0, 20);
+  $('aucune-activite').hidden = manuelles.length > 0;
+  $('liste-activites').replaceChildren(...manuelles.map((a) => {
+    const li = document.createElement('li');
+    const texte = document.createElement('span');
+    texte.textContent = `${formatCourt.format(a.debut)} · ${NOMS_ACTIVITE[a.type] ?? a.type} · ${a.minutes} min`;
+    const retirer = document.createElement('button');
+    retirer.type = 'button';
+    retirer.textContent = 'Retirer';
+    retirer.addEventListener('click', async () => {
+      carnet.activites = carnet.activites.filter((x) => x.id !== a.id);
+      await enregistrerCarnet();
+      afficherSemaine();
+    });
+    li.append(texte, retirer);
+    return li;
+  }));
+
+  $('basculer-deplacement').textContent = 'Semaine de déplacement';
+
+  // Réglages
+  const r = carnet.reglages;
+  $('reglage-objectif').value = c.objectif;
+  $('reglage-jokers').value = r.jokersParBloc;
+  $('reglage-bloc').value = r.semainesParBloc;
+  $('reglage-cible').value = r.dureeCibleMin;
+  $('reglage-palier').value = r.seancesParPalier;
+  $('reglage-courte').value = r.dureeSeanceCourteMin;
+}
+
+function fixerObjectif(jours) {
+  const lundi = lundiDe(maintenant());
+  const r = carnet.reglages;
+  r.objectifs = r.objectifs.filter((o) => o.depuis !== lundi);
+  r.objectifs.push({ depuis: lundi, seances: Math.min(7, Math.max(1, jours)) });
+  r.derniereRevision = lundi;
+}
+
+$('depart-valider').addEventListener('click', async () => {
+  fixerObjectif(Number($('depart-jours').value) || 3);
+  await enregistrerCarnet();
+  afficherSemaine();
+});
+
+for (const bouton of document.querySelectorAll('[data-revision]')) {
+  bouton.addEventListener('click', async () => {
+    const actuel = Number($('semaine-objectif').textContent) || 3;
+    fixerObjectif(actuel + Number(bouton.dataset.revision));
+    await enregistrerCarnet();
+    afficherSemaine();
+  });
+}
+
+$('ouvrir-activite').addEventListener('click', () => {
+  $('form-deplacement').hidden = true;
+  $('activite-jour').value = cleJour(maintenant());
+  $('activite-jour').max = cleJour(maintenant());
+  $('form-activite').hidden = false;
+  $('activite-minutes').focus();
+});
+$('annuler-activite').addEventListener('click', () => { $('form-activite').hidden = true; });
+$('form-activite').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const [a, m, j] = $('activite-jour').value.split('-').map(Number);
+  const debut = new Date(a, m - 1, j, 12).getTime();
+  carnet.activites.push({
+    id: `a-${Date.now()}`, debut, minutes: Number($('activite-minutes').value), type: $('activite-type').value,
+  });
+  await enregistrerCarnet();
+  $('form-activite').hidden = true;
+  afficherSemaine();
+});
+
+$('basculer-deplacement').addEventListener('click', () => {
+  $('form-activite').hidden = true;
+  const choix = $('deplacement-semaine');
+  const lundiCourant = lundiDe(maintenant());
+  const options = [-1, 0, 1, 2].map((decalage) => {
+    const d = new Date(`${lundiCourant}T12:00`); d.setDate(d.getDate() + 7 * decalage);
+    const cle = lundiDe(d);
+    const etiquette = { '-1': 'La semaine dernière', 0: 'Cette semaine', 1: 'La semaine prochaine', 2: 'Dans deux semaines' }[decalage];
+    const deja = carnet.reglages.deplacements.includes(cle);
+    const o = document.createElement('option');
+    o.value = cle;
+    o.textContent = `${etiquette}, du ${formatJour.format(d)}${deja ? ' (déclarée)' : ''}`;
+    return o;
+  });
+  choix.replaceChildren(...options);
+  choix.value = lundiCourant;
+  majBoutonDeplacement();
+  $('form-deplacement').hidden = false;
+});
+function majBoutonDeplacement() {
+  const deja = carnet.reglages.deplacements.includes($('deplacement-semaine').value);
+  $('valider-deplacement').textContent = deja ? 'Annuler la déclaration' : 'Déclarer';
+}
+$('deplacement-semaine').addEventListener('change', majBoutonDeplacement);
+$('annuler-deplacement').addEventListener('click', () => { $('form-deplacement').hidden = true; });
+$('form-deplacement').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const cle = $('deplacement-semaine').value;
+  const r = carnet.reglages;
+  r.deplacements = r.deplacements.includes(cle) ? r.deplacements.filter((x) => x !== cle) : [...r.deplacements, cle];
+  await enregistrerCarnet();
+  $('form-deplacement').hidden = true;
+  afficherSemaine();
+});
+
+$('enregistrer-reglages').addEventListener('click', async () => {
+  const r = carnet.reglages;
+  const lire = (id, defaut) => { const v = Number($(id).value); return Number.isFinite(v) && v > 0 ? v : defaut; };
+  const objectif = lire('reglage-objectif', 3);
+  if (objectif !== objectifCourant()) fixerObjectif(objectif);
+  r.jokersParBloc = Math.max(0, Number($('reglage-jokers').value) || 0);
+  r.semainesParBloc = lire('reglage-bloc', r.semainesParBloc);
+  r.dureeCibleMin = lire('reglage-cible', r.dureeCibleMin);
+  r.seancesParPalier = lire('reglage-palier', r.seancesParPalier);
+  r.dureeSeanceCourteMin = lire('reglage-courte', r.dureeSeanceCourteMin);
+  await enregistrerCarnet();
+  afficherSemaine();
+});
+function objectifCourant() { return Number($('semaine-objectif').textContent) || null; }
+
+// ---------------------------------------------------------------- pilotage de la résistance
+// FTMS, Control Point 0x2AD9 : 0x00 demande le contrôle, 0x04 règle la résistance
+// (paramètre en dixièmes). La norme le donne sur un octet ; ce rameur envoie sa
+// résistance sur deux octets, donc on essaie l'autre forme si la première est refusée.
+
+let pointPilotage = null;
+let resistancePilotable = false;
+
+function majBoutonNiveau() {
+  const b = $('regler-niveau');
+  b.hidden = !(appareil && resistancePilotable && pointPilotage && niveauConseille);
+  b.textContent = `Régler le rameur au niveau ${niveauConseille ?? '–'}`;
+}
+
+function attendreReponse(op) {
+  return new Promise((resolve) => {
+    const surReponse = (ev) => {
+      const v = new Uint8Array(ev.target.value.buffer);
+      if (v[0] === 0x80 && v[1] === op) { pointPilotage.removeEventListener('characteristicvaluechanged', surReponse); resolve(v[2]); }
+    };
+    pointPilotage.addEventListener('characteristicvaluechanged', surReponse);
+    setTimeout(() => { pointPilotage?.removeEventListener('characteristicvaluechanged', surReponse); resolve(null); }, 3000);
+  });
+}
+
+async function commander(octets) {
+  const reponse = attendreReponse(octets[0]);
+  await pointPilotage.writeValueWithResponse(Uint8Array.from(octets));
+  return reponse; // 0x01 : accepté ; null : pas de réponse
+}
+
+$('regler-niveau').addEventListener('click', async () => {
+  const b = $('regler-niveau');
+  b.disabled = true;
+  try {
+    const n = niveauConseille * 10;
+    const controle = await commander([0x00]);
+    let resultat = await commander([0x04, n & 0xff]);
+    if (resultat !== 0x01) resultat = await commander([0x04, n & 0xff, (n >> 8) & 0xff]);
+    journaliser('pilotage', Uint8Array.from([controle ?? 0xff, resultat ?? 0xff]));
+    $('aide').textContent = resultat === 0x01 ? `Rameur réglé au niveau ${niveauConseille}.`
+      : `Le rameur n’a pas accepté le réglage (réponse ${resultat ?? 'absente'}). Réglez-le sur la console.`;
+  } catch (e) {
+    $('aide').textContent = `Réglage impossible : ${e.message}`;
+  } finally {
+    b.disabled = false;
+  }
+});
 
 /**
  * Au chargement : une séance restée ouverte reprend si elle a bougé il y a peu
@@ -216,6 +519,7 @@ async function brancher() {
 
   try {
     const cap = decoderCapacites(await (await service.getCharacteristic(CARS.capacites)).readValue());
+    resistancePilotable = cap.resistancePilotable;
     const plage = decoderPlageResistance(await (await service.getCharacteristic(CARS.plageResistance)).readValue());
     $('secondaire').textContent = `${appareil.name ?? 'rameur'} · résistance ${plage.min} à ${plage.max}`
       + (cap.resistancePilotable ? ' · pilotable' : '');
@@ -234,6 +538,16 @@ async function brancher() {
       if (nom === 'mesures') throw e; // sans les mesures, rien ne marche
     }
   }
+  // Le point de pilotage répond par « indications » : il faut s'y abonner avant d'écrire.
+  pointPilotage = null;
+  if (resistancePilotable) {
+    try {
+      const c = await service.getCharacteristic(CARS.pilotage);
+      await c.startNotifications();
+      pointPilotage = c;
+    } catch { /* pilotage indisponible : le bouton reste caché */ }
+  }
+  majBoutonNiveau();
   afficherEtat('Connecté : ramez pour démarrer', 'actif');
   $('action').textContent = 'Se déconnecter';
   $('aide').textContent = '';
@@ -278,6 +592,8 @@ function deconnecter() {
   const a = appareil;
   appareil = null;
   a?.gatt.disconnect();
+  pointPilotage = null;
+  majBoutonNiveau();
   verrou?.release();
   afficherEtat('Non connecté');
   $('action').textContent = 'Se connecter au rameur';
@@ -349,7 +665,7 @@ $('resume-csv').addEventListener('click', async () => {
 });
 $('resume-supprimer').addEventListener('click', async () => {
   if (!confirm('Supprimer cette séance ? Elle disparaîtra de l’historique.')) return;
-  await db.supprimer(resumeOuvert.id);
+  await supprimerSeance(resumeOuvert.id);
   montrer('historique');
 });
 $('resume-retour').addEventListener('click', () => montrer('historique'));
@@ -388,6 +704,7 @@ $('historique-import').addEventListener('change', async (ev) => {
     $('historique-message').textContent = ajoutees
       ? `${ajoutees} séance${ajoutees > 1 ? 's' : ''} ajoutée${ajoutees > 1 ? 's' : ''}.`
       : 'Rien de nouveau : ces séances étaient déjà là.';
+    if (ajoutees) await synchro?.demarrer(); // les séances importées partent aussi vers la sauvegarde
   } catch (e) {
     $('historique-message').textContent = e.message;
   }
@@ -425,7 +742,14 @@ async function rejouer() {
 
 $('action').addEventListener('click', () => (appareil ? deconnecter() : connecter()));
 
-db = await ouvrir(params.get('base') ?? (enRejeu ? 'rameur-rejeu' : 'rameur'));
+const nomBase = params.get('base') ?? (enRejeu ? 'rameur-rejeu' : 'rameur');
+db = await ouvrir(nomBase);
+// La sauvegarde sur le serveur ne concerne que la vraie base : jamais un rejeu ni une base d'essai.
+if (nomBase === 'rameur') {
+  synchro = creerSynchro(db);
+  await synchro.demarrer();
+}
+await chargerCarnet();
 await reprendre();
-if (params.get('vue') === 'historique') montrer('historique');
+montrer(enRejeu ? 'direct' : params.get('vue') ?? 'semaine');
 if (enRejeu) rejouer();
