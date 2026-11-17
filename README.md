@@ -1,4 +1,4 @@
-# Rameur
+# Coulisse
 
 Une page web libre et gratuite pour suivre ses séances sur un rameur
 d'appartement connecté. Sans compte, sans abonnement, sans rien installer.
