@@ -112,7 +112,9 @@ createServer(async (req, res) => {
 
     if (chemin.startsWith('/api/')) { await api(req, res, chemin); return; }
 
-    const cible = normalize(join(RACINE, chemin === '/' ? '/web/index.html' : chemin));
+    // La page vit dans web/ et charge son code par chemins relatifs, comme sur GitHub Pages.
+    if (chemin === '/') { res.writeHead(302, { Location: '/web/' + new URL(req.url, 'http://x').search }).end(); return; }
+    const cible = normalize(join(RACINE, chemin.endsWith('/') ? chemin + 'index.html' : chemin));
     if (!cible.startsWith(RACINE) || cible.startsWith(DONNEES) || cible.includes('/.git/')) {
       res.writeHead(403).end('interdit');
       return;

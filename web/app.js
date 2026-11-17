@@ -10,14 +10,14 @@
 
 import {
   decoderRameur, decoderStatut, decoderCapacites, decoderPlageResistance,
-} from '/src/ftms.js';
+} from '../src/ftms.js';
 import {
   creerSuivi, resumer, seanceVersCsv, historiqueVersCsv, lireImport, DUREE_MINIMALE_S,
   FORMAT_EXPORT, VERSION_EXPORT,
-} from '/src/seance.js';
-import { ouvrir } from '/web/stockage.js';
-import { creerSynchro } from '/web/synchro.js';
-import { bilan, suggererNiveau, lundiDe, cleJour, REGLAGES_PAR_DEFAUT } from '/src/objectif.js';
+} from '../src/seance.js';
+import { ouvrir } from './stockage.js';
+import { creerSynchro } from './synchro.js';
+import { bilan, suggererNiveau, lundiDe, cleJour, REGLAGES_PAR_DEFAUT } from '../src/objectif.js';
 
 const FTMS = 0x1826;
 const INFOS_APPAREIL = 0x180a;
