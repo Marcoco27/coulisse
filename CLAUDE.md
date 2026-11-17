@@ -51,6 +51,9 @@ donnée personnelle : ni nom, ni machine, ni adresse, ni séance.
 - `README.md` : la présentation publique du projet.
 - `LICENSE` : la licence MIT.
 - `CLAUDE.md` : cette carte.
+- `CLAUDE.local.md` : les notes locales de travail.
+- `.claude/settings.json` : retire la ligne d'attribution des commits.
+- `.gitignore` : ignore `donnees/` (captures complètes et données de séance) et `tmp/`.
 - `docs/depots-de-reference.md` : les dépôts GitHub proches, leur licence et ce
   qu'on en tire.
 - `docs/bases-scientifiques.md` : les quinze règles d'entraînement et de
@@ -62,15 +65,16 @@ donnée personnelle : ni nom, ni machine, ni adresse, ni séance.
 - `src/ftms.js` : le décodeur, en fonctions pures (mesures, statuts, capacités).
 - `src/seance.js` : découpage du flux en séances, résumé (moyennes, temps de
   passage aux 500 m), exports CSV, contrôle d'un fichier importé. Fonctions pures.
+- `src/objectif.js` : l'objectif de la semaine (jours actifs, minutes, réserve,
+  série, révision) et la suggestion de niveau. Chaque règle porte son numéro R.
 - `web/stockage.js` : l'historique dans le navigateur (IndexedDB), un échantillon
   écrit par seconde ramée, dès son arrivée.
 - `web/synchro.js` : copie de l'historique et du carnet sur le serveur qui sert la
   page, quand il répond ; la page s'en passe sinon. Jamais pour un rejeu ni une
   base d'essai.
-- `src/objectif.js` : l'objectif de la semaine (jours actifs, minutes, réserve,
-  série, révision) et la suggestion de niveau. Chaque règle porte son numéro R.
-- `tests/ftms.test.js` et `tests/seance.test.js` : leurs tests, sur `tests/fixtures/rameur-protocole.json`,
-  extrait d'une capture réelle sans date ni numéro de série.
+- `tests/ftms.test.js`, `tests/seance.test.js` et `tests/objectif.test.js` : leurs
+  tests, sur `tests/fixtures/rameur-protocole.json`, extrait d'une capture réelle
+  sans date ni numéro de série.
 - `outils/capture-ble.py` : capture depuis un ordinateur Linux par `bleak`, pas
   encore essayée sur le rameur.
 - `outils/extraire-fixture.mjs` : tire un extrait publiable d'une capture.
@@ -82,13 +86,11 @@ donnée personnelle : ni nom, ni machine, ni adresse, ni séance.
   `donnees/seances/` et `donnees/carnet.json`. Une séance supprimée part dans
   `donnees/seances/corbeille/`. `RAMEUR_DONNEES` pointe ailleurs pour un essai.
 - `web/` : la page (`index.html`, `style.css`, `app.js`). Écran en direct par Web
-  Bluetooth, résumé de fin, historique avec export et import. Rejeu d'une capture
-  par `?rejeu=1&vitesse=20`, `&depuis=S`, `&jusqua=S` ; il écrit dans une base à
-  part, `rameur-rejeu`, que `?base=rameur-rejeu&vue=historique` relit. Sur une
-  base d'essai, `&maintenant=AAAA-MM-JJTHH:MM` fixe la date du jour de l'écran de la
-  semaine.
-- `donnees/` : captures complètes, ignorées par git.
-- `.claude/settings.json` : retire la ligne d'attribution des commits.
+  Bluetooth, résumé de fin, historique avec export JSON ou CSV et import. Rejeu
+  d'une capture par `?rejeu=1&vitesse=20`, `&depuis=S`, `&jusqua=S` ; il écrit
+  dans une base à part, `rameur-rejeu`, que `?base=rameur-rejeu&vue=historique`
+  relit. Sur une base d'essai, `&maintenant=AAAA-MM-JJTHH:MM` fixe la date du
+  jour de l'écran de la semaine.
 
 Chaque dossier créé s'ajoute ici le jour même.
 

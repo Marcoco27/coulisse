@@ -406,7 +406,9 @@ async function commander(octets) {
   return reponse; // 0x01 : accepté ; null : pas de réponse
 }
 
-$('regler-niveau').addEventListener('click', async () => {
+/** Règle la résistance au niveau conseillé. Appelé seul à la connexion : on ne clique pas en ramant. */
+async function reglerNiveau() {
+  if (!(pointPilotage && resistancePilotable && niveauConseille)) return;
   const b = $('regler-niveau');
   b.disabled = true;
   try {
@@ -422,7 +424,9 @@ $('regler-niveau').addEventListener('click', async () => {
   } finally {
     b.disabled = false;
   }
-});
+}
+
+$('regler-niveau').addEventListener('click', reglerNiveau);
 
 /**
  * Au chargement : une séance restée ouverte reprend si elle a bougé il y a peu
@@ -549,6 +553,7 @@ async function brancher() {
   }
   majBoutonNiveau();
   afficherEtat('Connecté : ramez pour démarrer', 'actif');
+  reglerNiveau(); // sans attendre : la connexion n'en dépend pas
   $('action').textContent = 'Se déconnecter';
   $('aide').textContent = '';
   garderEcranAllume();

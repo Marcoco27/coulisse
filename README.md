@@ -3,14 +3,16 @@
 Une page web libre et gratuite pour suivre ses séances sur un rameur
 d'appartement connecté. Sans compte, sans abonnement, sans rien installer.
 
-> **État : en construction.** Aucune version utilisable n'est encore publiée.
+> **État : version 0.1, fonctionnelle en local.** La page s'utilise dès
+> maintenant en servant ce dossier en local. Aucune version n'est encore
+> publiée en ligne.
 
 ## L'idée
 
 - **Mesurer.** Pendant la séance, l'écran affiche l'allure aux 500 m, la
   cadence, le temps et la distance.
 - **Garder l'historique.** Chaque séance s'enregistre toute seule, se retrouve
-  plus tard et s'exporte en fichier.
+  plus tard avec son résumé, et s'exporte en fichier JSON ou CSV.
 - **Tenir dans la durée.** Vous fixez un nombre de séances par semaine. La page
   montre où vous en êtes, compte aussi vos autres activités, et ne vous pénalise
   pas pour une semaine de déplacement. Ses règles s'appuient sur des sources
@@ -21,6 +23,9 @@ d'appartement connecté. Sans compte, sans abonnement, sans rien installer.
 La page parle au rameur par Web Bluetooth, une fonction du navigateur Chrome.
 Elle fonctionne dans Chrome sur Android et sur ordinateur. Elle ne fonctionne
 pas dans Safari sur iPhone, qui ne propose pas cette fonction.
+
+Dès la connexion, elle règle aussi la résistance du rameur au niveau conseillé
+(pas encore vérifié sur l'appareil).
 
 Le rameur doit suivre la norme FTMS (Fitness Machine Service), le langage
 Bluetooth commun des machines de sport.
