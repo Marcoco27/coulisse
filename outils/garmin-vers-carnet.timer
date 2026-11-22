@@ -9,7 +9,7 @@ Description=Versement quotidien des footings Garmin, apres midi
 # Jamais avant midi : le footing du matin doit avoir eu le temps de synchroniser.
 OnCalendar=*-*-* 12:30:00
 # Pas de rattrapage au demarrage : il pourrait tomber avant midi. Le lendemain
-# relit quatorze jours, rien ne se perd.
+# relit soixante jours, rien ne se perd.
 Persistent=false
 AccuracySec=1min
 

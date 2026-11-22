@@ -27,7 +27,7 @@ const ilYaNJours = (n) => { const d = new Date(); d.setDate(d.getDate() - n); re
 const formaterDate = (ms) => new Date(ms).toLocaleDateString('fr-FR');
 
 function lireOptions(argv) {
-  const options = { depuis: ilYaNJours(14), essai: false };
+  const options = { depuis: ilYaNJours(60), essai: false };
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--depuis') {
       const valeur = argv[++i];
