@@ -1,0 +1,17 @@
+[Unit]
+# Minuteur utilisateur : il ne demande aucun sudo. A poser par
+#   cp ~/code/rameur/outils/garmin-vers-carnet.{service,timer} ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now garmin-vers-carnet.timer
+Description=Versement quotidien des footings Garmin, apres midi
+
+[Timer]
+# Jamais avant midi : le footing du matin doit avoir eu le temps de synchroniser.
+OnCalendar=*-*-* 12:30:00
+# Pas de rattrapage au demarrage : il pourrait tomber avant midi. Le lendemain
+# relit quatorze jours, rien ne se perd.
+Persistent=false
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target

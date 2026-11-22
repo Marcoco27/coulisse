@@ -130,3 +130,16 @@ test('fusionner : garde les réglages et les activités existantes', () => {
   assert.equal(r.carnet.reglages, reglages);
   assert.ok(r.carnet.activites.includes(existante));
 });
+
+test('fusionner : une course de moins de 500 m est écartée et signalée', () => {
+  const r = fusionner(
+    carnetVide(),
+    [garmin(1, '2025-09-28 07:00:00', { duration: 5, distance: 0 }),
+     garmin(2, '2025-11-18 07:00:00', { duration: 66, distance: 120 }),
+     garmin(3, '2025-11-19 07:00:00', { duration: 300, distance: 500 })],
+    le(2026, 3, 9),
+  );
+  assert.deepEqual(r.ajoutees.map((a) => a.id), ['garmin-3']);
+  assert.equal(r.ignorees.length, 2);
+  assert.match(r.ignorees[0].raison, /trop courte/);
+});

@@ -7,6 +7,9 @@
 
 import { cleJour } from './objectif.js';
 
+/** En dessous de cette distance (mètres), une course est un chrono lancé par erreur. */
+export const DISTANCE_MINIMALE = 500;
+
 const TYPES_COURSE = new Set([
   'running',
   'indoor_running',
@@ -68,6 +71,10 @@ export function fusionner(carnet, activitesGarmin, maintenant) {
   for (const brute of activitesGarmin ?? []) {
     if (!estUneCourse(brute)) continue;
     const a = versActivite(brute);
+    if (a.distance < DISTANCE_MINIMALE) {
+      ignorees.push({ id: a.id, raison: `trop courte (${a.distance} m)` });
+      continue;
+    }
     if (ids.has(a.id)) {
       ignorees.push({ id: a.id, raison: 'déjà là' });
       continue;

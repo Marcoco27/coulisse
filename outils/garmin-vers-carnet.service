@@ -1,0 +1,11 @@
+[Unit]
+Description=Versement quotidien des footings Garmin dans le carnet de Coulisse
+Documentation=file:///home/marc/code/rameur/outils/garmin-vers-carnet.mjs
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/marc/code/rameur
+# La cle vit dans le .env de l'espace de travail ; bash la charge comme a la main.
+# Sans --depuis, le script relit les quatorze derniers jours : un jour manque se rattrape.
+ExecStart=/bin/bash -c 'set -a; . /home/marc/code/espace-de-travail/.env; set +a; exec /home/marc/.nvm/versions/node/v24.22.1/bin/node outils/garmin-vers-carnet.mjs'
+Nice=15
