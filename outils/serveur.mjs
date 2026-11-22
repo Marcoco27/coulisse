@@ -23,6 +23,9 @@ const SEANCES = join(DONNEES, 'seances');
 const CORBEILLE = join(SEANCES, 'corbeille');
 const CARNET = join(DONNEES, 'carnet.json');
 const PORT = Number(process.argv[2] ?? 8790);
+// RAMEUR_HOTE ouvre l'écoute à une autre adresse (le service : l'adresse Tailscale d'atlas).
+// Par défaut, la machine seule.
+const HOTE = process.env.RAMEUR_HOTE ?? '127.0.0.1';
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
@@ -128,6 +131,6 @@ createServer(async (req, res) => {
     console.error(e);
     res.writeHead(e.statut ?? 500).end('erreur');
   }
-}).listen(PORT, '127.0.0.1', () => {
-  console.log(`http://localhost:${PORT}/  (trames reçues → ${fichierCapture})`);
+}).listen(PORT, HOTE, () => {
+  console.log(`http://${HOTE}:${PORT}/  (trames reçues → ${fichierCapture})`);
 });

@@ -1,0 +1,20 @@
+[Unit]
+Description=Coulisse, serveur du carnet et de l'historique, joignable par Tailscale seulement
+Documentation=file:///home/marc/code/rameur/outils/serveur.mjs
+# Si Tailscale n'a pas encore son adresse au démarrage, l'écoute échoue :
+# Restart la retente toutes les quinze secondes, sans limite.
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+WorkingDirectory=/home/marc/code/rameur
+# Écoute sur l'adresse Tailscale d'atlas, jamais sur le réseau local ni sur Internet.
+Environment=RAMEUR_HOTE=100.96.92.68
+ExecStart=/home/marc/.nvm/versions/node/v24.22.1/bin/node outils/serveur.mjs 8790
+Restart=on-failure
+RestartSec=15
+Nice=10
+MemoryMax=300M
+
+[Install]
+WantedBy=default.target
