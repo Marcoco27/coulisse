@@ -48,6 +48,7 @@ export function versActivite(activite) {
  * Fusionne les activités Garmin dans le carnet, sans modifier l'objet reçu.
  * - ignore silencieusement les non-courses ;
  * - ignore un id déjà présent (raison « déjà là ») ;
+ * - ignore une activité dont l'id est dans supprimees (raison « retirée à la main ») ;
  * - ignore une course Garmin si une course saisie à la main existe le même jour local
  *   (raison « course saisie à la main le même jour »).
  * Si rien n'est ajouté, le carnet revient inchangé (même maj). Sinon le maj devient
@@ -58,6 +59,8 @@ export function fusionner(carnet, activitesGarmin, maintenant) {
   const existantes = Array.isArray(source.activites) ? source.activites : [];
   const reglages = source.reglages ?? {};
   const majAvant = source.maj ?? 0;
+  const supprimees = Array.isArray(source.supprimees) ? source.supprimees : [];
+  const supprimeesSet = new Set(supprimees);
 
   const ids = new Set(existantes.map((a) => a.id));
   const joursManuels = new Set(
@@ -71,6 +74,10 @@ export function fusionner(carnet, activitesGarmin, maintenant) {
   for (const brute of activitesGarmin ?? []) {
     if (!estUneCourse(brute)) continue;
     const a = versActivite(brute);
+    if (supprimeesSet.has(a.id)) {
+      ignorees.push({ id: a.id, raison: 'retirée à la main' });
+      continue;
+    }
     if (a.distance < DISTANCE_MINIMALE) {
       ignorees.push({ id: a.id, raison: `trop courte (${a.distance} m)` });
       continue;
@@ -88,11 +95,11 @@ export function fusionner(carnet, activitesGarmin, maintenant) {
   }
 
   if (ajoutees.length === 0) {
-    return { carnet: { ...source, maj: majAvant, reglages, activites: existantes }, ajoutees, ignorees };
+    return { carnet: { ...source, maj: majAvant, reglages, supprimees, activites: existantes }, ajoutees, ignorees };
   }
 
   const activites = [...existantes, ...ajoutees].sort((a, b) => a.debut - b.debut);
   const maj = Math.max(maintenant, majAvant + 1);
-  return { carnet: { ...source, maj, reglages, activites }, ajoutees, ignorees };
+  return { carnet: { ...source, maj, reglages, supprimees, activites }, ajoutees, ignorees };
 }
 

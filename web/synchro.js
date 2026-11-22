@@ -6,7 +6,23 @@
 //
 // Règles de fusion, pour un seul utilisateur :
 // - une séance terminée existe des deux côtés ; celle qui manque d'un côté y est copiée ;
-// - le carnet (réglages, autres activités) : le plus récent gagne, d'après « maj ».
+// - le carnet : réglages du plus récent (d'après « maj »), activités fusionnées par id,
+//   suppressions conservées des deux côtés.
+
+import { fusionnerCarnets } from '../src/carnet.js';
+
+function normaliser(v) {
+  if (Array.isArray(v)) return v.map(normaliser);
+  if (v && typeof v === 'object') {
+    return Object.fromEntries(Object.keys(v).sort().map((cle) => [cle, normaliser(v[cle])]));
+  }
+  return v;
+}
+
+/** Vrai si les deux carnets ont le même contenu, quel que soit l'ordre des clés. */
+function memeCarnet(a, b) {
+  return JSON.stringify(normaliser(a)) === JSON.stringify(normaliser(b));
+}
 
 export function creerSynchro(db) {
   let active = null; // null : pas encore su ; true / false ensuite
@@ -44,10 +60,11 @@ export function creerSynchro(db) {
 
         const carnetDistant = await appel('GET', '/api/carnet');
         const carnetLocal = await db.carnet();
-        if (carnetDistant && (!carnetLocal || carnetDistant.maj > carnetLocal.maj)) await db.ecrireCarnet(carnetDistant);
-        else if (carnetLocal && (!carnetDistant || carnetLocal.maj > carnetDistant.maj)) await appel('PUT', '/api/carnet', carnetLocal);
+        const carnet = fusionnerCarnets(carnetLocal, carnetDistant);
+        if (!memeCarnet(carnet, carnetLocal)) await db.ecrireCarnet(carnet);
+        if (!memeCarnet(carnet, carnetDistant)) await appel('PUT', '/api/carnet', carnet);
 
-        return { recuperees: aRecuperer.length, envoyees };
+        return { recuperees: aRecuperer.length, envoyees, carnet };
       } catch {
         active = false;
         return null;
@@ -68,7 +85,10 @@ export function creerSynchro(db) {
 
     async envoyerCarnet(carnet) {
       if (active === false) return;
-      await appel('PUT', '/api/carnet', carnet);
+      const distant = await appel('GET', '/api/carnet');
+      const fusionne = fusionnerCarnets(carnet, distant);
+      await appel('PUT', '/api/carnet', fusionne);
+      return fusionne;
     },
   };
 }

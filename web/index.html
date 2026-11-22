@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Coulisse</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="historique.css">
 </head>
 <body>
 <nav aria-label="Vues">
@@ -184,14 +185,32 @@
 
 <main id="vue-historique" class="vue page" hidden>
   <h1>Historique</h1>
-  <p id="historique-vide" class="discret" hidden>Aucune séance pour l’instant. Elles s’enregistrent toutes seules dès que vous ramez.</p>
-  <ul id="historique-liste" class="liste"></ul>
-  <div class="boutons">
+  <p id="historique-vide" class="discret" hidden>Aucune séance pour l’instant. Elles s’enregistrent toutes seules dès que vous ramez ou courez.</p>
+  <div id="historique-contenu" class="historique-contenu">
+    <section id="historique-derniere" class="historique-derniere" aria-label="Dernière séance"></section>
+    <div class="historique-colonne">
+      <section id="historique-calendrier" class="carte historique-calendrier" aria-label="Calendrier de l’année"></section>
+      <section id="historique-progression" class="carte historique-progression" aria-label="Progression"></section>
+    </div>
+    <section class="carte historique-liste-section" aria-labelledby="historique-liste-titre">
+      <h2 id="historique-liste-titre">Toutes les séances</h2>
+      <div id="historique-filtres" class="historique-filtres" role="group" aria-label="Filtrer les séances"></div>
+      <div id="historique-liste" class="historique-liste"></div>
+    </section>
+  </div>
+  <div id="historique-actions" class="boutons historique-actions">
     <button type="button" id="historique-json">Tout exporter en JSON</button>
     <button type="button" id="historique-csv">Tout exporter en CSV</button>
     <label class="bouton">Importer un JSON<input type="file" id="historique-import" accept="application/json,.json" hidden></label>
   </div>
   <p id="historique-message" class="discret" role="status"></p>
+  <dialog id="historique-dialog" closedby="any" aria-labelledby="historique-dialog-titre">
+    <h2 id="historique-dialog-titre"></h2>
+    <div id="historique-dialog-contenu"></div>
+    <form method="dialog">
+      <button type="submit" autofocus>Fermer</button>
+    </form>
+  </dialog>
 </main>
 
 <script type="module" src="app.js"></script>

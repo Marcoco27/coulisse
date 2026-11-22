@@ -17,6 +17,7 @@ import {
 } from '../src/seance.js';
 import { ouvrir } from './stockage.js';
 import { creerSynchro } from './synchro.js';
+import { creerHistorique } from './historique.js';
 import { bilan, suggererNiveau, lundiDe, cleJour, REGLAGES_PAR_DEFAUT } from '../src/objectif.js';
 
 const FTMS = 0x1826;
@@ -139,12 +140,19 @@ async function chargerCarnet() {
   carnet = (await db.carnet()) ?? { maj: 0, reglages: {}, activites: [] };
   carnet.reglages = { ...REGLAGES_PAR_DEFAUT, ...carnet.reglages };
   carnet.activites ??= [];
+  carnet.supprimees ??= [];
 }
 
 async function enregistrerCarnet() {
   carnet.maj = Date.now();
   await db.ecrireCarnet(carnet);
-  try { await synchro?.envoyerCarnet({ ...carnet, id: 'carnet' }); } catch (e) { console.warn('sauvegarde serveur', e); }
+  try {
+    const fusionne = await synchro?.envoyerCarnet({ ...carnet, id: 'carnet' });
+    if (fusionne) {
+      carnet = fusionne;
+      await db.ecrireCarnet(carnet);
+    }
+  } catch (e) { console.warn('sauvegarde serveur', e); }
 }
 
 function afficherSauvegarde() {
@@ -263,6 +271,8 @@ async function afficherSemaine() {
     retirer.textContent = 'Retirer';
     retirer.addEventListener('click', async () => {
       carnet.activites = carnet.activites.filter((x) => x.id !== a.id);
+      carnet.supprimees ??= [];
+      if (!carnet.supprimees.includes(a.id)) carnet.supprimees.push(a.id);
       await enregistrerCarnet();
       afficherSemaine();
     });
@@ -677,23 +687,11 @@ $('resume-retour').addEventListener('click', () => montrer('historique'));
 
 // ---------------------------------------------------------------- historique
 
+let historique = null;
+
 async function afficherHistorique() {
-  const seances = await db.seances();
-  $('historique-vide').hidden = seances.length > 0;
-  $('historique-liste').replaceChildren(...seances.map((s) => {
-    const li = document.createElement('li');
-    const b = document.createElement('button');
-    b.type = 'button';
-    const date = document.createElement('span'); date.className = 'date';
-    date.textContent = formatDate.format(s.debut) + (s.etat === 'en-cours' ? ' · en cours' : '');
-    const totaux = document.createElement('span'); totaux.className = 'totaux';
-    const r = s.resume;
-    totaux.textContent = r ? `${mmss(r.duree)} · ${nombre.format(r.distance)} m · ${mmss(r.allureMoyenne)} /500 m` : '…';
-    b.append(date, totaux);
-    b.addEventListener('click', () => ouvrirResume(s.id));
-    li.append(b);
-    return li;
-  }));
+  historique ??= creerHistorique({ db, lireCarnet: () => carnet, ouvrirResume });
+  await historique.afficher();
 }
 
 $('historique-json').addEventListener('click', async () => exporterJson(await db.seances(), `rameur-historique-${nomFichier(Date.now())}.json`));

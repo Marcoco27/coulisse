@@ -143,3 +143,12 @@ test('fusionner : une course de moins de 500 m est écartée et signalée', () =
   assert.equal(r.ignorees.length, 2);
   assert.match(r.ignorees[0].raison, /trop courte/);
 });
+
+test('fusionner : une activité retirée à la main n’est pas réimportée', () => {
+  const carnet = { maj: 10, reglages: {}, supprimees: ['garmin-1'], activites: [] };
+  const r = fusionner(carnet, [garmin(1, '2026-03-08 07:00:00')], le(2026, 3, 9));
+  assert.equal(r.ajoutees.length, 0);
+  assert.deepEqual(r.ignorees, [{ id: 'garmin-1', raison: 'retirée à la main' }]);
+  assert.deepEqual(r.carnet.supprimees, ['garmin-1']);
+  assert.equal(r.carnet.maj, 10);
+});
