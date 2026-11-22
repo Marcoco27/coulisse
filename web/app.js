@@ -19,6 +19,7 @@ import { ouvrir } from './stockage.js';
 import { creerSynchro } from './synchro.js';
 import { creerHistorique } from './historique.js';
 import { bilan, suggererNiveau, lundiDe, cleJour, REGLAGES_PAR_DEFAUT } from '../src/objectif.js';
+import { DUREE_MINIMALE_SECONDES } from '../src/historique.js';
 
 const FTMS = 0x1826;
 const INFOS_APPAREIL = 0x180a;
@@ -177,6 +178,7 @@ async function seancesRameur() {
   const liste = [];
   for (const s of await db.seances()) {
     if (s.etat !== 'terminee' || !s.resume) continue;
+    if ((s.resume.duree ?? 0) < DUREE_MINIMALE_SECONDES) continue; // faux départ : ne compte pas
     if (s.resume.niveauPrincipal === undefined) {
       s.resume = resumer(await db.echantillons(s.id));
       await db.ecrireSeance(s);

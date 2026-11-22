@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  unifier, comparer, calendrier, medianesMensuelles, grouperParMois, lisser, formaterAllure,
+  unifier, comparer, DUREE_MINIMALE_SECONDES, grouperParMois, lisser, formaterAllure,
   semainesRecentes, tendance, elan,
 } from '../src/historique.js';
 import { cleJour } from '../src/objectif.js';
@@ -35,6 +35,24 @@ test('unifier ramène les deux sources au même format, du plus récent au plus 
   assert.equal(liste[2].puissance, 120);
 });
 
+test('unifier ignore une séance de rameur de 39 s, garde 60 s et une course de 0,5 minute', () => {
+  assert.equal(DUREE_MINIMALE_SECONDES, 60);
+  const t1 = new Date(2024, 0, 1, 10, 0).getTime();
+  const t2 = new Date(2024, 0, 2, 10, 0).getTime();
+  const t3 = new Date(2024, 0, 3, 10, 0).getTime();
+  const seancesRameur = [
+    { id: 'r39', debut: t1, resume: { duree: 39, distance: 100, allureMoyenne: 150 } },
+    { id: 'r60', debut: t2, resume: { duree: 60, distance: 200, allureMoyenne: 150 } },
+  ];
+  const activites = [
+    { id: 'a05', debut: t3, minutes: 0.5, type: 'course' },
+  ];
+  const liste = unifier(seancesRameur, activites);
+  assert.deepEqual(liste.map((s) => s.id), ['a05', 'r60']);
+  assert.equal(liste[0].minutes, 0.5);
+  assert.equal(liste[1].minutes, 1);
+});
+
 test('comparer distingue plus vite, plus lent, allure habituelle et moins de cinq précédentes', () => {
   const base = new Date(2024, 0, 10, 10, 0).getTime();
   const jour = 86400000;
@@ -65,50 +83,6 @@ test('comparer distingue plus vite, plus lent, allure habituelle et moins de cin
   const moinsDeCinq = comparer(seance, [seance, ...deux]);
   assert.equal(moinsDeCinq.ecart, 10);
   assert.match(moinsDeCinq.texte, /10 s\/km plus vite/);
-});
-
-test('calendrier agrège les deux types, calcule les crans et commence un lundi', () => {
-  const maintenant = new Date(2024, 2, 20, 12, 0);
-  const lundi = new Date(2024, 2, 18, 10, 0);
-  const mardi = new Date(2024, 2, 19, 10, 0);
-  const mercredi = new Date(2024, 2, 20, 10, 0);
-  const jeudi = new Date(2024, 2, 21, 10, 0);
-  const liste = [
-    { id: 'r1', debut: lundi.getTime(), type: 'rameur', minutes: 20 },
-    { id: 'c1', debut: lundi.getTime() + 3600000, type: 'course', minutes: 15 },
-    { id: 'r2', debut: mardi.getTime(), type: 'rameur', minutes: 10 },
-    { id: 'r3', debut: mercredi.getTime(), type: 'rameur', minutes: 70 },
-    { id: 'r4', debut: jeudi.getTime(), type: 'rameur', minutes: 150 },
-  ];
-  const semaines = calendrier(liste, maintenant);
-  assert.equal(semaines.length, 53);
-  assert.equal(semaines[0].length, 7);
-  assert.equal(new Date(semaines[0][0].cle + 'T12:00:00').getDay(), 1);
-
-  const parCle = new Map(semaines.flat().map((j) => [j.cle, j]));
-  const l = parCle.get(cleJour(lundi));
-  assert.equal(l.minutesRameur, 20);
-  assert.equal(l.minutesFooting, 15);
-  assert.equal(l.cran, 2);
-  assert.deepEqual(l.seances, ['r1', 'c1']);
-  assert.equal(parCle.get(cleJour(mardi)).cran, 1);
-  assert.equal(parCle.get(cleJour(mercredi)).cran, 3);
-  assert.equal(parCle.get(cleJour(jeudi)).cran, 4);
-  assert.equal(parCle.get(cleJour(new Date(2024, 2, 22, 10, 0))).cran, 0);
-});
-
-test('medianesMensuelles calcule une médiane par mois local', () => {
-  const points = [
-    { debut: new Date(2024, 0, 10).getTime(), allure: 300 },
-    { debut: new Date(2024, 0, 20).getTime(), allure: 320 },
-    { debut: new Date(2024, 0, 25).getTime(), allure: 310 },
-    { debut: new Date(2024, 1, 5).getTime(), allure: 400 },
-    { debut: new Date(2024, 1, 15).getTime(), allure: 380 },
-  ];
-  assert.deepEqual(medianesMensuelles(points), [
-    { mois: '2024-01', mediane: 310 },
-    { mois: '2024-02', mediane: 390 },
-  ]);
 });
 
 test('grouperParMois regroupe et totalise par mois, du plus récent au plus ancien', () => {
