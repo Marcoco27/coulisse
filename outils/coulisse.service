@@ -8,8 +8,9 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 WorkingDirectory=/home/marc/code/rameur
-# Écoute sur l'adresse Tailscale d'atlas, jamais sur le réseau local ni sur Internet.
-Environment=RAMEUR_HOTE=100.96.92.68
+# Écoute sur la machine elle-même (le rameur, par le transfert de port de VS Code)
+# et sur l'adresse Tailscale d'atlas ; jamais sur le réseau local ni sur Internet.
+Environment=RAMEUR_HOTE=127.0.0.1,100.96.92.68
 ExecStart=/home/marc/.nvm/versions/node/v24.22.1/bin/node outils/serveur.mjs 8790
 Restart=on-failure
 RestartSec=15
