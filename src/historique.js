@@ -284,6 +284,84 @@ export function semainesRecentes(liste, maintenant, nombre = 12, statuts = new M
   return semaines;
 }
 
+const JOUR_MS = 86400000;
+export const MINUTES_CONSEILLEES = 150;
+
+/**
+ * Élan de la semaine : où en est la semaine courante, sport par sport, et une
+ * phrase d'encouragement fondée sur les chiffres (jamais une promesse).
+ * `semaines` vient de semainesRecentes : la dernière est la semaine courante.
+ */
+export function elan(liste, semaines, maintenant) {
+  const instant = maintenant instanceof Date ? maintenant.getTime() : Number(maintenant);
+  const courante = semaines[semaines.length - 1];
+  const precedente = semaines.length >= 2 ? semaines[semaines.length - 2] : null;
+  if (!courante) return null;
+
+  const derniere = (type) => {
+    const s = liste.filter((x) => x.type === type && x.debut <= instant)
+      .reduce((a, b) => (a && a.debut > b.debut ? a : b), null);
+    return s ? Math.floor((instant - s.debut) / JOUR_MS) : null;
+  };
+  const sports = ['rameur', 'course'].map((type) => ({
+    type,
+    minutes: courante.minutes[type] || 0,
+    seances: courante.seances.filter((s) => s.type === type).length,
+    joursDepuis: derniere(type),
+  }));
+
+  const total = courante.total;
+  const part = Math.min(1, total / MINUTES_CONSEILLEES);
+  const jourSemaine = (new Date(instant).getDay() + 6) % 7; // lundi = 0
+  const joursRestants = 6 - jourSemaine; // jours après aujourd'hui
+  const reste = courante.objectif != null ? Math.max(0, courante.objectif - courante.joursActifs) : null;
+  const aujourdhuiActif = courante.jours[jourSemaine]?.types.length > 0;
+  const course = sports[1];
+  const rameur = sports[0];
+
+  let titre;
+  let texte;
+  let ton = 'elan';
+  if (courante.statut === 'tenue' || (reste === 0 && courante.objectif != null)) {
+    titre = 'Semaine gagnée';
+    texte = total >= MINUTES_CONSEILLEES
+      ? `Objectif tenu et ${Math.round(total)} minutes au compteur : la dose conseillée est atteinte.`
+      : 'Objectif tenu. Tout ce qui vient maintenant est du bonus.';
+    ton = 'victoire';
+  } else if (total === 0) {
+    titre = jourSemaine === 0 ? 'Nouvelle semaine, page blanche' : 'La semaine attend son premier coup de rame';
+    texte = 'Quinze minutes suffisent pour ouvrir le compteur. Le plus dur, c’est de s’asseoir.';
+  } else if (reste != null && reste > joursRestants + (aujourdhuiActif ? 0 : 1)) {
+    titre = 'Pas cette fois, mais rien n’est perdu';
+    texte = `${Math.round(total)} minutes déjà faites cette semaine. Chaque séance compte pour la forme, même quand l’objectif file.`;
+    if (joursRestants === 0) texte += ' Demain, le compteur repart à zéro.';
+  } else if (reste != null) {
+    titre = `Encore ${reste} ${reste > 1 ? 'jours actifs' : 'jour actif'}`;
+    const marge = joursRestants + (aujourdhuiActif ? 0 : 1);
+    texte = `Il reste ${marge} ${marge > 1 ? 'jours' : 'jour'} au calendrier : c’est jouable.`;
+  } else {
+    titre = `${Math.round(total)} minutes cette semaine`;
+    texte = 'Chaque minute compte, et elles s’additionnent.';
+  }
+
+  let coupDePouce = null;
+  if (course.seances === 0 && rameur.seances > 0) {
+    coupDePouce = course.joursDepuis != null
+      ? `Les baskets attendent depuis ${course.joursDepuis} jours : un footing cette semaine, et elle devient complète.`
+      : 'Un footing cette semaine, et elle devient complète.';
+  } else if (rameur.seances === 0 && course.seances > 0) {
+    coupDePouce = rameur.joursDepuis != null
+      ? `Le rameur n’a pas servi depuis ${rameur.joursDepuis} jours : quinze minutes, et les deux sports sont au rendez-vous.`
+      : 'Quinze minutes de rameur, et les deux sports sont au rendez-vous.';
+  } else if (precedente && total > precedente.total && precedente.total > 0) {
+    coupDePouce = `Déjà ${Math.round(total - precedente.total)} minutes de plus que la semaine dernière.`;
+  } else if (total < MINUTES_CONSEILLEES && total > 0) {
+    coupDePouce = `${Math.round(MINUTES_CONSEILLEES - total)} minutes encore pour la dose conseillée de ${MINUTES_CONSEILLEES} minutes.`;
+  }
+
+  return { titre, texte, coupDePouce, ton, total, part, sports, reste, objectif: courante.objectif };
+}
+
 /** Tendance d'allure : lot récent, lot précédent et écart, sans valeurs aberrantes. */
 export function tendance(liste, type, taille = 5) {
   const lot = Math.max(1, Math.floor(taille));

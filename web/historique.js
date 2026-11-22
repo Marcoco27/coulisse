@@ -3,6 +3,7 @@
 
 import {
   unifier, comparer, grouperParMois, lisser, formaterAllure, semainesRecentes, tendance,
+  elan, MINUTES_CONSEILLEES,
 } from '../src/historique.js';
 import { bilan, cleJour } from '../src/objectif.js';
 
@@ -168,6 +169,7 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume, maintenant = () 
   const el = {
     vide: $('historique-vide'),
     contenu: $('historique-contenu'),
+    elan: $('historique-elan'),
     derniere: $('historique-derniere'),
     semaines: $('historique-semaines'),
     tendances: $('historique-tendances'),
@@ -258,6 +260,83 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume, maintenant = () 
       el.dialogContenu.append(p);
     }
     if (!el.dialog.open) el.dialog.showModal();
+  }
+
+  function rendreElan() {
+    if (!el.elan) return;
+    el.elan.replaceChildren();
+    const semaines = semainesRecentes(liste, instant, 2, statuts);
+    const e = elan(liste, semaines, instant);
+    if (!e) {
+      el.elan.hidden = true;
+      return;
+    }
+    el.elan.hidden = false;
+    el.elan.dataset.ton = e.ton;
+
+    const surtitre = document.createElement('span');
+    surtitre.className = 'historique-surtitre';
+    surtitre.textContent = 'Votre semaine';
+    const titre = document.createElement('h2');
+    titre.className = 'elan-titre';
+    titre.textContent = e.titre;
+    const texte = document.createElement('p');
+    texte.className = 'elan-texte';
+    texte.textContent = e.texte;
+
+    // Jauge vers les minutes conseillées, empilée par sport.
+    const jauge = document.createElement('div');
+    jauge.className = 'elan-jauge';
+    jauge.setAttribute('role', 'img');
+    jauge.setAttribute('aria-label', `${Math.round(e.total)} minutes sur ${MINUTES_CONSEILLEES} conseillées`);
+    const echelle = Math.max(MINUTES_CONSEILLEES, e.total);
+    for (const s of e.sports) {
+      if (s.minutes <= 0) continue;
+      const seg = document.createElement('span');
+      seg.className = `elan-segment type-${s.type}`;
+      seg.style.width = `${(s.minutes / echelle) * 100}%`;
+      jauge.append(seg);
+    }
+    const jaugeLegende = document.createElement('p');
+    jaugeLegende.className = 'elan-jauge-legende';
+    const fait = document.createElement('strong');
+    fait.textContent = `${Math.round(e.total)} min`;
+    jaugeLegende.append(fait, ` sur ${MINUTES_CONSEILLEES} conseillées`);
+
+    // Les deux sports, toujours présents, même à zéro.
+    const sports = document.createElement('div');
+    sports.className = 'elan-sports';
+    for (const s of e.sports) {
+      const carte = document.createElement('div');
+      carte.className = `elan-sport type-${s.type}`;
+      if (s.seances === 0) carte.classList.add('a-faire');
+      const nom = document.createElement('span');
+      nom.className = 'elan-sport-nom';
+      nom.textContent = NOMS_TYPE[s.type];
+      const valeur = document.createElement('span');
+      valeur.className = 'elan-sport-valeur';
+      valeur.textContent = `${Math.round(s.minutes)} min`;
+      const detail = document.createElement('span');
+      detail.className = 'elan-sport-detail';
+      if (s.seances > 0) {
+        detail.textContent = `${s.seances} ${pluriel(s.seances, 'séance', 'séances')}`;
+      } else if (s.joursDepuis != null) {
+        detail.textContent = s.joursDepuis === 0 ? 'pas encore cette semaine'
+          : `dernier il y a ${s.joursDepuis} ${pluriel(s.joursDepuis, 'jour', 'jours')}`;
+      } else {
+        detail.textContent = 'pas encore';
+      }
+      carte.append(nom, valeur, detail);
+      sports.append(carte);
+    }
+
+    el.elan.append(surtitre, titre, texte, jauge, jaugeLegende, sports);
+    if (e.coupDePouce) {
+      const p = document.createElement('p');
+      p.className = 'elan-pouce';
+      p.textContent = e.coupDePouce;
+      el.elan.append(p);
+    }
   }
 
   async function rendreDerniere() {
@@ -761,9 +840,17 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume, maintenant = () 
         refs.statut.textContent = 'Objectif tenu';
       } else if (semaine.statut === 'en-cours') {
         const reste = semaine.objectif != null ? Math.max(0, semaine.objectif - semaine.joursActifs) : null;
-        refs.statut.textContent = reste != null
-          ? `Encore ${reste} ${pluriel(reste, 'jour', 'jours')}`
-          : 'En cours';
+        // Jours encore jouables : ceux qui restent au calendrier, aujourd'hui compris s'il est encore vide.
+        const aujourdhuiCle = cleJour(instant);
+        const jouables = semaine.jours.filter((j) => j.cle > aujourdhuiCle
+          || (j.cle === aujourdhuiCle && j.types.length === 0)).length;
+        if (reste != null && reste > jouables) {
+          refs.statut.textContent = 'Hors de portée, on repart lundi';
+        } else {
+          refs.statut.textContent = reste != null
+            ? `Encore ${reste} ${pluriel(reste, 'jour actif', 'jours actifs')}`
+            : 'En cours';
+        }
       } else if (semaine.statut === 'joker') {
         refs.statut.textContent = 'Réserve utilisée';
       } else if (semaine.statut === 'manquee') {
@@ -807,16 +894,16 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume, maintenant = () 
       refs.jours.append(li);
     }
 
-    const familles = ORDRE_FAMILLES.filter((f) => (semaine.minutes[f] || 0) > 0);
-    if (familles.length >= 2) {
-      refs.repartition.hidden = false;
-      refs.repartition.textContent = familles
-        .map((f) => `${NOMS_TYPE[f]} ${Math.round(semaine.minutes[f])} min`)
-        .join(' · ');
-    } else {
-      refs.repartition.hidden = true;
-      refs.repartition.textContent = '';
-    }
+    // Rameur et footing toujours affichés, même à zéro : la semaine compte les deux.
+    const familles = ORDRE_FAMILLES.filter((f) => f !== 'autre' || (semaine.minutes[f] || 0) > 0);
+    refs.repartition.hidden = false;
+    refs.repartition.replaceChildren(...familles.map((f) => {
+      const span = document.createElement('span');
+      span.className = `historique-repartition-sport type-${f}`;
+      if (!(semaine.minutes[f] > 0)) span.classList.add('zero');
+      span.textContent = `${NOMS_TYPE[f]} ${Math.round(semaine.minutes[f] || 0)} min`;
+      return span;
+    }));
 
     refs.seances.replaceChildren();
     if (semaine.seances.length === 0) {
@@ -1075,6 +1162,7 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume, maintenant = () 
       }
     }
 
+    rendreElan();
     await rendreDerniere();
     construireSemaines();
     majSemaines();

@@ -28,13 +28,15 @@
     grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
     /* La première rangée prend la hauteur de la dernière séance, la seconde le reste :
        sans cela, la carte des semaines étire les deux et ouvre un trou à gauche. */
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto auto 1fr auto;
     grid-template-areas:
+      "elan elan"
       "derniere semaines"
       "tendances semaines"
       "toutes toutes";
     align-items: start;
   }
+  .historique-elan { grid-area: elan; }
   .historique-derniere { grid-area: derniere; }
   .historique-semaines { grid-area: semaines; }
   .historique-tendances { grid-area: tendances; }
@@ -841,4 +843,165 @@ dialog:modal {
 dialog::backdrop {
   overflow: hidden;
   overscroll-behavior: contain;
+}
+
+/* ------------------------------------------------ élan de la semaine */
+/* Repli : fond uni d'abord, teinte par color-mix ensuite (navigateurs anciens). */
+
+.historique-elan {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.1rem 1rem 1rem;
+  border: 1px solid var(--trait);
+  border-radius: 0.9rem;
+  background: var(--surface);
+  background:
+    linear-gradient(135deg,
+      color-mix(in oklab, var(--rameur) 28%, var(--surface)) 0%,
+      color-mix(in oklab, var(--autre) 18%, var(--surface)) 55%,
+      color-mix(in oklab, var(--footing) 26%, var(--surface)) 100%);
+}
+
+.historique-elan[data-ton="victoire"] {
+  border-color: var(--accent);
+  background: var(--surface);
+  background:
+    linear-gradient(135deg,
+      color-mix(in oklab, var(--accent) 30%, var(--surface)) 0%,
+      color-mix(in oklab, var(--rameur) 20%, var(--surface)) 100%);
+}
+
+.historique-elan .historique-surtitre {
+  color: var(--texte);
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+}
+
+.elan-titre {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+.historique-elan[data-ton="victoire"] .elan-titre {
+  color: var(--accent);
+}
+
+.elan-texte {
+  margin: 0;
+  color: var(--texte);
+}
+
+.elan-jauge {
+  display: flex;
+  height: 0.9rem;
+  margin-top: 0.3rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--fond) 70%, transparent);
+  border: 1px solid var(--trait);
+}
+
+.elan-segment {
+  display: block;
+  height: 100%;
+  min-width: 0.4rem;
+}
+
+.elan-segment.type-rameur { background: var(--rameur); }
+.elan-segment.type-course { background: var(--footing); }
+
+.elan-jauge-legende {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--discret);
+}
+
+.elan-jauge-legende strong {
+  color: var(--texte);
+  font-size: 1rem;
+}
+
+.elan-sports {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.elan-sport {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 0.7rem;
+  border: 2px solid transparent;
+  background: var(--fond);
+}
+
+.elan-sport.type-rameur {
+  border-color: var(--rameur);
+  background: color-mix(in oklab, var(--rameur) 22%, var(--fond));
+}
+
+.elan-sport.type-course {
+  border-color: var(--footing);
+  background: color-mix(in oklab, var(--footing) 22%, var(--fond));
+}
+
+/* Un sport pas encore fait cette semaine : cadre en pointillés, une case à remplir. */
+.elan-sport.a-faire {
+  border-style: dashed;
+  background: var(--fond);
+  background: color-mix(in oklab, var(--fond) 70%, transparent);
+}
+
+.elan-sport-nom {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.elan-sport.type-rameur .elan-sport-nom { color: var(--rameur); }
+.elan-sport.type-course .elan-sport-nom { color: var(--footing); }
+
+.elan-sport-valeur {
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.elan-sport-detail {
+  font-size: 0.8rem;
+  color: var(--discret);
+}
+
+.elan-pouce {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  border-left: 3px solid var(--alerte);
+  border-radius: 0.3rem;
+  background: color-mix(in oklab, var(--alerte) 14%, var(--fond));
+  color: var(--texte);
+  font-size: 0.95rem;
+}
+
+/* ------------------------------------------------ couleurs dans la semaine */
+
+.historique-repartition-sport {
+  font-weight: 600;
+}
+
+.historique-repartition-sport + .historique-repartition-sport::before {
+  content: " · ";
+  color: var(--discret);
+  font-weight: 400;
+}
+
+.historique-repartition-sport.type-rameur { color: var(--rameur); }
+.historique-repartition-sport.type-course { color: var(--footing); }
+.historique-repartition-sport.type-autre { color: var(--autre); }
+.historique-repartition-sport.zero { opacity: 0.55; font-weight: 400; }
+
+.historique-statut.tenue {
+  background: color-mix(in oklab, var(--accent) 25%, var(--surface));
 }

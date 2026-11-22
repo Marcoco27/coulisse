@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   unifier, comparer, calendrier, medianesMensuelles, grouperParMois, lisser, formaterAllure,
-  semainesRecentes, tendance,
+  semainesRecentes, tendance, elan,
 } from '../src/historique.js';
 import { cleJour } from '../src/objectif.js';
 
@@ -237,4 +237,55 @@ test('tendance laisse avant à null sous deux séances précédentes', () => {
   assert.equal(t.avant, null);
   assert.equal(t.ecart, null);
   assert.equal(t.nombre, 2);
+});
+
+// ------------------------------------------------ élan de la semaine
+
+function seance(type, date, minutes) {
+  return { id: `${type}-${date.getTime()}`, type, debut: date.getTime(), minutes };
+}
+
+test('elan montre toujours les deux sports et pousse au footing manquant', () => {
+  const maintenant = new Date(2026, 10, 18, 20, 0); // mercredi
+  const liste = [
+    seance('rameur', new Date(2026, 10, 16, 10), 15),
+    seance('rameur', new Date(2026, 10, 17, 10), 15),
+    seance('course', new Date(2026, 9, 14, 10), 30),
+  ];
+  const e = elan(liste, semainesRecentes(liste, maintenant, 2), maintenant);
+  assert.deepEqual(e.sports.map((s) => s.type), ['rameur', 'course']);
+  assert.equal(e.sports[0].minutes, 30);
+  assert.equal(e.sports[1].seances, 0);
+  assert.equal(e.sports[1].joursDepuis, 35);
+  assert.match(e.coupDePouce, /baskets attendent depuis 35 jours/);
+  assert.equal(e.total, 30);
+});
+
+test('elan félicite une semaine tenue', () => {
+  const maintenant = new Date(2026, 10, 20, 20, 0); // vendredi
+  const liste = [1, 2].map((j) => seance('rameur', new Date(2026, 10, 15 + j, 10), 20))
+    .concat([seance('course', new Date(2026, 10, 19, 10), 30)]);
+  const statuts = new Map([['2026-11-16', { statut: 'tenue', objectif: 3 }]]);
+  const e = elan(liste, semainesRecentes(liste, maintenant, 2, statuts), maintenant);
+  assert.equal(e.ton, 'victoire');
+  assert.equal(e.titre, 'Semaine gagnée');
+});
+
+test('elan ne promet pas une semaine devenue impossible, et regarde vers demain le dimanche', () => {
+  const maintenant = new Date(2026, 10, 22, 20, 0); // dimanche
+  const liste = [seance('rameur', new Date(2026, 10, 16, 10), 26)];
+  const statuts = new Map([['2026-11-16', { statut: 'en-cours', objectif: 5 }]]);
+  const e = elan(liste, semainesRecentes(liste, maintenant, 2, statuts), maintenant);
+  assert.equal(e.titre, 'Pas cette fois, mais rien n’est perdu');
+  assert.match(e.texte, /Demain, le compteur repart à zéro/);
+});
+
+test('elan compte les jours restants quand la semaine reste jouable', () => {
+  const maintenant = new Date(2026, 10, 17, 9, 0); // mardi matin, rien fait aujourd'hui
+  const liste = [seance('course', new Date(2026, 10, 16, 10), 30)];
+  const statuts = new Map([['2026-11-16', { statut: 'en-cours', objectif: 5 }]]);
+  const e = elan(liste, semainesRecentes(liste, maintenant, 2, statuts), maintenant);
+  assert.equal(e.titre, 'Encore 4 jours actifs');
+  assert.match(e.texte, /Il reste 6 jours/);
+  assert.match(e.coupDePouce, /rameur/);
 });
