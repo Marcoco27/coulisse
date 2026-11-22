@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   unifier, comparer, calendrier, medianesMensuelles, grouperParMois, lisser, formaterAllure,
+  semainesRecentes, tendance,
 } from '../src/historique.js';
 import { cleJour } from '../src/objectif.js';
 
@@ -134,4 +135,106 @@ test('lisser lisse sans déborder et formaterAllure arrondit', () => {
   assert.deepEqual(lisser([10, 20, 30], 3), [15, 20, 25]);
   assert.deepEqual(lisser([10, null, 20], 3), [10, null, 20]);
   assert.equal(formaterAllure(312.6), '5:13');
+});
+
+
+test('semainesRecentes place la semaine courante en dernière position', () => {
+  const maintenant = new Date(2024, 4, 15, 12, 0, 0);
+  const semaines = semainesRecentes([], maintenant, 3);
+  assert.equal(semaines.length, 3);
+  assert.equal(semaines[0].lundi, '2024-04-29');
+  assert.equal(semaines[2].lundi, '2024-05-13');
+  assert.equal(semaines[2].jours[0].cle, '2024-05-13');
+  assert.equal(semaines[2].jours[6].cle, '2024-05-19');
+});
+
+test('semainesRecentes additionne les minutes par famille', () => {
+  const maintenant = new Date(2024, 0, 10, 12);
+  const liste = [
+    { id: 'r', debut: new Date(2024, 0, 8, 10).getTime(), type: 'rameur', minutes: 10 },
+    { id: 'c', debut: new Date(2024, 0, 9, 10).getTime(), type: 'course', minutes: 20 },
+    { id: 'ren', debut: new Date(2024, 0, 9, 11).getTime(), type: 'renforcement', minutes: 15 },
+    { id: 'a', debut: new Date(2024, 0, 10, 10).getTime(), type: 'autre', minutes: 5 },
+  ];
+  const semaine = semainesRecentes(liste, maintenant, 1)[0];
+  assert.equal(semaine.minutes.rameur, 10);
+  assert.equal(semaine.minutes.course, 20);
+  assert.equal(semaine.minutes.autre, 20);
+  assert.equal(semaine.total, 50);
+  assert.equal(semaine.joursActifs, 3);
+});
+
+test('semainesRecentes signale un jour mixte sans doublon de famille', () => {
+  const maintenant = new Date(2024, 0, 10, 12);
+  const liste = [
+    { id: 'r1', debut: new Date(2024, 0, 8, 9).getTime(), type: 'rameur', minutes: 10 },
+    { id: 'r2', debut: new Date(2024, 0, 8, 10).getTime(), type: 'rameur', minutes: 5 },
+    { id: 'c1', debut: new Date(2024, 0, 8, 11).getTime(), type: 'course', minutes: 20 },
+  ];
+  const jour = semainesRecentes(liste, maintenant, 1)[0].jours[0];
+  assert.deepEqual(jour.types, ['rameur', 'course']);
+  assert.equal(jour.minutes, 35);
+});
+
+test('semainesRecentes passe le changement d’heure sans décaler les jours', () => {
+  const maintenant = new Date(2024, 9, 28, 12);
+  const semaines = semainesRecentes([], maintenant, 2);
+  assert.equal(semaines[0].lundi, '2024-10-21');
+  assert.equal(semaines[0].jours[6].cle, '2024-10-27');
+  assert.equal(semaines[1].lundi, '2024-10-28');
+  assert.equal(semaines[1].jours[0].cle, '2024-10-28');
+});
+
+test('semainesRecentes reprend le statut et l’objectif de la Map', () => {
+  const statuts = new Map([['2024-05-13', { statut: 'tenue', objectif: 5 }]]);
+  const semaine = semainesRecentes([], new Date(2024, 4, 15, 12), 1, statuts)[0];
+  assert.equal(semaine.statut, 'tenue');
+  assert.equal(semaine.objectif, 5);
+  const sans = semainesRecentes([], new Date(2024, 4, 15, 12), 1)[0];
+  assert.equal(sans.statut, null);
+  assert.equal(sans.objectif, null);
+});
+
+test('tendance calcule un écart positif entre le lot récent et le précédent', () => {
+  const t0 = new Date(2024, 0, 1, 10).getTime();
+  const liste = [
+    { id: 'p1', debut: t0, type: 'rameur', minutes: 10, allure: 200 },
+    { id: 'p2', debut: t0 + 1, type: 'rameur', minutes: 10, allure: 202 },
+    { id: 'r1', debut: t0 + 2, type: 'rameur', minutes: 10, allure: 190 },
+    { id: 'r2', debut: t0 + 3, type: 'rameur', minutes: 10, allure: 192 },
+  ];
+  const t = tendance(liste, 'rameur', 2);
+  assert.deepEqual(t.points.map((p) => p.id), ['p1', 'p2', 'r1', 'r2']);
+  assert.equal(t.actuelle, 191);
+  assert.equal(t.avant, 201);
+  assert.equal(t.ecart, 10);
+  assert.equal(t.nombre, 2);
+});
+
+test('tendance écarte les séances trop courtes et les allures aberrantes', () => {
+  const t0 = new Date(2024, 0, 1, 10).getTime();
+  const liste = [
+    { id: 'courte', debut: t0, type: 'rameur', minutes: 4, allure: 100 },
+    { id: 'p1', debut: t0 + 1, type: 'rameur', minutes: 10, allure: 200 },
+    { id: 'p2', debut: t0 + 2, type: 'rameur', minutes: 10, allure: 202 },
+    { id: 'r1', debut: t0 + 3, type: 'rameur', minutes: 10, allure: 190 },
+    { id: 'r2', debut: t0 + 4, type: 'rameur', minutes: 10, allure: 192 },
+    { id: 'aberrante', debut: t0 + 5, type: 'rameur', minutes: 10, allure: 300 },
+  ];
+  const t = tendance(liste, 'rameur', 2);
+  assert.ok(!t.points.some((p) => p.id === 'courte'));
+  assert.ok(!t.points.some((p) => p.id === 'aberrante'));
+});
+
+test('tendance laisse avant à null sous deux séances précédentes', () => {
+  const t0 = new Date(2024, 0, 1, 10).getTime();
+  const liste = [
+    { id: 'p1', debut: t0, type: 'rameur', minutes: 10, allure: 200 },
+    { id: 'r1', debut: t0 + 1, type: 'rameur', minutes: 10, allure: 190 },
+    { id: 'r2', debut: t0 + 2, type: 'rameur', minutes: 10, allure: 192 },
+  ];
+  const t = tendance(liste, 'rameur', 2);
+  assert.equal(t.avant, null);
+  assert.equal(t.ecart, null);
+  assert.equal(t.nombre, 2);
 });

@@ -1,18 +1,28 @@
-// Écran Historique : dernière séance, calendrier, progression, liste et détail.
+// Écran Historique : dernière séance, semaines, tendances, liste et détail.
 // Rendu par création d'éléments ; les données ne passent jamais par innerHTML.
 
 import {
-  unifier, comparer, calendrier, medianesMensuelles, grouperParMois, lisser, formaterAllure,
+  unifier, comparer, grouperParMois, lisser, formaterAllure, semainesRecentes, tendance,
 } from '../src/historique.js';
-import { cleJour } from '../src/objectif.js';
+import { bilan, cleJour } from '../src/objectif.js';
 
 const $ = (id) => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
 const nombre = new Intl.NumberFormat('fr-FR');
 const formatDateLongue = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'full' });
 const formatDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 const formatHeure = new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit' });
 const formatMoisCourt = new Intl.DateTimeFormat('fr-FR', { month: 'short' });
-const NOMS_TYPE = { rameur: 'Rameur', course: 'Course à pied', renforcement: 'Renforcement', autre: 'Autre' };
+const formatDateLigne = new Intl.DateTimeFormat('fr-FR', { weekday: 'short', day: 'numeric' });
+const MOIS_LONGS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+const LETTRES_JOURS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+const ORDRE_FAMILLES = ['rameur', 'course', 'autre'];
+const NOMS_TYPE = {
+  rameur: 'Rameur',
+  course: 'Footing',
+  renforcement: 'Renforcement',
+  autre: 'Autre',
+};
 
 function mmss(secondes) {
   if (secondes == null || !Number.isFinite(secondes)) return '–';
@@ -42,6 +52,65 @@ function formaterDateRelative(debut, maintenant = new Date()) {
     return new Intl.DateTimeFormat('fr-FR', { weekday: 'long' }).format(d);
   }
   return formatDate.format(d);
+}
+
+function dureeCumulee(minutes) {
+  const total = Math.max(0, Math.round(Number(minutes) || 0));
+  const h = Math.floor(total / 60);
+  const m = total % 60;
+  return h === 0 ? `${m} min` : `${h} h ${String(m).padStart(2, '0')}`;
+}
+
+function pluriel(n, singulier, plurielMot) {
+  return n > 1 ? plurielMot : singulier;
+}
+
+function dateDepuisCle(cle) {
+  const [annee, mois, jour] = cle.split('-').map(Number);
+  return new Date(annee, mois - 1, jour, 12);
+}
+
+function ajouterJoursCle(cle, n) {
+  const d = dateDepuisCle(cle);
+  return cleJour(new Date(d.getFullYear(), d.getMonth(), d.getDate() + n, 12));
+}
+
+function plageDates(lundi, dimanche) {
+  const d1 = dateDepuisCle(lundi);
+  const d2 = dateDepuisCle(dimanche);
+  const jour = (d) => (d.getDate() === 1 ? '1er' : String(d.getDate()));
+  const mois1 = MOIS_LONGS[d1.getMonth()];
+  const mois2 = MOIS_LONGS[d2.getMonth()];
+  if (d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear()) {
+    return `du ${jour(d1)} au ${jour(d2)} ${mois2}`;
+  }
+  if (d1.getFullYear() === d2.getFullYear()) {
+    return `du ${jour(d1)} ${mois1} au ${jour(d2)} ${mois2}`;
+  }
+  return `du ${jour(d1)} ${mois1} ${d1.getFullYear()} au ${jour(d2)} ${mois2} ${d2.getFullYear()}`;
+}
+
+function couleurType(type) {
+  if (type === 'rameur') return 'var(--rameur)';
+  if (type === 'course') return 'var(--footing)';
+  return 'var(--autre)';
+}
+
+function elNS(nom, attributs = {}) {
+  const e = document.createElementNS(NS, nom);
+  for (const [cle, valeur] of Object.entries(attributs)) e.setAttribute(cle, valeur);
+  return e;
+}
+
+function libelleJourComplet(date, jour) {
+  const parties = [formatDateLongue.format(date)];
+  if (jour.types.length === 0) {
+    parties.push('aucune activité');
+  } else {
+    parties.push(`${Math.round(jour.minutes)} min`);
+    parties.push(jour.types.map((f) => NOMS_TYPE[f].toLowerCase()).join(' et '));
+  }
+  return parties.join(', ');
 }
 
 /** Courbe d'allure d'une séance de rameur : plus haut = plus vite, lissée sur 10 s. */
@@ -81,42 +150,49 @@ export function dessinerCourbe(conteneur, echantillons) {
   const x = (t) => marge + ((t - minT) / spanT) * (largeur - 2 * marge);
   const y = (a) => marge + ((a - minA) / spanA) * (hauteur - 2 * marge);
 
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  const svg = document.createElementNS(NS, 'svg');
   svg.setAttribute('viewBox', `0 0 ${largeur} ${hauteur}`);
   svg.setAttribute('preserveAspectRatio', 'none');
   svg.setAttribute('class', 'historique-courbe-svg');
   svg.setAttribute('role', 'img');
   svg.setAttribute('aria-label', 'Allure au 500 mètres au fil de la séance, plus haut signifie plus vite.');
 
-  const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  const polyline = document.createElementNS(NS, 'polyline');
   polyline.setAttribute('points', points.map((p) => `${x(p.t)},${y(p.all)}`).join(' '));
   polyline.setAttribute('class', 'historique-courbe-ligne');
   svg.append(polyline);
   conteneur.append(svg);
 }
 
-export function creerHistorique({ db, lireCarnet, ouvrirResume }) {
+export function creerHistorique({ db, lireCarnet, ouvrirResume, maintenant = () => Date.now() }) {
   const el = {
     vide: $('historique-vide'),
     contenu: $('historique-contenu'),
-    actions: $('historique-actions'),
-    message: $('historique-message'),
     derniere: $('historique-derniere'),
-    calendrier: $('historique-calendrier'),
-    progression: $('historique-progression'),
+    semaines: $('historique-semaines'),
+    tendances: $('historique-tendances'),
     filtres: $('historique-filtres'),
     liste: $('historique-liste'),
+    message: $('historique-message'),
     dialog: $('historique-dialog'),
     dialogTitre: $('historique-dialog-titre'),
     dialogContenu: $('historique-dialog-contenu'),
   };
 
   let liste = [];
+  let reglages = {};
+  let statuts = new Map();
+  let instant = new Date();
+  let periode = 12;
+  let lundiChoisi = null;
+  let semainesAffichees = [];
+  let indexChoisi = 0;
   let filtre = 'tout';
-  let periode = '1an';
-  let jourSelectionne = null;
   let moisAffiches = 3;
-  const jourBoutons = new Map();
+  let squeletteSemainesConstruit = false;
+  let observerGraphique = null;
+  let derniereLargeurGraphique = 0;
+  const refs = {};
 
   if (el.dialog && typeof HTMLDialogElement !== 'undefined' && !('closedBy' in HTMLDialogElement.prototype)) {
     let pressedOutside = false;
@@ -195,23 +271,26 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume }) {
 
     const bouton = document.createElement('button');
     bouton.type = 'button';
-    bouton.className = 'carte historique-derniere-bouton';
+    bouton.className = 'historique-derniere-bouton';
     bouton.addEventListener('click', () => ouvrirDetail(derniere));
 
     const entete = document.createElement('div');
     entete.className = 'historique-entete';
+    const surtitre = document.createElement('span');
+    surtitre.className = 'historique-surtitre';
+    surtitre.textContent = 'Dernière séance';
     const pastille = document.createElement('span');
     pastille.className = `pastille type-${derniere.type}`;
     pastille.textContent = NOMS_TYPE[derniere.type] ?? derniere.type;
     const date = document.createElement('span');
     date.className = 'historique-date';
-    date.textContent = formaterDateRelative(derniere.debut);
-    entete.append(pastille, date);
+    date.textContent = formaterDateRelative(derniere.debut, instant);
+    entete.append(surtitre, pastille, date);
     bouton.append(entete);
 
     const chiffres = document.createElement('div');
     chiffres.className = 'historique-grands-chiffres';
-    const ajouterChiffre = (titre, valeur) => {
+    const ajouterChiffre = (valeur, libelle) => {
       const div = document.createElement('div');
       div.className = 'historique-chiffre';
       const v = document.createElement('span');
@@ -219,24 +298,33 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume }) {
       v.textContent = valeur;
       const t = document.createElement('span');
       t.className = 'historique-chiffre-titre';
-      t.textContent = titre;
+      t.textContent = libelle;
       div.append(v, t);
       chiffres.append(div);
     };
-    ajouterChiffre('Durée', mmss(derniere.minutes * 60));
-    if (derniere.distance != null) ajouterChiffre('Distance', distanceTexte(derniere.distance, derniere.type));
-    if (derniere.allure != null) ajouterChiffre('Allure', `${formaterAllure(derniere.allure)} ${derniere.type === 'rameur' ? '/500 m' : '/km'}`);
-    if (derniere.puissance != null) ajouterChiffre('Puissance', `${Math.round(derniere.puissance)} W`);
+    ajouterChiffre(mmss(derniere.minutes * 60), 'durée');
+    if (derniere.distance != null) ajouterChiffre(distanceTexte(derniere.distance, derniere.type), 'distance');
+    if (derniere.allure != null) {
+      ajouterChiffre(formaterAllure(derniere.allure), `allure ${derniere.type === 'rameur' ? '/500 m' : '/km'}`);
+    }
+    if (derniere.puissance != null) ajouterChiffre(`${Math.round(derniere.puissance)} W`, 'puissance');
     bouton.append(chiffres);
 
-    if (derniere.type === 'rameur' || derniere.type === 'course') {
-      const c = comparer(derniere, liste);
-      if (c.texte) {
-        const p = document.createElement('p');
-        p.className = 'historique-comparaison';
+    const c = comparer(derniere, liste);
+    if (c.ecart != null) {
+      const p = document.createElement('p');
+      p.className = 'historique-comparaison';
+      if (Math.abs(c.ecart) < 3) {
+        p.classList.add('discret');
+        p.textContent = 'Allure habituelle';
+      } else if (c.ecart > 0) {
+        p.classList.add('rapide');
         p.textContent = c.texte;
-        bouton.append(p);
+      } else {
+        p.classList.add('discret');
+        p.textContent = c.texte;
       }
+      bouton.append(p);
     }
 
     if (derniere.type === 'rameur') {
@@ -252,328 +340,633 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume }) {
     el.derniere.append(bouton);
   }
 
-  function libelleJour(jour) {
-    const d = new Date(jour.cle + 'T12:00:00');
-    const parties = [formatDateLongue.format(d)];
-    if (jour.minutesRameur > 0) parties.push(`${nombre.format(Math.round(jour.minutesRameur))} min de rameur`);
-    if (jour.minutesFooting > 0) parties.push(`${nombre.format(Math.round(jour.minutesFooting))} min de course`);
-    if (jour.seances.length === 0) parties.push('aucune séance');
-    return parties.join(', ');
-  }
+  function construireSemaines() {
+    if (squeletteSemainesConstruit) return;
+    const section = el.semaines;
+    section.replaceChildren();
 
-  function rendreJour() {
-    const zone = el.calendrier.querySelector('.historique-jour-liste');
-    if (!zone) return;
-    zone.replaceChildren();
-    if (!jourSelectionne) {
-      const p = document.createElement('p');
-      p.className = 'discret';
-      p.textContent = 'Touchez un jour du calendrier pour voir ses séances.';
-      zone.append(p);
-      return;
-    }
-    const seances = liste.filter((s) => cleJour(new Date(s.debut)) === jourSelectionne);
-    const titre = document.createElement('p');
-    titre.className = 'historique-jour-titre';
-    titre.textContent = formatDate.format(new Date(jourSelectionne + 'T12:00:00'));
-    zone.append(titre);
-    if (seances.length === 0) {
-      const p = document.createElement('p');
-      p.className = 'discret';
-      p.textContent = 'Aucune séance ce jour-là.';
-      zone.append(p);
-      return;
-    }
-    const ul = document.createElement('ul');
-    ul.className = 'liste historique-jour-seances';
-    for (const s of seances) {
-      const li = document.createElement('li');
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.addEventListener('click', () => ouvrirDetail(s));
-      const date = document.createElement('span');
-      date.className = 'date';
-      date.textContent = NOMS_TYPE[s.type] ?? s.type;
-      const totaux = document.createElement('span');
-      totaux.className = 'totaux';
-      totaux.textContent = [
-        mmss(s.minutes * 60),
-        s.distance != null ? distanceTexte(s.distance, s.type) : null,
-        s.allure != null ? `${formaterAllure(s.allure)} ${s.type === 'rameur' ? '/500 m' : '/km'}` : null,
-      ].filter(Boolean).join(' · ');
-      b.append(date, totaux);
-      li.append(b);
-      ul.append(li);
-    }
-    zone.append(ul);
-  }
-
-  function rendreCalendrier() {
-    el.calendrier.replaceChildren();
-    const semaines = calendrier(liste, new Date());
-    const debut = new Date(semaines[0][0].cle + 'T00:00:00');
-    const fin = new Date(semaines[52][6].cle + 'T23:59:59');
-    const dansAnnee = liste.filter((s) => {
-      const d = new Date(s.debut);
-      return d >= debut && d <= fin;
-    });
-    const totalSeances = dansAnnee.length;
-    const totalMinutes = dansAnnee.reduce((a, s) => a + (s.minutes || 0), 0);
-    const totalDistance = dansAnnee.reduce((a, s) => a + (s.distance || 0), 0);
-
-    const totaux = document.createElement('div');
-    totaux.className = 'historique-totaux';
-    const ajouterTotal = (titre, valeur) => {
-      const div = document.createElement('div');
-      div.className = 'historique-total';
-      const v = document.createElement('span');
-      v.className = 'historique-total-valeur';
-      v.textContent = valeur;
-      const t = document.createElement('span');
-      t.className = 'historique-total-titre';
-      t.textContent = titre;
-      div.append(v, t);
-      totaux.append(div);
-    };
-    ajouterTotal('Séances', nombre.format(totalSeances));
-    ajouterTotal('Heures', nombre.format(Math.round(totalMinutes / 60)));
-    ajouterTotal('Kilomètres', nombre.format(Math.round(totalDistance / 1000)));
-    el.calendrier.append(totaux);
-
-    const defilement = document.createElement('div');
-    defilement.className = 'historique-calendrier-defilement';
-    const interieur = document.createElement('div');
-    interieur.className = 'historique-calendrier-interieur';
-
-    const mois = document.createElement('div');
-    mois.className = 'historique-mois';
-    for (let i = 0; i < semaines.length; i++) {
-      const caseMois = document.createElement('span');
-      caseMois.className = 'historique-mois-case';
-      const premier = new Date(semaines[i][0].cle + 'T12:00:00');
-      const precedent = i > 0 ? new Date(semaines[i - 1][0].cle + 'T12:00:00') : null;
-      if (!precedent || premier.getMonth() !== precedent.getMonth()) {
-        caseMois.textContent = formatMoisCourt.format(premier).replace(/^./, (c) => c.toUpperCase());
-      }
-      mois.append(caseMois);
-    }
-    interieur.append(mois);
-
-    const grille = document.createElement('div');
-    grille.className = 'historique-calendrier-grille';
-    grille.setAttribute('role', 'grid');
-    grille.setAttribute('aria-label', 'Calendrier des séances sur une année glissante');
-    jourBoutons.clear();
-    for (let i = 0; i < semaines.length; i++) {
-      for (let j = 0; j < 7; j++) {
-        const jour = semaines[i][j];
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = `historique-jour cran-${jour.cran}`;
-        if (jour.minutesRameur > 0 && jour.minutesFooting > 0) b.classList.add('les-deux');
-        else if (jour.minutesRameur > 0) b.classList.add('type-rameur');
-        else if (jour.minutesFooting > 0) b.classList.add('type-course');
-        b.setAttribute('role', 'gridcell');
-        b.setAttribute('aria-label', libelleJour(jour));
-        if (jour.cle === jourSelectionne) b.setAttribute('aria-pressed', 'true');
-        b.addEventListener('click', () => {
-          jourSelectionne = jour.cle;
-          for (const [cle, btn] of jourBoutons) {
-            if (cle === jourSelectionne) btn.setAttribute('aria-pressed', 'true');
-            else btn.removeAttribute('aria-pressed');
-          }
-          rendreJour();
-        });
-        jourBoutons.set(jour.cle, b);
-        grille.append(b);
-      }
-    }
-    interieur.append(grille);
-    defilement.append(interieur);
-    el.calendrier.append(defilement);
-
-    const zone = document.createElement('div');
-    zone.className = 'historique-jour-liste';
-    zone.setAttribute('aria-live', 'polite');
-    el.calendrier.append(zone);
-
-    const aujourdhui = cleJour(new Date());
-    if (semaines.some((w) => w.some((d) => d.cle === aujourdhui))) {
-      jourSelectionne = aujourdhui;
-      jourBoutons.get(aujourdhui)?.setAttribute('aria-pressed', 'true');
-    } else {
-      jourSelectionne = null;
-    }
-    rendreJour();
-
-    requestAnimationFrame(() => {
-      defilement.scrollLeft = defilement.scrollWidth;
-    });
-  }
-
-  function rendreProgression() {
-    el.progression.replaceChildren();
+    const entete = document.createElement('div');
+    entete.className = 'historique-semaines-entete';
     const h2 = document.createElement('h2');
-    h2.textContent = 'Progression';
-    el.progression.append(h2);
-
-    const selecteur = document.createElement('div');
-    selecteur.className = 'historique-segmente';
-    selecteur.setAttribute('role', 'group');
-    selecteur.setAttribute('aria-label', 'Période de progression');
-    for (const [valeur, label] of [['3mois', '3 mois'], ['1an', '1 an'], ['tout', 'Tout']]) {
+    h2.textContent = 'Semaine après semaine';
+    const periodes = document.createElement('div');
+    periodes.className = 'historique-periodes';
+    periodes.setAttribute('role', 'group');
+    periodes.setAttribute('aria-label', 'Période affichée');
+    refs.boutonsPeriode = new Map();
+    for (const [valeur, label] of [[12, '12 semaines'], [26, '6 mois'], [52, '1 an']]) {
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = label;
+      b.dataset.periode = String(valeur);
       b.setAttribute('aria-pressed', String(periode === valeur));
       b.addEventListener('click', () => {
         periode = valeur;
-        rendreProgression();
+        majSemaines();
       });
-      selecteur.append(b);
+      refs.boutonsPeriode.set(valeur, b);
+      periodes.append(b);
     }
-    el.progression.append(selecteur);
+    entete.append(h2, periodes);
 
-    const grille = document.createElement('div');
-    grille.className = 'historique-graphiques';
-    el.progression.append(grille);
+    const cumul = document.createElement('p');
+    cumul.className = 'historique-cumul';
+    refs.cumul = cumul;
 
-    const maintenant = new Date();
-    let limite = -Infinity;
-    if (periode === '3mois') {
-      const d = new Date(maintenant);
-      d.setMonth(d.getMonth() - 3);
-      limite = d.getTime();
-    } else if (periode === '1an') {
-      const d = new Date(maintenant);
-      d.setFullYear(d.getFullYear() - 1);
-      limite = d.getTime();
-    }
+    const graphique = document.createElement('div');
+    graphique.className = 'historique-graphique-conteneur';
+    refs.graphiqueConteneur = graphique;
 
-    for (const type of ['rameur', 'course']) {
-      const points = liste
-        .filter((s) => s.type === type && s.allure != null && s.debut >= limite)
-        .sort((a, b) => a.debut - b.debut);
-      const carte = document.createElement('div');
-      carte.className = 'historique-graphique-carte';
-      const info = document.createElement('p');
-      info.className = 'historique-graphique-info';
-      info.textContent = 'Touchez un point pour voir la séance.';
-      carte.append(info);
-      carte.append(creerGraphiqueProgression(points, type, info));
-      grille.append(carte);
+    const legende = document.createElement('div');
+    legende.className = 'historique-legende';
+    refs.legende = legende;
+
+    const detail = document.createElement('div');
+    detail.className = 'historique-semaine-detail';
+
+    const nav = document.createElement('div');
+    nav.className = 'historique-nav';
+    const precedent = document.createElement('button');
+    precedent.type = 'button';
+    precedent.className = 'historique-fleche';
+    precedent.setAttribute('aria-label', 'Semaine précédente');
+    precedent.textContent = '‹';
+    precedent.addEventListener('click', () => choisirSemaine(indexChoisi - 1));
+    const titre = document.createElement('h3');
+    titre.className = 'historique-semaine-titre';
+    titre.setAttribute('aria-live', 'polite');
+    const suivant = document.createElement('button');
+    suivant.type = 'button';
+    suivant.className = 'historique-fleche';
+    suivant.setAttribute('aria-label', 'Semaine suivante');
+    suivant.textContent = '›';
+    suivant.addEventListener('click', () => choisirSemaine(indexChoisi + 1));
+    nav.append(precedent, titre, suivant);
+    refs.precedent = precedent;
+    refs.suivant = suivant;
+    refs.titre = titre;
+
+    const sousTitre = document.createElement('p');
+    sousTitre.className = 'historique-sous-titre';
+    refs.sousTitre = sousTitre;
+
+    const chiffres = document.createElement('div');
+    chiffres.className = 'historique-semaine-chiffres';
+    const statJours = document.createElement('div');
+    statJours.className = 'historique-stat';
+    const valeurJours = document.createElement('span');
+    valeurJours.className = 'historique-stat-valeur';
+    const libelleJours = document.createElement('span');
+    libelleJours.className = 'historique-stat-libelle';
+    libelleJours.textContent = 'jours actifs';
+    statJours.append(valeurJours, libelleJours);
+    const statDuree = document.createElement('div');
+    statDuree.className = 'historique-stat';
+    const valeurDuree = document.createElement('span');
+    valeurDuree.className = 'historique-stat-valeur';
+    const libelleDuree = document.createElement('span');
+    libelleDuree.className = 'historique-stat-libelle';
+    libelleDuree.textContent = "d'activité";
+    statDuree.append(valeurDuree, libelleDuree);
+    const statut = document.createElement('span');
+    statut.className = 'historique-statut';
+    statut.hidden = true;
+    chiffres.append(statJours, statDuree, statut);
+    refs.valeurJours = valeurJours;
+    refs.valeurDuree = valeurDuree;
+    refs.statut = statut;
+
+    const jours = document.createElement('ol');
+    jours.className = 'historique-jours';
+    refs.jours = jours;
+
+    const repartition = document.createElement('p');
+    repartition.className = 'historique-repartition';
+    repartition.hidden = true;
+    refs.repartition = repartition;
+
+    const seances = document.createElement('ul');
+    seances.className = 'liste historique-semaine-seances';
+    refs.seances = seances;
+
+    const vide = document.createElement('p');
+    vide.className = 'historique-semaine-vide';
+    vide.hidden = true;
+    refs.vide = vide;
+
+    detail.append(nav, sousTitre, chiffres, jours, repartition, seances, vide);
+    section.append(entete, cumul, graphique, legende, detail);
+    squeletteSemainesConstruit = true;
+
+    if (typeof ResizeObserver !== 'undefined') {
+      observerGraphique = new ResizeObserver(() => {
+        const largeur = refs.graphiqueConteneur?.clientWidth ?? 0;
+        if (largeur > 0 && largeur !== derniereLargeurGraphique) {
+          derniereLargeurGraphique = largeur;
+          dessinerGraphique();
+        }
+      });
+      observerGraphique.observe(graphique);
     }
   }
 
-  function creerGraphiqueProgression(points, type, info) {
-    const largeur = 360;
-    const hauteur = 140;
-    const marge = { haut: 10, bas: 10, gauche: 10, droite: 10 };
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('viewBox', `0 0 ${largeur} ${hauteur}`);
-    svg.setAttribute('class', 'historique-graphique');
-    svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', type === 'rameur'
-      ? 'Allure au 500 mètres du rameur, un point par séance et une ligne de médiane mensuelle.'
-      : 'Allure au kilomètre du footing, un point par séance et une ligne de médiane mensuelle.');
+  function majSemaines() {
+    if (!squeletteSemainesConstruit) return;
+    for (const [valeur, b] of refs.boutonsPeriode) {
+      b.setAttribute('aria-pressed', String(periode === valeur));
+    }
+    semainesAffichees = semainesRecentes(liste, instant, periode, statuts);
+    if (semainesAffichees.length === 0) return;
 
-    if (points.length === 0) {
-      const texte = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      texte.setAttribute('x', largeur / 2);
-      texte.setAttribute('y', hauteur / 2);
-      texte.setAttribute('text-anchor', 'middle');
-      texte.setAttribute('class', 'historique-graphique-vide');
-      texte.textContent = 'Pas encore de séance';
-      svg.append(texte);
-      return svg;
+    let index = lundiChoisi ? semainesAffichees.findIndex((w) => w.lundi === lundiChoisi) : -1;
+    if (index < 0) index = semainesAffichees.length - 1;
+    indexChoisi = index;
+    lundiChoisi = semainesAffichees[index].lundi;
+
+    const totalSeances = semainesAffichees.reduce((n, w) => n + w.seances.length, 0);
+    const totalMinutes = semainesAffichees.reduce((n, w) => n + w.total, 0);
+    const tenues = semainesAffichees.filter((w) => w.statut === 'tenue').length;
+    const parties = [
+      `${totalSeances} ${pluriel(totalSeances, 'séance', 'séances')}`,
+      dureeCumulee(totalMinutes),
+    ];
+    if (tenues > 0) parties.push(`${tenues} ${pluriel(tenues, 'semaine tenue', 'semaines tenues')}`);
+    refs.cumul.textContent = parties.join(' · ');
+
+    dessinerGraphique();
+    rendreLegende();
+    majDetailSemaine();
+  }
+
+  function dessinerGraphique() {
+    const conteneur = refs.graphiqueConteneur;
+    if (!conteneur || semainesAffichees.length === 0) return;
+    const largeur = conteneur.clientWidth || 320;
+    if (largeur <= 0) return;
+    derniereLargeurGraphique = largeur;
+    conteneur.replaceChildren();
+
+    const hauteur = 168;
+    const n = semainesAffichees.length;
+    const pas = largeur / n;
+    const largeurBarre = Math.max(3, Math.min(26, pas * 0.68));
+    const repere = Number(reglages.repereMinutes) || 150;
+    const maxTotal = semainesAffichees.reduce((m, w) => Math.max(m, w.total || 0), 0);
+    const max = Math.max(maxTotal, repere * 1.1, 1);
+    const margeHaut = 28;
+    const ligneBase = 132;
+    const hauteurZone = ligneBase - margeHaut;
+    const yPour = (minutes) => ligneBase - (minutes / max) * hauteurZone;
+
+    const svg = elNS('svg', {
+      viewBox: `0 0 ${largeur} ${hauteur}`,
+      class: 'historique-graphique-semaines',
+      role: 'img',
+      'aria-label': `Minutes d'activité par semaine sur les ${n} dernières semaines. Les boutons Semaine précédente et Semaine suivante permettent de les parcourir.`,
+    });
+
+    const margeBande = Math.min(2, pas / 10);
+    const largeurBande = Math.max(0, pas - margeBande * 2);
+    const bande = elNS('rect', {
+      x: 0,
+      y: 8,
+      width: largeurBande,
+      height: hauteur - 16,
+      rx: 6,
+      class: 'historique-bande',
+    });
+    svg.append(bande);
+
+    const yRepere = yPour(repere);
+    svg.append(elNS('line', {
+      x1: 0,
+      x2: largeur,
+      y1: yRepere,
+      y2: yRepere,
+      class: 'historique-repere-semaines',
+    }));
+
+    const groupes = [];
+    for (let i = 0; i < n; i++) {
+      const semaine = semainesAffichees[i];
+      const x = i * pas + (pas - largeurBarre) / 2;
+      const g = elNS('g', { class: 'historique-barres' });
+
+      if ((semaine.total || 0) <= 0) {
+        g.append(elNS('line', {
+          x1: x,
+          x2: x + largeurBarre,
+          y1: ligneBase,
+          y2: ligneBase,
+          class: 'historique-barre-vide',
+        }));
+      } else {
+        const familles = [
+          ['rameur', semaine.minutes.rameur || 0],
+          ['course', semaine.minutes.course || 0],
+          ['autre', semaine.minutes.autre || 0],
+        ].filter(([, m]) => m > 0);
+        let cumul = 0;
+        familles.forEach(([famille, minutes], indice) => {
+          const h = (minutes / max) * hauteurZone;
+          const estDernier = indice === familles.length - 1;
+          const y = ligneBase - cumul - h;
+          const hauteurSegment = cumul > 0 ? Math.max(0, h - 2) : h;
+          if (hauteurSegment > 0) {
+            if (estDernier) {
+              const r = Math.min(4, largeurBarre / 2, hauteurSegment / 2);
+              const path = elNS('path', {
+                d: `M ${x} ${y + hauteurSegment} L ${x} ${y + r} Q ${x} ${y} ${x + r} ${y} L ${x + largeurBarre - r} ${y} Q ${x + largeurBarre} ${y} ${x + largeurBarre} ${y + r} L ${x + largeurBarre} ${y + hauteurSegment} Z`,
+                class: `historique-barre type-${famille}`,
+              });
+              g.append(path);
+            } else {
+              g.append(elNS('rect', {
+                x,
+                y,
+                width: largeurBarre,
+                height: hauteurSegment,
+                class: `historique-barre type-${famille}`,
+              }));
+            }
+          }
+          cumul += h;
+        });
+      }
+
+      if (semaine.statut === 'tenue') {
+        g.append(elNS('circle', {
+          cx: x + largeurBarre / 2,
+          cy: ligneBase + 8,
+          r: 3.5,
+          class: 'historique-point-statut',
+        }));
+      }
+      svg.append(g);
+      groupes.push(g);
     }
 
-    const minX = Math.min(...points.map((p) => p.debut));
-    const maxX = Math.max(...points.map((p) => p.debut));
-    const minY = Math.min(...points.map((p) => p.allure));
-    const maxY = Math.max(...points.map((p) => p.allure));
-    const spanX = maxX - minX || 1;
-    const spanY = maxY - minY || 1;
-    const x = (debut) => marge.gauche + ((debut - minX) / spanX) * (largeur - marge.gauche - marge.droite);
-    const y = (allure) => (maxY === minY
-      ? hauteur / 2
-      : marge.haut + ((allure - minY) / spanY) * (hauteur - marge.haut - marge.bas));
+    const texteRepere = elNS('text', {
+      x: largeur - 4,
+      y: yRepere - 4,
+      'text-anchor': 'end',
+      class: 'historique-repere-texte',
+    });
+    texteRepere.textContent = `${repere} min conseillées`;
+    svg.append(texteRepere);
 
-    const pointsParMois = new Map();
-    for (const p of points) {
-      const d = new Date(p.debut);
-      const cle = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-      if (!pointsParMois.has(cle)) pointsParMois.set(cle, []);
-      pointsParMois.get(cle).push(p);
-    }
-    const ligne = [];
-    for (const m of medianesMensuelles(points)) {
-      const pts = pointsParMois.get(m.mois) ?? [];
-      if (!pts.length) continue;
-      const moyenneX = pts.reduce((a, p) => a + p.debut, 0) / pts.length;
-      ligne.push([x(moyenneX), y(m.mediane)]);
-    }
-    if (ligne.length > 1) {
-      const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-      polyline.setAttribute('points', ligne.map(([px, py]) => `${px},${py}`).join(' '));
-      polyline.setAttribute('class', 'historique-mediane');
-      svg.append(polyline);
-    }
-
-    for (const p of points) {
-      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      c.setAttribute('cx', x(p.debut));
-      c.setAttribute('cy', y(p.allure));
-      c.setAttribute('r', 2.5);
-      c.setAttribute('class', `historique-point type-${type}`);
-      svg.append(c);
+    let dernierMois = null;
+    let dernierLabelX = -Infinity;
+    for (let i = 0; i < n; i++) {
+      const d = dateDepuisCle(semainesAffichees[i].lundi);
+      const mois = d.getMonth();
+      if (mois !== dernierMois) {
+        const x = i * pas + pas / 2;
+        if (dernierLabelX === -Infinity || x - dernierLabelX >= 34) {
+          const texte = elNS('text', {
+            x,
+            y: hauteur - 4,
+            'text-anchor': 'middle',
+            class: 'historique-mois-texte',
+          });
+          texte.textContent = formatMoisCourt.format(d);
+          svg.append(texte);
+          dernierLabelX = x;
+        }
+        dernierMois = mois;
+      }
     }
 
-    const repere = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    repere.setAttribute('class', 'historique-repere');
-    repere.setAttribute('y1', marge.haut);
-    repere.setAttribute('y2', hauteur - marge.bas);
-    repere.setAttribute('visibility', 'hidden');
-    svg.append(repere);
+    refs.svg = svg;
+    refs.bande = bande;
+    refs.groupesBarres = groupes;
+    refs.pas = pas;
+    refs.margeBande = margeBande;
+    conteneur.append(svg);
 
-    const cercleActif = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    cercleActif.setAttribute('r', 4);
-    cercleActif.setAttribute('class', 'historique-point-actif');
-    cercleActif.setAttribute('visibility', 'hidden');
-    svg.append(cercleActif);
-
-    const maj = (clientX) => {
+    let geste = false;
+    const choisirDepuisX = (clientX) => {
       const rect = svg.getBoundingClientRect();
-      const px = ((clientX - rect.left) / rect.width) * largeur;
-      let meilleur = null;
-      let distance = Infinity;
-      for (const p of points) {
-        const d = Math.abs(x(p.debut) - px);
-        if (d < distance) {
-          distance = d;
-          meilleur = p;
+      if (rect.width <= 0) return;
+      const x = ((clientX - rect.left) / rect.width) * largeur;
+      const idx = Math.max(0, Math.min(n - 1, Math.floor(x / pas)));
+      if (idx !== indexChoisi) choisirSemaine(idx);
+    };
+    svg.addEventListener('pointerdown', (e) => {
+      geste = true;
+      svg.setPointerCapture(e.pointerId);
+      choisirDepuisX(e.clientX);
+    });
+    svg.addEventListener('pointermove', (e) => {
+      if (geste) choisirDepuisX(e.clientX);
+    });
+    const terminer = (e) => {
+      if (!geste) return;
+      geste = false;
+      if (svg.hasPointerCapture(e.pointerId)) svg.releasePointerCapture(e.pointerId);
+    };
+    svg.addEventListener('pointerup', terminer);
+    svg.addEventListener('pointercancel', terminer);
+
+    mettreAJourSelectionGraphique();
+  }
+
+  function mettreAJourSelectionGraphique() {
+    if (!refs.bande || !refs.pas) return;
+    const x = indexChoisi * refs.pas + (refs.margeBande ?? 0);
+    refs.bande.style.transform = `translateX(${x}px)`;
+    for (let i = 0; i < refs.groupesBarres.length; i++) {
+      refs.groupesBarres[i].classList.toggle('attenuee', i !== indexChoisi);
+    }
+  }
+
+  function choisirSemaine(index) {
+    if (semainesAffichees.length === 0) return;
+    const i = Math.max(0, Math.min(semainesAffichees.length - 1, index));
+    if (i === indexChoisi && lundiChoisi === semainesAffichees[i].lundi) return;
+    indexChoisi = i;
+    lundiChoisi = semainesAffichees[i].lundi;
+    mettreAJourSelectionGraphique();
+    majDetailSemaine();
+  }
+
+  function rendreLegende() {
+    if (!refs.legende) return;
+    refs.legende.replaceChildren();
+    const familles = new Set();
+    let tenue = false;
+    for (const semaine of semainesAffichees) {
+      for (const f of ORDRE_FAMILLES) {
+        if ((semaine.minutes[f] || 0) > 0) familles.add(f);
+      }
+      if (semaine.statut === 'tenue') tenue = true;
+    }
+    for (const f of ORDRE_FAMILLES) {
+      if (!familles.has(f)) continue;
+      const item = document.createElement('span');
+      item.className = 'historique-legende-item';
+      const pastille = document.createElement('span');
+      pastille.className = `historique-pastille-carree type-${f}`;
+      const texte = document.createElement('span');
+      texte.textContent = NOMS_TYPE[f] ?? f;
+      item.append(pastille, texte);
+      refs.legende.append(item);
+    }
+    if (tenue) {
+      const item = document.createElement('span');
+      item.className = 'historique-legende-item';
+      const point = document.createElement('span');
+      point.className = 'historique-point-legende';
+      const texte = document.createElement('span');
+      texte.textContent = 'Objectif tenu';
+      item.append(point, texte);
+      refs.legende.append(item);
+    }
+  }
+
+  function majDetailSemaine() {
+    if (!refs.titre || semainesAffichees.length === 0) return;
+    const semaine = semainesAffichees[indexChoisi];
+    const n = semainesAffichees.length;
+    refs.precedent.disabled = indexChoisi <= 0;
+    refs.suivant.disabled = indexChoisi >= n - 1;
+
+    const dimanche = ajouterJoursCle(semaine.lundi, 6);
+    const estCourante = indexChoisi === n - 1;
+    const estDerniere = indexChoisi === n - 2;
+    if (estCourante) refs.titre.textContent = 'Cette semaine';
+    else if (estDerniere) refs.titre.textContent = 'La semaine dernière';
+    else refs.titre.textContent = `Semaine ${plageDates(semaine.lundi, dimanche)}`;
+
+    if (estCourante || estDerniere) {
+      refs.sousTitre.hidden = false;
+      refs.sousTitre.textContent = plageDates(semaine.lundi, dimanche);
+    } else {
+      refs.sousTitre.hidden = true;
+      refs.sousTitre.textContent = '';
+    }
+
+    refs.valeurJours.textContent = semaine.objectif != null
+      ? `${semaine.joursActifs} / ${semaine.objectif}`
+      : `${semaine.joursActifs}`;
+    refs.valeurDuree.textContent = dureeCumulee(semaine.total);
+
+    refs.statut.hidden = true;
+    refs.statut.className = 'historique-statut';
+    refs.statut.textContent = '';
+    if (semaine.statut) {
+      refs.statut.hidden = false;
+      if (semaine.statut === 'tenue') {
+        refs.statut.classList.add('tenue');
+        refs.statut.textContent = 'Objectif tenu';
+      } else if (semaine.statut === 'en-cours') {
+        const reste = semaine.objectif != null ? Math.max(0, semaine.objectif - semaine.joursActifs) : null;
+        refs.statut.textContent = reste != null
+          ? `Encore ${reste} ${pluriel(reste, 'jour', 'jours')}`
+          : 'En cours';
+      } else if (semaine.statut === 'joker') {
+        refs.statut.textContent = 'Réserve utilisée';
+      } else if (semaine.statut === 'manquee') {
+        refs.statut.textContent = 'Objectif manqué';
+      } else if (semaine.statut === 'deplacement') {
+        refs.statut.textContent = 'Déplacement';
+      }
+    }
+
+    refs.jours.replaceChildren();
+    const aujourdhui = cleJour(instant);
+    for (let i = 0; i < semaine.jours.length; i++) {
+      const jour = semaine.jours[i];
+      const d = dateDepuisCle(jour.cle);
+      const li = document.createElement('li');
+      if (jour.cle === aujourdhui) li.classList.add('aujourdhui');
+      if (jour.cle > aujourdhui) li.classList.add('a-venir');
+
+      const lettre = document.createElement('span');
+      lettre.className = 'historique-jour-lettre';
+      lettre.textContent = LETTRES_JOURS[i];
+
+      const caseJour = document.createElement('span');
+      caseJour.className = 'historique-jour-case';
+      if (jour.types.length === 0) {
+        caseJour.classList.add('vide');
+      } else if (jour.types.length === 1) {
+        caseJour.classList.add(`type-${jour.types[0]}`);
+      } else {
+        caseJour.classList.add('deux-sports');
+        const [a, b] = jour.types;
+        caseJour.style.background = `linear-gradient(135deg, ${couleurType(a)} 0 50%, ${couleurType(b)} 50% 100%)`;
+      }
+
+      const minutes = document.createElement('span');
+      minutes.className = 'historique-jour-minutes';
+      minutes.textContent = jour.types.length ? `${Math.round(jour.minutes)} min` : '\u00a0';
+
+      li.append(lettre, caseJour, minutes);
+      li.setAttribute('aria-label', libelleJourComplet(d, jour));
+      refs.jours.append(li);
+    }
+
+    const familles = ORDRE_FAMILLES.filter((f) => (semaine.minutes[f] || 0) > 0);
+    if (familles.length >= 2) {
+      refs.repartition.hidden = false;
+      refs.repartition.textContent = familles
+        .map((f) => `${NOMS_TYPE[f]} ${Math.round(semaine.minutes[f])} min`)
+        .join(' · ');
+    } else {
+      refs.repartition.hidden = true;
+      refs.repartition.textContent = '';
+    }
+
+    refs.seances.replaceChildren();
+    if (semaine.seances.length === 0) {
+      refs.seances.hidden = true;
+      refs.vide.hidden = false;
+      refs.vide.textContent = semaine.statut === 'deplacement'
+        ? 'Semaine de déplacement : elle ne compte ni pour ni contre la série.'
+        : 'Aucune activité cette semaine-là.';
+    } else {
+      refs.vide.hidden = true;
+      refs.seances.hidden = false;
+      for (const s of semaine.seances) {
+        const li = document.createElement('li');
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.addEventListener('click', () => ouvrirDetail(s));
+
+        const date = document.createElement('span');
+        date.className = 'date';
+        date.textContent = formatDateLigne.format(new Date(s.debut));
+
+        const pastille = document.createElement('span');
+        pastille.className = `pastille type-${s.type}`;
+        pastille.textContent = NOMS_TYPE[s.type] ?? s.type;
+
+        const totaux = document.createElement('span');
+        totaux.className = 'totaux';
+        const parties = [mmss(s.minutes * 60)];
+        if (s.distance != null) parties.push(distanceTexte(s.distance, s.type));
+        if (s.allure != null) parties.push(`${formaterAllure(s.allure)} ${s.type === 'rameur' ? '/500 m' : '/km'}`);
+        totaux.textContent = parties.join(' · ');
+
+        b.append(date, pastille, totaux);
+        li.append(b);
+        refs.seances.append(li);
+      }
+    }
+  }
+
+  function rendreTendances() {
+    el.tendances.replaceChildren();
+    for (const type of ['rameur', 'course']) {
+      const t = tendance(liste, type);
+      if (t.points.length === 0) continue;
+
+      const carte = document.createElement('div');
+      carte.className = 'historique-tendance-carte';
+
+      const entete = document.createElement('div');
+      entete.className = 'historique-tendance-entete';
+      const pastille = document.createElement('span');
+      pastille.className = `pastille type-${type}`;
+      pastille.textContent = NOMS_TYPE[type];
+      const libelle = document.createElement('span');
+      libelle.textContent = 'Allure';
+      entete.append(pastille, libelle);
+
+      const valeur = document.createElement('div');
+      valeur.className = 'historique-tendance-valeur';
+      valeur.textContent = formaterAllure(t.actuelle);
+      const unite = document.createElement('span');
+      unite.className = 'historique-tendance-unite';
+      unite.textContent = type === 'rameur' ? '/500 m' : '/km';
+      valeur.append(unite);
+
+      const sousTitre = document.createElement('p');
+      sousTitre.className = 'historique-tendance-sous-titre';
+      sousTitre.textContent = t.nombre <= 1
+        ? 'médiane de la dernière séance'
+        : `médiane des ${t.nombre} dernières séances`;
+
+      const comparaison = document.createElement('p');
+      comparaison.className = 'historique-tendance-comparaison';
+      if (t.ecart == null) {
+        comparaison.classList.add('discret');
+        comparaison.textContent = 'Pas encore assez de séances pour comparer.';
+      } else if (Math.abs(t.ecart) < 2) {
+        comparaison.classList.add('discret');
+        comparaison.textContent = 'Stable.';
+      } else {
+        const precedentes = Math.min(5, Math.max(0, t.points.length - t.nombre));
+        if (t.ecart > 0) {
+          comparaison.classList.add('rapide');
+          comparaison.textContent = `${Math.round(t.ecart)} s plus vite que les ${precedentes} précédentes`;
+        } else {
+          comparaison.classList.add('discret');
+          comparaison.textContent = `${Math.round(-t.ecart)} s plus lent que les ${precedentes} précédentes`;
         }
       }
-      if (!meilleur) return;
-      const cx = x(meilleur.debut);
-      repere.setAttribute('x1', cx);
-      repere.setAttribute('x2', cx);
-      repere.setAttribute('visibility', 'visible');
-      cercleActif.setAttribute('cx', cx);
-      cercleActif.setAttribute('cy', y(meilleur.allure));
-      cercleActif.setAttribute('visibility', 'visible');
-      info.textContent = `${formatDate.format(new Date(meilleur.debut))} · ${formaterAllure(meilleur.allure)} ${type === 'rameur' ? '/500 m' : '/km'}`;
-    };
 
-    svg.addEventListener('pointerdown', (e) => {
-      svg.setPointerCapture(e.pointerId);
-      maj(e.clientX);
+      carte.append(entete, valeur, sousTitre, comparaison);
+
+      if (t.points.length >= 3) {
+        const mini = document.createElement('div');
+        mini.className = 'historique-mini-courbe';
+        const legende = document.createElement('p');
+        legende.className = 'historique-mini-legende';
+        legende.textContent = 'Plus haut : plus vite.';
+        carte.append(mini, legende);
+        el.tendances.append(carte);
+        dessinerMiniCourbe(mini, t, type);
+      } else {
+        el.tendances.append(carte);
+      }
+    }
+  }
+
+  function dessinerMiniCourbe(conteneur, t, type) {
+    const largeur = conteneur.clientWidth || 220;
+    const hauteur = 52;
+    const points = t.points.slice(-30);
+    if (points.length < 3) return;
+
+    const marge = 4;
+    const allures = points.map((p) => p.allure);
+    const min = Math.min(...allures);
+    const max = Math.max(...allures);
+    const span = max - min || 1;
+    const meme = max === min;
+    const x = (i) => marge + (i / (points.length - 1)) * (largeur - 2 * marge);
+    const y = (allure) => (meme
+      ? hauteur / 2
+      : marge + ((allure - min) / span) * (hauteur - 2 * marge));
+
+    const svg = elNS('svg', {
+      viewBox: `0 0 ${largeur} ${hauteur}`,
+      class: `historique-mini-svg type-${type}`,
+      role: 'img',
+      'aria-label': `Allure ${type === 'rameur' ? 'au 500 mètres' : 'au kilomètre'} des dernières séances, plus haut signifie plus vite.`,
     });
-    svg.addEventListener('pointermove', (e) => maj(e.clientX));
-    svg.addEventListener('pointerup', (e) => {
-      if (svg.hasPointerCapture(e.pointerId)) svg.releasePointerCapture(e.pointerId);
+
+    const polyline = elNS('polyline', {
+      points: points.map((p, i) => `${x(i)},${y(p.allure)}`).join(' '),
+      class: 'historique-mini-ligne',
     });
-    return svg;
+    svg.append(polyline);
+
+    const recentStart = Math.max(0, points.length - t.nombre);
+    points.forEach((p, i) => {
+      const cercle = elNS('circle', {
+        cx: x(i),
+        cy: y(p.allure),
+        r: 2.5,
+        class: 'historique-mini-point',
+      });
+      if (i < recentStart) cercle.setAttribute('opacity', '0.45');
+      svg.append(cercle);
+    });
+
+    conteneur.replaceChildren(svg);
   }
 
   function rendreListe() {
@@ -591,19 +984,18 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume }) {
       el.liste.append(p);
       return;
     }
+
     for (const groupe of groupes.slice(0, moisAffiches)) {
       const section = document.createElement('section');
       section.className = 'historique-groupe-mois';
+
       const entete = document.createElement('div');
       entete.className = 'historique-groupe-entete';
       const h3 = document.createElement('h3');
       h3.textContent = groupe.titre;
       const total = document.createElement('span');
       total.className = 'historique-groupe-total';
-      const parties = [`${groupe.nombre} séance${groupe.nombre > 1 ? 's' : ''}`];
-      if (groupe.totalMinutes > 0) parties.push(mmss(groupe.totalMinutes * 60));
-      if (groupe.totalDistance > 0) parties.push(distanceTexte(groupe.totalDistance, 'course'));
-      total.textContent = parties.join(' · ');
+      total.textContent = `${groupe.nombre} ${pluriel(groupe.nombre, 'séance', 'séances')} · ${dureeCumulee(groupe.totalMinutes)}`;
       entete.append(h3, total);
       section.append(entete);
 
@@ -614,19 +1006,22 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume }) {
         const b = document.createElement('button');
         b.type = 'button';
         b.addEventListener('click', () => ouvrirDetail(s));
+
         const date = document.createElement('span');
         date.className = 'date';
-        date.textContent = formatDate.format(new Date(s.debut));
+        date.textContent = formatDateLigne.format(new Date(s.debut));
+
         const type = document.createElement('span');
         type.className = `pastille type-${s.type}`;
         type.textContent = NOMS_TYPE[s.type] ?? s.type;
+
         const totaux = document.createElement('span');
         totaux.className = 'totaux';
-        totaux.textContent = [
-          mmss(s.minutes * 60),
-          s.distance != null ? distanceTexte(s.distance, s.type) : null,
-          s.allure != null ? `${formaterAllure(s.allure)} ${s.type === 'rameur' ? '/500 m' : '/km'}` : null,
-        ].filter(Boolean).join(' · ');
+        const parties = [mmss(s.minutes * 60)];
+        if (s.distance != null) parties.push(distanceTexte(s.distance, s.type));
+        if (s.allure != null) parties.push(`${formaterAllure(s.allure)} ${s.type === 'rameur' ? '/500 m' : '/km'}`);
+        totaux.textContent = parties.join(' · ');
+
         b.append(date, type, totaux);
         li.append(b);
         ul.append(li);
@@ -634,6 +1029,7 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume }) {
       section.append(ul);
       el.liste.append(section);
     }
+
     if (groupes.length > moisAffiches) {
       const plus = document.createElement('button');
       plus.type = 'button';
@@ -649,29 +1045,41 @@ export function creerHistorique({ db, lireCarnet, ouvrirResume }) {
   }
 
   async function afficher() {
-    const seancesRameur = await db.seances();
+    const seancesRameur = (await db.seances()) ?? [];
     const carnet = await lireCarnet();
     const activites = carnet?.activites ?? [];
     liste = unifier(seancesRameur, activites);
+    instant = maintenant();
+    if (!(instant instanceof Date)) instant = new Date(instant);
 
+    if (el.message) el.message.hidden = false;
     const vide = liste.length === 0;
     el.vide.hidden = !vide;
     el.contenu.hidden = vide;
-    el.actions.hidden = vide;
-    el.message.hidden = vide;
 
     if (vide) {
       el.derniere.replaceChildren();
-      el.calendrier.replaceChildren();
-      el.progression.replaceChildren();
+      el.tendances.replaceChildren();
       el.liste.replaceChildren();
       return;
     }
 
-    creerFiltres();
+    const reglagesCarnet = carnet?.reglages ?? {};
+    const b = bilan(liste, reglagesCarnet, instant);
+    reglages = b.reglages;
+
+    statuts = new Map();
+    if (Array.isArray(carnet?.reglages?.objectifs) && carnet.reglages.objectifs.length > 0) {
+      for (const s of [...b.semaines, b.courante]) {
+        statuts.set(s.lundi, { statut: s.statut, objectif: s.objectif });
+      }
+    }
+
     await rendreDerniere();
-    rendreCalendrier();
-    rendreProgression();
+    construireSemaines();
+    majSemaines();
+    rendreTendances();
+    creerFiltres();
     rendreListe();
   }
 

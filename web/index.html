@@ -188,22 +188,23 @@
   <p id="historique-vide" class="discret" hidden>Aucune séance pour l’instant. Elles s’enregistrent toutes seules dès que vous ramez ou courez.</p>
   <div id="historique-contenu" class="historique-contenu">
     <section id="historique-derniere" class="historique-derniere" aria-label="Dernière séance"></section>
-    <div class="historique-colonne">
-      <section id="historique-calendrier" class="carte historique-calendrier" aria-label="Calendrier de l’année"></section>
-      <section id="historique-progression" class="carte historique-progression" aria-label="Progression"></section>
-    </div>
-    <section class="carte historique-liste-section" aria-labelledby="historique-liste-titre">
-      <h2 id="historique-liste-titre">Toutes les séances</h2>
+    <section id="historique-semaines" class="carte historique-semaines" aria-label="Semaine après semaine"></section>
+    <div id="historique-tendances" class="historique-tendances"></div>
+    <details id="historique-toutes" class="historique-repli">
+      <summary>Toutes les séances</summary>
       <div id="historique-filtres" class="historique-filtres" role="group" aria-label="Filtrer les séances"></div>
       <div id="historique-liste" class="historique-liste"></div>
-    </section>
+    </details>
   </div>
-  <div id="historique-actions" class="boutons historique-actions">
-    <button type="button" id="historique-json">Tout exporter en JSON</button>
-    <button type="button" id="historique-csv">Tout exporter en CSV</button>
-    <label class="bouton">Importer un JSON<input type="file" id="historique-import" accept="application/json,.json" hidden></label>
-  </div>
-  <p id="historique-message" class="discret" role="status"></p>
+  <details class="historique-repli historique-export">
+    <summary>Exporter, importer</summary>
+    <div class="boutons historique-actions">
+      <button type="button" id="historique-json">Tout exporter en JSON</button>
+      <button type="button" id="historique-csv">Tout exporter en CSV</button>
+      <label class="bouton">Importer un JSON<input type="file" id="historique-import" accept="application/json,.json" hidden></label>
+    </div>
+    <p id="historique-message" class="discret" role="status"></p>
+  </details>
   <dialog id="historique-dialog" closedby="any" aria-labelledby="historique-dialog-titre">
     <h2 id="historique-dialog-titre"></h2>
     <div id="historique-dialog-contenu"></div>

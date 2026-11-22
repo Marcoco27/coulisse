@@ -690,7 +690,7 @@ $('resume-retour').addEventListener('click', () => montrer('historique'));
 let historique = null;
 
 async function afficherHistorique() {
-  historique ??= creerHistorique({ db, lireCarnet: () => carnet, ouvrirResume });
+  historique ??= creerHistorique({ db, lireCarnet: () => carnet, ouvrirResume, maintenant });
   await historique.afficher();
 }
 

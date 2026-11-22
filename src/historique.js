@@ -208,3 +208,107 @@ export function formaterAllure(s) {
   const secondes = total % 60;
   return `${minutes}:${String(secondes).padStart(2, '0')}`;
 }
+
+function medianeNombres(valeurs) {
+  if (!valeurs.length) return null;
+  const tri = [...valeurs].sort((a, b) => a - b);
+  const milieu = Math.floor(tri.length / 2);
+  return tri.length % 2 ? tri[milieu] : (tri[milieu - 1] + tri[milieu]) / 2;
+}
+
+/** Semaines du lundi au dimanche, de la plus ancienne à la semaine courante. */
+export function semainesRecentes(liste, maintenant, nombre = 12, statuts = new Map()) {
+  const totalSemaines = Math.max(0, Math.floor(nombre));
+  const lundiCourant = lundiDe(maintenant);
+  const [annee, mois, jour] = lundiCourant.split('-').map(Number);
+  const semaines = [];
+  const parLundi = new Map();
+
+  for (let i = 0; i < totalSemaines; i++) {
+    const decalage = (i - (totalSemaines - 1)) * 7;
+    const dateLundi = new Date(annee, mois - 1, jour + decalage);
+    const lundi = cleJour(dateLundi);
+    const jours = [];
+    const parCle = new Map();
+
+    for (let j = 0; j < 7; j++) {
+      const d = new Date(dateLundi.getFullYear(), dateLundi.getMonth(), dateLundi.getDate() + j);
+      const cle = cleJour(d);
+      const jourSemaine = { cle, minutes: 0, types: [] };
+      jours.push(jourSemaine);
+      parCle.set(cle, jourSemaine);
+    }
+
+    const info = statuts.get(lundi);
+    const semaine = {
+      lundi,
+      jours,
+      seances: [],
+      minutes: { rameur: 0, course: 0, autre: 0 },
+      total: 0,
+      joursActifs: 0,
+      statut: info?.statut ?? null,
+      objectif: info?.objectif ?? null,
+    };
+    semaines.push(semaine);
+    parLundi.set(lundi, { semaine, parCle });
+  }
+
+  const ordre = ['rameur', 'course', 'autre'];
+  for (const s of liste) {
+    const lundi = lundiDe(s.debut);
+    const entree = parLundi.get(lundi);
+    if (!entree) continue;
+    const { semaine, parCle } = entree;
+    const cle = cleJour(s.debut);
+    const jourSemaine = parCle.get(cle);
+    if (!jourSemaine) continue;
+
+    const famille = s.type === 'rameur' ? 'rameur' : s.type === 'course' ? 'course' : 'autre';
+    const minutes = Number(s.minutes) || 0;
+    jourSemaine.minutes += minutes;
+    if (!jourSemaine.types.includes(famille)) jourSemaine.types.push(famille);
+    semaine.minutes[famille] += minutes;
+    semaine.total += minutes;
+    semaine.seances.push(s);
+  }
+
+  for (const semaine of semaines) {
+    semaine.seances.sort((a, b) => a.debut - b.debut);
+    semaine.joursActifs = semaine.jours.filter((j) => j.types.length > 0).length;
+    for (const jourSemaine of semaine.jours) {
+      jourSemaine.types.sort((a, b) => ordre.indexOf(a) - ordre.indexOf(b));
+    }
+  }
+
+  return semaines;
+}
+
+/** Tendance d'allure : lot récent, lot précédent et écart, sans valeurs aberrantes. */
+export function tendance(liste, type, taille = 5) {
+  const lot = Math.max(1, Math.floor(taille));
+  const filtrees = liste.filter((s) => s.type === type
+    && s.allure != null
+    && (Number(s.minutes) || 0) >= 5);
+
+  const mediane = medianeNombres(filtrees.map((s) => s.allure));
+  const gardees = mediane == null
+    ? []
+    : filtrees.filter((s) => s.allure <= mediane * 1.3);
+
+  gardees.sort((a, b) => a.debut - b.debut);
+  const points = gardees.map((s) => ({ id: s.id, debut: s.debut, allure: s.allure }));
+  const recentes = points.slice(-lot);
+  const avantPoints = points.slice(
+    Math.max(0, points.length - lot * 2),
+    Math.max(0, points.length - lot),
+  );
+
+  const actuelle = medianeNombres(recentes.map((p) => p.allure));
+  const avant = avantPoints.length >= 2
+    ? medianeNombres(avantPoints.map((p) => p.allure))
+    : null;
+  const ecart = avant != null && actuelle != null ? avant - actuelle : null;
+
+  return { points, actuelle, avant, ecart, nombre: recentes.length };
+}
